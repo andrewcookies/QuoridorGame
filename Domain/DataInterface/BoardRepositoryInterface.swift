@@ -10,7 +10,7 @@ import Foundation
 protocol BoardRepositoryInterface {
     func movePawnOnTheBoard(pawn : Pawn)
     func insertWallOnTheBoard(wall : Wall)
-    func getBoardState() -> Board
+    func updateBoard(board : Board)
     func validateMovePawn(pawn : Pawn) -> BoardConflict
     func validateInsertWall(wall : Wall) -> BoardConflict
 }

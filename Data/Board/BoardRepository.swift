@@ -12,7 +12,8 @@ final class BoardRespository {
     private var board : Board
     private var validator : ValidatorInterface?
     
-    init(validator: ValidatorInterface?) {
+    init(validator: ValidatorInterface?,
+         game : GameInterface?) {
         self.board = Board()
         self.validator = validator
     }
@@ -20,6 +21,10 @@ final class BoardRespository {
 }
 
 extension BoardRespository : BoardRepositoryInterface {
+    func updateBoard(board: Board) {
+        self.board = board
+    }
+    
     func movePawnOnTheBoard(pawn: Pawn) {
         board.userPawn = pawn
     }

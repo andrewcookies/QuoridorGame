@@ -9,6 +9,8 @@ import Foundation
 import Combine
 
 enum GameEvent {
+    case waiting
+    case waitingOpponentMove
     case matchWon
     case matchLost
     case updateBoard
@@ -24,8 +26,8 @@ protocol GameUseCaseProtocol {
     
     func movePawn(newPawn : Pawn)
     func insertWall(wall : Wall)
-    func getBoardState() -> Board
     
     var gameEvent : Published<GameEvent>.Publisher { get }
+    var board : Published<Board>.Publisher { get }
 }
 

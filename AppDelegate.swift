@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseCore
+import Firebase
 import FirebaseFirestore
 
 @main
@@ -16,6 +17,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
+        let db = Firestore.firestore()
+        db.collection("users").getDocuments() { (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                for document in querySnapshot!.documents {
+
+                    print("\(document.documentID) => \(document.data())")
+                }
+            }
+        }
         return true
     }
 

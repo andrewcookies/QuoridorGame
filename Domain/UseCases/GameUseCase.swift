@@ -14,14 +14,25 @@ final class GameUseCase {
     private var userInfoInterface : UserInfoInterface?
     private var boardInterface : BoardRepositoryInterface?
     private var gameInterface : GameInterface?
-    @Published private var localGameEvent : GameEvent = .noEvent
     
+    @Published private var localGameEvent : GameEvent = .noEvent
+    @Published private var localBoard : Board = Board()
+
+    private var subscribers: [AnyCancellable] = []
+
     init(userInfoInterface: UserInfoInterface?,
          boardInterface: BoardRepositoryInterface?,
          gameInterface: GameInterface?) {
         self.userInfoInterface = userInfoInterface
         self.boardInterface = boardInterface
         self.gameInterface = gameInterface
+        
+        self.gameInterface?.boardListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] board in
+            guard let self = self else { return }
+            boardInterface?.updateBoard(board: board)
+            self.localBoard = board
+            
+        }).store(in: &subscribers)
     }
     
     func conflictsToEvent(conflict : BoardConflict) -> GameEvent {
@@ -44,6 +55,11 @@ final class GameUseCase {
 
 extension GameUseCase : GameUseCaseProtocol {
     
+    var board: Published<Board>.Publisher {
+        return $localBoard
+    }
+    
+    
     var gameEvent: Published<GameEvent>.Publisher {
         $localGameEvent
     }
@@ -52,23 +68,35 @@ extension GameUseCase : GameUseCaseProtocol {
         
         let conflict = boardInterface?.validateMovePawn(pawn: newPawn) ?? .genericError
         if conflict == .noConflicts {
-            boardInterface?.movePawnOnTheBoard(pawn: newPawn)
-            //  gameInterface?
+            localGameEvent = .waiting
+            Task.init {
+                do {
+                    try await gameInterface?.updatePawn(pawn: newPawn)
+                    localGameEvent = .waitingOpponentMove
+                    boardInterface?.movePawnOnTheBoard(pawn: newPawn)
+                } catch {
+                    localGameEvent = .genericError
+                }
+            }
         }
     }
     
     func insertWall(wall: Wall) {
         let conflict = boardInterface?.validateInsertWall(wall: wall) ?? .genericError
         if conflict == .noConflicts {
-            boardInterface?.insertWallOnTheBoard(wall: wall)
-            //  gameInterface?
+            localGameEvent = .waiting
+            Task.init {
+                do {
+                    try await gameInterface?.updateWalls(wall: wall)
+                    localGameEvent = .waitingOpponentMove
+                    boardInterface?.insertWallOnTheBoard(wall: wall)
+                } catch {
+                    localGameEvent = .genericError
+                }
+            }
         } else {
             localGameEvent = conflictsToEvent(conflict: conflict)
         }
-    }
-    
-    func getBoardState() -> Board {
-        return boardInterface?.getBoardState() ?? Board()
     }
     
 }
