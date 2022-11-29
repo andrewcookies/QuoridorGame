@@ -8,5 +8,5 @@
 import Foundation
 
 protocol GameInterface {
-    
+    func updateBoard(board : Board)
 }

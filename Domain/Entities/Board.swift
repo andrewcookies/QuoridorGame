@@ -9,8 +9,13 @@ import Foundation
 
 struct Board {
         
-    let userPawn : Pawn
-    let oppositePawn : Pawn
-    let walls : [Wall] 
+    var userPawn : Pawn
+    var oppositePawn : Pawn
+    var walls : [Wall]
     
+    init(){
+        userPawn = Pawn(position: 0)
+        oppositePawn = Pawn(position: 0)
+        walls = []
+    }
 }

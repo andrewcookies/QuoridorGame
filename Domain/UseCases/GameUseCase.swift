@@ -11,17 +11,14 @@ import Combine
 
 final class GameUseCase {
     
-    private var validatorInterface : ValidatorInterface?
     private var userInfoInterface : UserInfoInterface?
     private var boardInterface : BoardRepositoryInterface?
     private var gameInterface : GameInterface?
     @Published private var localGameEvent : GameEvent = .noEvent
     
-    init(validatorInterface: ValidatorInterface?,
-         userInfoInterface: UserInfoInterface?,
+    init(userInfoInterface: UserInfoInterface?,
          boardInterface: BoardRepositoryInterface?,
          gameInterface: GameInterface?) {
-        self.validatorInterface = validatorInterface
         self.userInfoInterface = userInfoInterface
         self.boardInterface = boardInterface
         self.gameInterface = gameInterface
@@ -52,34 +49,26 @@ extension GameUseCase : GameUseCaseProtocol {
     }
     
     func movePawn(newPawn: Pawn) {
-        if let board = boardInterface?.getBoardState() {
-            let conflicts = validatorInterface?.validatePawnMove(pawn: newPawn, board: board) ?? [.genericError]
-            if conflicts.count == 0 {
-                boardInterface?.movePawnOnTheBoard(board: board)
-              //  gameInterface?
-            }
-        } else {
-            localGameEvent = .genericError
+        
+        let conflict = boardInterface?.validateMovePawn(pawn: newPawn) ?? .genericError
+        if conflict == .noConflicts {
+            boardInterface?.movePawnOnTheBoard(pawn: newPawn)
+            //  gameInterface?
         }
     }
     
     func insertWall(wall: Wall) {
-        if let board = boardInterface?.getBoardState() {
-            let conflicts = validatorInterface?.validateInsertWall(wall: wall, board: board) ?? [.genericError]
-            if conflicts.count == 0 {
-                boardInterface?.movePawnOnTheBoard(board: board)
-              //  gameInterface?
-            } else {
-                let event = conflictsToEvent(conflict: conflicts.first ?? .genericError)
-                localGameEvent = event
-            }
+        let conflict = boardInterface?.validateInsertWall(wall: wall) ?? .genericError
+        if conflict == .noConflicts {
+            boardInterface?.insertWallOnTheBoard(wall: wall)
+            //  gameInterface?
         } else {
-            localGameEvent = .genericError
+            localGameEvent = conflictsToEvent(conflict: conflict)
         }
     }
     
     func getBoardState() -> Board {
-        return boardInterface?.getBoardState() ?? Board(userPawn: Pawn(position: -1), oppositePawn:  Pawn(position: -1), walls: [])
+        return boardInterface?.getBoardState() ?? Board()
     }
     
 }

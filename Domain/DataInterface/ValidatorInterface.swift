@@ -7,6 +7,7 @@
 
 import Foundation
 enum BoardConflict {
+    case noConflicts
     case genericError
     case wrongWallPosition
     case noMoreWalls
