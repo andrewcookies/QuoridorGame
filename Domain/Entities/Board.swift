@@ -11,6 +11,6 @@ struct Board {
         
     let userPawn : Pawn
     let oppositePawn : Pawn
-    let walls : [Wall]
+    let walls : [Wall] 
     
 }

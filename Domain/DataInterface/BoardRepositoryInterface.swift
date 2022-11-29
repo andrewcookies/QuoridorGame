@@ -8,6 +8,7 @@
 import Foundation
 
 protocol BoardRepositoryInterface {
-    func updateBoard(board : Board)
+    func movePawnOnTheBoard(board : Board)
+    func insertWallOnTheBoard(board : Board)
     func getBoardState() -> Board
 }

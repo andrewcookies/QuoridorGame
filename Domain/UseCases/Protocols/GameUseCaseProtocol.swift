@@ -6,12 +6,26 @@
 //
 
 import Foundation
+import Combine
+
+enum GameEvent {
+    case matchWon
+    case matchLost
+    case updateBoard
+    case genericError
+    case invalidWall
+    case noWall
+    case invalidPawn
+    case noEvent
+}
+
 
 protocol GameUseCaseProtocol {
     
     func movePawn(newPawn : Pawn)
     func insertWall(wall : Wall)
     func getBoardState() -> Board
-    //add listener
+    
+    var gameEvent : Published<GameEvent>.Publisher { get }
 }
 
