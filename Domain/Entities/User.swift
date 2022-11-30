@@ -10,4 +10,9 @@ import Foundation
 struct User {
     let userId : String
     let name : String
+    
+    enum CodingKeys: String, CodingKey {
+        case userId
+        case name
+    }
 }

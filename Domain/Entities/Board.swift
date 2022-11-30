@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Board {
+struct Board: Codable {
         
     var userPawn : Pawn
     var oppositePawn : Pawn
@@ -17,5 +17,11 @@ struct Board {
         userPawn = Pawn(position: 0)
         oppositePawn = Pawn(position: 0)
         walls = []
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case userPawn
+        case oppositePawn
+        case walls
     }
 }

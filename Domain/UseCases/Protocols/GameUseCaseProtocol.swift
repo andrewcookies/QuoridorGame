@@ -14,7 +14,7 @@ enum GameEvent {
     case matchWon
     case matchLost
     case updateBoard
-    case genericError
+    case error
     case invalidWall
     case noWall
     case invalidPawn
@@ -24,10 +24,9 @@ enum GameEvent {
 
 protocol GameUseCaseProtocol {
     
-    func movePawn(newPawn : Pawn)
-    func insertWall(wall : Wall)
+    func movePawn(newPawn : Pawn) async -> GameEvent
+    func insertWall(wall : Wall) async -> GameEvent
     
-    var gameEvent : Published<GameEvent>.Publisher { get }
     var board : Published<Board>.Publisher { get }
 }
 

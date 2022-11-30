@@ -6,6 +6,11 @@
 //
 
 import Foundation
-struct Pawn {
+struct Pawn : Codable {
     let position : Int
+    
+    enum CodingKeys: String, CodingKey {
+        case position
+    }
+    
 }

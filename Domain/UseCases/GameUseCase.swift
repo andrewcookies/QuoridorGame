@@ -29,7 +29,7 @@ final class GameUseCase {
         
         self.gameInterface?.boardListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] board in
             guard let self = self else { return }
-            boardInterface?.updateBoard(board: board)
+            self.boardInterface?.updateBoard(board: board)
             self.localBoard = board
             
         }).store(in: &subscribers)
@@ -39,7 +39,7 @@ final class GameUseCase {
         switch conflict {
             
         case .genericError:
-            return .genericError
+            return .error
 
         case .wrongWallPosition:
             return .invalidWall
@@ -48,55 +48,46 @@ final class GameUseCase {
             return .noWall
             
         default:
-            return .genericError
+            return .error
         }
     }
 }
 
 extension GameUseCase : GameUseCaseProtocol {
+    func movePawn(newPawn: Pawn) async -> GameEvent {
+        let conflict = boardInterface?.validateMovePawn(pawn: newPawn) ?? .genericError
+        if conflict == .noConflicts {
+            do {
+                try await gameInterface?.updatePawn(pawn: newPawn)
+                boardInterface?.movePawnOnTheBoard(pawn: newPawn)
+                return GameEvent.waitingOpponentMove
+            } catch {
+                return GameEvent.error
+            }
+        } else {
+            return .invalidPawn
+        }
+    }
+    
+    func insertWall(wall: Wall) async -> GameEvent {
+        let conflict = boardInterface?.validateInsertWall(wall: wall) ?? .genericError
+        if conflict == .noConflicts {
+            do {
+                try await gameInterface?.updateWalls(wall: wall)
+                boardInterface?.insertWallOnTheBoard(wall: wall)
+                return GameEvent.waitingOpponentMove
+            } catch {
+                return GameEvent.error
+            }
+            
+        } else {
+            return conflictsToEvent(conflict: conflict)
+        }
+    }
+    
     
     var board: Published<Board>.Publisher {
         return $localBoard
-    }
-    
-    
-    var gameEvent: Published<GameEvent>.Publisher {
-        $localGameEvent
-    }
-    
-    func movePawn(newPawn: Pawn) {
-        
-        let conflict = boardInterface?.validateMovePawn(pawn: newPawn) ?? .genericError
-        if conflict == .noConflicts {
-            localGameEvent = .waiting
-            Task.init {
-                do {
-                    try await gameInterface?.updatePawn(pawn: newPawn)
-                    localGameEvent = .waitingOpponentMove
-                    boardInterface?.movePawnOnTheBoard(pawn: newPawn)
-                } catch {
-                    localGameEvent = .genericError
-                }
-            }
-        }
-    }
-    
-    func insertWall(wall: Wall) {
-        let conflict = boardInterface?.validateInsertWall(wall: wall) ?? .genericError
-        if conflict == .noConflicts {
-            localGameEvent = .waiting
-            Task.init {
-                do {
-                    try await gameInterface?.updateWalls(wall: wall)
-                    localGameEvent = .waitingOpponentMove
-                    boardInterface?.insertWallOnTheBoard(wall: wall)
-                } catch {
-                    localGameEvent = .genericError
-                }
-            }
-        } else {
-            localGameEvent = conflictsToEvent(conflict: conflict)
-        }
     }
     
 }

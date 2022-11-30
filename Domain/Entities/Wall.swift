@@ -6,12 +6,12 @@
 //
 
 import Foundation
-enum WallOrientation {
+enum WallOrientation: String, Codable {
     case vertical
     case horizontal
 }
 
-enum WallPosition {
+enum WallPosition: String, Codable {
     case top
     case bottom
     case middle
@@ -19,8 +19,14 @@ enum WallPosition {
     case left
 }
 
-struct Wall {
+struct Wall : Codable {
     let orientation : WallOrientation
     let position : WallPosition
     let topLeftCell : Int
+    
+    enum CodingKeys: String, CodingKey {
+        case orientation
+        case position
+        case topLeftCell
+    }
 }
