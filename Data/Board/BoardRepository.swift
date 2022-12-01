@@ -12,8 +12,7 @@ final class BoardRespository {
     private var board : Board
     private var validator : ValidatorInterface?
     
-    init(validator: ValidatorInterface?,
-         game : GameInterface?) {
+    init(validator: ValidatorInterface?) {
         self.board = Board()
         self.validator = validator
     }

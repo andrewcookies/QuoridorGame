@@ -15,7 +15,6 @@ final class GameUseCase {
     private var boardInterface : BoardRepositoryInterface?
     private var gameInterface : GameInterface?
     
-    @Published private var localGameEvent : GameEvent = .noEvent
     @Published private var localBoard : Board = Board()
 
     private var subscribers: [AnyCancellable] = []
@@ -54,6 +53,16 @@ final class GameUseCase {
 }
 
 extension GameUseCase : GameUseCaseProtocol {
+    func initMatch() async -> GameEvent {
+        do {
+            //TODO: check opponents turn
+            try await gameInterface?.searchMatch()
+            return GameEvent.waitingOpponentMove
+        } catch {
+            return GameEvent.error
+        }
+    }
+    
     func movePawn(newPawn: Pawn) async -> GameEvent {
         let conflict = boardInterface?.validateMovePawn(pawn: newPawn) ?? .genericError
         if conflict == .noConflicts {

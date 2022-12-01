@@ -8,8 +8,7 @@
 import Foundation
 
 protocol GameInterface {
-    func createGameSession() async throws
-    func searchSession() async throws
+    func searchMatch() async throws
     func updatePawn(pawn : Pawn) async throws
     func updateWalls(wall : Wall) async throws
     

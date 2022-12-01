@@ -24,6 +24,7 @@ enum GameEvent {
 
 protocol GameUseCaseProtocol {
     
+    func initMatch() async -> GameEvent
     func movePawn(newPawn : Pawn) async -> GameEvent
     func insertWall(wall : Wall) async -> GameEvent
     

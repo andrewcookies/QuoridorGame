@@ -28,11 +28,7 @@ extension OnlineGameRepository : GameInterface {
     }
     
     
-    func createGameSession() async {
-        //TODO:
-    }
-    
-    func searchSession() async {
+    func searchMatch() async throws {
         //TODOD:
     }
     
