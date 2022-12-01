@@ -19,7 +19,7 @@ enum WallPosition: String, Codable {
     case left
 }
 
-struct Wall : Codable {
+struct Wall : Codable, DictionaryConverter {
     let orientation : WallOrientation
     let position : WallPosition
     let topLeftCell : Int
@@ -28,5 +28,9 @@ struct Wall : Codable {
         case orientation
         case position
         case topLeftCell
+    }
+    
+    static var defaultValue : Wall {
+        return Wall(orientation: .horizontal, position: .bottom, topLeftCell: 10)
     }
 }

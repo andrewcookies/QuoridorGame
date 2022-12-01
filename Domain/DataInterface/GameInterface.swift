@@ -71,4 +71,15 @@ db.collection("cities").document("LA").setData([
      }
  }
  }
+ 
+ db.collection("cities").whereField("capital", isEqualTo: true)
+     .getDocuments() { (querySnapshot, err) in
+         if let err = err {
+             print("Error getting documents: \(err)")
+         } else {
+             for document in querySnapshot!.documents {
+                 print("\(document.documentID) => \(document.data())")
+             }
+         }
+ }
 */

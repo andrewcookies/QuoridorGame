@@ -13,7 +13,7 @@ final class BoardRespository {
     private var validator : ValidatorInterface?
     
     init(validator: ValidatorInterface?) {
-        self.board = Board()
+        self.board = Board.defaultValue
         self.validator = validator
     }
     
@@ -25,11 +25,11 @@ extension BoardRespository : BoardRepositoryInterface {
     }
     
     func movePawnOnTheBoard(pawn: Pawn) {
-        board.userPawn = pawn
+        //board.userPawn = pawn
     }
     
     func insertWallOnTheBoard(wall: Wall) {
-        board.walls.append(wall)
+       // board.walls.append(wall)
     }
     
     func getBoardState() -> Board {

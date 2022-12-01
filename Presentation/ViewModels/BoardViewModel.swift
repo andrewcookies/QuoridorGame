@@ -22,7 +22,7 @@ final class BoardViewModel {
     private var useCases : GameUseCaseProtocol?
     private var subscribers: [AnyCancellable] = []
 
-    @Published private var localBoard : Board = Board()
+    @Published private var localBoard : Board = Board.defaultValue
     
     init(useCases: GameUseCaseProtocol?) {
         self.useCases = useCases

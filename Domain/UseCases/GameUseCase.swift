@@ -15,7 +15,7 @@ final class GameUseCase {
     private var boardInterface : BoardRepositoryInterface?
     private var gameInterface : GameInterface?
     
-    @Published private var localBoard : Board = Board()
+    @Published private var localBoard : Board = Board.defaultValue
 
     private var subscribers: [AnyCancellable] = []
 
