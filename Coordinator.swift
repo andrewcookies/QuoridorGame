@@ -19,7 +19,7 @@ final class Coordinator {
     func start() {
         //navigation...
         
-        let gameInterface = OnlineGameRepository(userInterface: nil)
+        let gameInterface = OnlineGameRepository(userInterface: UserRepository())
         let validator = Validator()
         let boardRepository = BoardRespository(validator: validator)
 
