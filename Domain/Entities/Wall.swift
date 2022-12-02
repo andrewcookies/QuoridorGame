@@ -9,6 +9,7 @@ import Foundation
 enum WallOrientation: String, Codable {
     case vertical
     case horizontal
+    case null
 }
 
 enum WallPosition: String, Codable {
@@ -17,6 +18,7 @@ enum WallPosition: String, Codable {
     case middle
     case right
     case left
+    case null
 }
 
 struct Wall : Codable, DictionaryConverter {
@@ -32,5 +34,10 @@ struct Wall : Codable, DictionaryConverter {
     
     static var defaultValue : Wall {
         return Wall(orientation: .horizontal, position: .bottom, topLeftCell: 10)
+    }
+    
+    static var nullValue : Wall {
+        return Wall(orientation: .null, position: .null, topLeftCell: -1)
+
     }
 }

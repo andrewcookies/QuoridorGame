@@ -12,11 +12,66 @@ import FirebaseCore
 final class OnlineGameRepository {
     
     @Published private var localBoard : Board = Board.defaultValue
+    @Published private var currentGame : Game = Game.defaultValue
     private let db : Firestore?
+    private var currentGameId : String?
+    private var userInterface : UserInfoInterface?
+    private var playerName : String {
+        userInterface?.getUserInfo().name ?? "- -"
+    }
+    private var playerId : String {
+        userInterface?.getUserInfo().userId ?? "- -"
+    }
+   
     
-    init() {
+    init(userInterface : UserInfoInterface?) {
         FirebaseApp.configure()
         db = Firestore.firestore()
+    }
+    
+    private func startNewGame(){
+        let collection = db?.collection("games")
+        let newPlayer = Player(name: playerName,
+                               playerId: playerId,
+                               pawnPosition: Pawn.startValue,
+                               walls: [])
+        let game = Game(created: Date().timeIntervalSince1970,
+                        state: .waiting,
+                        player1: newPlayer,
+                        player2: Player.defaultValue,
+                        wallsOnBaord: [],
+                        lastMove: Move.startValue,
+                        gameMoves: [])
+        
+        if let ref = collection?.addDocument(data: game.toDictionary()){
+            //set Listener
+            self.currentGameId = ref.documentID
+            setGameListener(id: ref.documentID)
+        }
+    }
+    
+    private func joinMatch(game : Game, gameId : String) {
+        let collection = db?.collection("games")
+        let newPlayer =  Player(name: playerName,
+                                playerId: playerId,
+                                pawnPosition: Pawn.startValue,
+                                walls: [])
+
+        collection?.document(gameId).updateData([
+            "player2" : newPlayer.toDictionary(),
+            "state" : GameState.inProgress.rawValue
+        ])
+        
+        setGameListener(id: gameId)
+    }
+    
+    private func setGameListener(id:String){
+        let collection = db?.collection("games")
+        collection?.document(id).addSnapshotListener({ [weak self] documentSnapshot, error in
+            if let document = documentSnapshot, let data = document.data(), let game = self?.gameMapper(from: data) {
+                self?.currentGame = game
+            }
+        })
     }
     
 }
@@ -28,60 +83,85 @@ extension OnlineGameRepository : GameInterface {
     }
     
     func updatePawn(pawn: Pawn) async throws {
-        //TODO:
+        let collection = db?.collection("games")
+        if let id = currentGameId {
+            let move = Move(playerName: playerName, pawnMove: pawn, wallMove: Wall.nullValue)
+            var game = currentGame
+            var playerKey = "-"
+            var currentPlayer = currentGame.player1
+            if game.player1.playerId == userInterface?.getUserInfo().userId ?? "- -" {
+                playerKey = "player1"
+            } else {
+                playerKey = "player2"
+                currentPlayer = currentGame.player2
+            }
+            
+            var player = Player(name: currentPlayer.name, playerId: currentPlayer.playerId, pawnPosition: pawn, walls: currentPlayer.walls)
+            var gameMoves = game.gameMoves
+            gameMoves.append(move)
+            
+
+            
+            try await collection?.document(id).updateData([
+                playerKey : player.toDictionary(),
+                "lastMove" : move.toDictionary(),
+                "gameMoves" : gameMoves
+            ])
+        }
     }
     
     func updateWalls(wall: Wall) async throws {
-        //TODO
+        let collection = db?.collection("games")
+        if let id = currentGameId {
+            let move = Move(playerName: playerName, pawnMove: Pawn.defaultValue, wallMove: wall)
+            var game = currentGame
+            var playerKey = "-"
+            var currentPlayer = currentGame.player1
+            if game.player1.playerId == userInterface?.getUserInfo().userId ?? "- -" {
+                playerKey = "player1"
+            } else {
+                playerKey = "player2"
+                currentPlayer = currentGame.player2
+            }
+           
+            var walls = currentPlayer.walls
+            walls.append(wall)
+            var player = Player(name: currentPlayer.name, playerId: currentPlayer.playerId, pawnPosition: currentPlayer.pawnPosition, walls: walls)
+           
+            var gameMoves = game.gameMoves
+            gameMoves.append(move)
+            
+            var wallsOnBoard = game.wallsOnBaord
+            wallsOnBoard.append(wall)
+            
+            try await collection?.document(id).updateData([
+                playerKey : player.toDictionary(),
+                "lastMove" : move.toDictionary(),
+                "gameMoves" : gameMoves,
+                "wallsOnBoard" : wallsOnBoard
+            ])
+        }
     }
     
     
     func searchMatch() async throws {
         let collection = db?.collection("games")
-        collection?
-            .whereField(Game.CodingKeys.state.rawValue, isEqualTo: GameState.waiting.rawValue)
-            .getDocuments() { [weak self] (querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                } else {
-                    let documents = querySnapshot?.documents
-                    if documents?.count == 0 {
-                        //no waiting game, create a game
-                        let newPlayer = Player(name: "newPlayer", playerId: "2")
-                        let game = Game(created: Date().timeIntervalSince1970,
-                                        state: .waiting,
-                                        player1: Player(name: "newPlayer", playerId: "2"),
-                                        player2: Player.defaultValue,
-                                        board: Board.startValue,
-                                        lastMove: Move(player: newPlayer, pawnMove: Pawn.startValue, wallMove: Wall.defaultValue),
-                                        gameMoves: [])
-                        
-                        collection?.addDocument(data: game.toDictionary())
-                        
-                        //set Listener
-                        
-                    } else {
-                        //add player to exsisting game
-                        if let document = documents?.first,
-                            let game = self?.gameMapper(from: document.data()) {
-                            let id = document.documentID
-                            let newPlayer = Player(name: "newPlayer", playerId: "2")
-                            
-                            let newGame = Game(created: game.created,
-                                               state: game.state,
-                                               player1: game.player1,
-                                               player2: newPlayer,
-                                               board: game.board,
-                                               lastMove: game.lastMove,
-                                               gameMoves: game.gameMoves)
-                            
-                            collection?.document(id).setData(newGame.toDictionary())
-                            
-                        }
-                    }
-                    
-                }
-            }
+        
+        let querySnapshot = try await collection?.whereField(Game.CodingKeys.state.rawValue, isEqualTo: GameState.waiting.rawValue).getDocuments()
+        let waitingGames = querySnapshot?.documents ?? []
+        
+        if waitingGames.count == 0 {
+            //create new game and wait..
+            self.startNewGame()
+        } else {
+            //join waiting match
+            let gameDocument = waitingGames.first
+            let gameDictionary = gameDocument?.data() ?? [:]
+            let gameId = gameDocument?.documentID ?? ""
+            let game = gameMapper(from: gameDictionary)
+            self.currentGameId = gameId
+            self.joinMatch(game: game, gameId: gameId)
+        }
     }
     
 }
@@ -129,8 +209,14 @@ extension OnlineGameRepository : EntityMapperInterface {
             let state = GameState(rawValue: d["state"] as? String ?? "") ?? .terminated
             let player1 = playerMapper(from: d["player1"] as? [String:Any] ?? [:])
             let player2 = playerMapper(from: d["player2"] as? [String:Any] ?? [:])
-            let board = boardMapper(from: d["board"] as? [String:Any] ?? [:])
             let lastMove = moveMapper(from: d["lastMove"] as? [String:Any] ?? [:])
+            
+            var tmpWalls = [Wall]()
+            let wallsOnBoard = d["wallsOnBoard"] as? [[String:Any]] ?? []
+            for w in wallsOnBoard {
+                tmpWalls.append(wallMapper(from: w))
+            }
+
             
             var tmpMoves = [Move]()
             let array = d["gameMoves"] as? [[String:Any]] ?? []
@@ -138,7 +224,7 @@ extension OnlineGameRepository : EntityMapperInterface {
                 tmpMoves.append(moveMapper(from: m))
             }
             
-            return Game(created: created, state: state, player1: player1, player2: player2, board: board, lastMove: lastMove, gameMoves: tmpMoves)
+            return Game(created: created, state: state, player1: player1, player2: player2, wallsOnBaord: tmpWalls, lastMove: lastMove, gameMoves: tmpMoves)
         }
         return Game.defaultValue
     }
@@ -147,16 +233,25 @@ extension OnlineGameRepository : EntityMapperInterface {
         if let d = from as? [String:Any] {
             let name = d["name"] as? String ?? ""
             let playerId = d["playerId"] as? String ?? ""
-            return Player(name: name, playerId: playerId)
+            let pawnPosition = pawnMapper(from: d["pawnPosition"] as? [String:Any] ?? [:])
+            
+            var tmpWalls = [Wall]()
+            let wallsOnBoard = d["walls"] as? [[String:Any]] ?? []
+            for w in wallsOnBoard {
+                tmpWalls.append(wallMapper(from: w))
+            }
+            
+            return Player(name: name, playerId: playerId,pawnPosition: pawnPosition,walls: tmpWalls)
         }
         return Player.defaultValue
     }
     
     func moveMapper(from: Any) -> Move {
         if let d = from as? [String:Any] {
-            let player = playerMapper(from: d["player"] as? [String:Any] ?? [:])
+            let playerName = d["playerName"] as? String ?? ""
             let pawnMove = pawnMapper(from: d["pawnMove"] as? [String:Any] ?? [:])
             let wallMove = wallMapper(from: d["wallMove"] as? [String:Any] ?? [:])
+            return Move(playerName: playerName, pawnMove: pawnMove, wallMove: wallMove)
         }
         return Move.defaultValue
     }
