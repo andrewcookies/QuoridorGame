@@ -11,11 +11,11 @@ import FirebaseCore
 
 final class OnlineGameRepository {
     
-    @Published private var localBoard : Board = Board.defaultValue
     @Published private var currentGame : Game = Game.defaultValue
+    
+    
     private let db : Firestore?
     private var currentGameId : String?
-    private var userInterface : UserInfoInterface?
     private var playerName : String {
         userInterface?.getUserInfo().name ?? "- -"
     }
@@ -24,7 +24,12 @@ final class OnlineGameRepository {
     }
    
     
-    init(userInterface : UserInfoInterface?) {
+    private var userInterface : UserInfoInterface?
+    private var readerInterface : GameRepositoryReadInterface?
+    
+    
+    init(userInterface : UserInfoInterface?,
+         readerInterface : GameRepositoryReadInterface) {
         FirebaseApp.configure()
         db = Firestore.firestore()
     }
@@ -39,7 +44,6 @@ final class OnlineGameRepository {
                         state: .waiting,
                         player1: newPlayer,
                         player2: Player.defaultValue,
-                        wallsOnBaord: [],
                         lastMove: Move.startValue,
                         gameMoves: [])
         
@@ -78,17 +82,18 @@ final class OnlineGameRepository {
 
 
 extension OnlineGameRepository : GameInterface {
-    var boardListener: Published<Board>.Publisher {
-        $localBoard
+    var gameListener: Published<Game>.Publisher {
+        $currentGame
     }
     
     func updatePawn(pawn: Pawn) async throws {
         let collection = db?.collection("games")
         if let id = currentGameId {
             let move = Move(playerName: playerName, pawnMove: pawn, wallMove: Wall.nullValue)
-            var game = currentGame
+            var game = readerInterface?.getCurrentGame() ?? Game.defaultValue
             var playerKey = "-"
-            var currentPlayer = currentGame.player1
+            var currentPlayer = game.player1
+            
             if game.player1.playerId == userInterface?.getUserInfo().userId ?? "- -" {
                 playerKey = "player1"
             } else {
@@ -114,9 +119,10 @@ extension OnlineGameRepository : GameInterface {
         let collection = db?.collection("games")
         if let id = currentGameId {
             let move = Move(playerName: playerName, pawnMove: Pawn.defaultValue, wallMove: wall)
-            var game = currentGame
+            var game = readerInterface?.getCurrentGame() ?? Game.defaultValue
             var playerKey = "-"
-            var currentPlayer = currentGame.player1
+            
+            var currentPlayer = game.player1
             if game.player1.playerId == userInterface?.getUserInfo().userId ?? "- -" {
                 playerKey = "player1"
             } else {
@@ -130,15 +136,12 @@ extension OnlineGameRepository : GameInterface {
            
             var gameMoves = game.gameMoves
             gameMoves.append(move)
-            
-            var wallsOnBoard = game.wallsOnBaord
-            wallsOnBoard.append(wall)
+
             
             try await collection?.document(id).updateData([
                 playerKey : player.toDictionary(),
                 "lastMove" : move.toDictionary(),
-                "gameMoves" : gameMoves,
-                "wallsOnBoard" : wallsOnBoard
+                "gameMoves" : gameMoves
             ])
         }
     }
@@ -211,20 +214,18 @@ extension OnlineGameRepository : EntityMapperInterface {
             let player2 = playerMapper(from: d["player2"] as? [String:Any] ?? [:])
             let lastMove = moveMapper(from: d["lastMove"] as? [String:Any] ?? [:])
             
-            var tmpWalls = [Wall]()
-            let wallsOnBoard = d["wallsOnBoard"] as? [[String:Any]] ?? []
-            for w in wallsOnBoard {
-                tmpWalls.append(wallMapper(from: w))
-            }
-
-            
             var tmpMoves = [Move]()
             let array = d["gameMoves"] as? [[String:Any]] ?? []
             for m in array {
                 tmpMoves.append(moveMapper(from: m))
             }
             
-            return Game(created: created, state: state, player1: player1, player2: player2, wallsOnBaord: tmpWalls, lastMove: lastMove, gameMoves: tmpMoves)
+            return Game(created: created,
+                        state: state,
+                        player1: player1,
+                        player2: player2,
+                        lastMove: lastMove,
+                        gameMoves: tmpMoves)
         }
         return Game.defaultValue
     }

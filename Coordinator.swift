@@ -11,6 +11,8 @@ import UIKit
 final class Coordinator {
     
     private var navigationController : UINavigationController?
+    private let gameDB = DataBaseRepository()
+    private let userDB =  UserRepository()
     
     init(navigationController: UINavigationController? = nil) {
         self.navigationController = navigationController
@@ -18,14 +20,16 @@ final class Coordinator {
     
     func start() {
         //navigation...
-        
-        let gameInterface = OnlineGameRepository(userInterface: UserRepository())
-        let validator = Validator()
-        let boardRepository = BoardRespository(validator: validator)
 
         
-        let useCase = GameUseCase(userInfoInterface: nil,
-                                  boardInterface: boardRepository,
+        let gameInterface = OnlineGameRepository(userInterface: userDB,
+                                                 readerInterface: gameDB)
+        
+        let validator = Validator(readerInterface: gameDB)
+
+        
+        let useCase = GameUseCase(gameRepoWriterInterface: gameDB,
+                                  validator: validator,
                                   gameInterface: gameInterface)
         
         let viewModel = BoardViewModel(useCases: useCase)

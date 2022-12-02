@@ -7,42 +7,35 @@
 
 import Foundation
 
-final class BoardRespository {
+final class DataBaseRepository {
     
-    private var board : Board
-    private var validator : ValidatorInterface?
+    private var currentGame : Game
     
-    init(validator: ValidatorInterface?) {
-        self.board = Board.defaultValue
-        self.validator = validator
+    init() {
+        self.currentGame = Game.defaultValue
     }
     
 }
 
-extension BoardRespository : BoardRepositoryInterface {
-    func updateBoard(board: Board) {
-        self.board = board
-    }
-    
+extension DataBaseRepository : GameRepositoryWriteInterface {
     func movePawnOnTheBoard(pawn: Pawn) {
-        //board.userPawn = pawn
+        //TODO
     }
     
     func insertWallOnTheBoard(wall: Wall) {
-       // board.walls.append(wall)
+        //TODO
     }
     
-    func getBoardState() -> Board {
-        return board
+    func updateGame(game: Game) {
+        currentGame = game
     }
     
-    func validateMovePawn(pawn: Pawn) -> BoardConflict {
-        let conflicts = validator?.validatePawnMove(pawn: pawn, board: board) ?? [.genericError]
-        return conflicts.first ?? .genericError
+}
+
+extension DataBaseRepository : GameRepositoryReadInterface {
+    func getCurrentGame() -> Game {
+        return currentGame
     }
     
-    func validateInsertWall(wall: Wall) -> BoardConflict {
-        let conflicts = validator?.validateInsertWall(wall: wall, board: board) ?? [.genericError]
-        return conflicts.first ?? .genericError
-    }
+
 }

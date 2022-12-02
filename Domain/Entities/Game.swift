@@ -18,7 +18,6 @@ struct Game : Codable, DictionaryConverter {
     let state : GameState
     let player1 : Player
     let player2 : Player
-    let wallsOnBaord : [Wall]
     let lastMove : Move
     let gameMoves : [Move]
     
@@ -27,7 +26,6 @@ struct Game : Codable, DictionaryConverter {
                     state: .terminated,
                     player1: Player.defaultValue,
                     player2: Player.defaultValue,
-                    wallsOnBaord: [],
                     lastMove: Move.defaultValue,
                     gameMoves: [])
     }
@@ -37,7 +35,6 @@ struct Game : Codable, DictionaryConverter {
         case state
         case player1
         case player2
-        case wallsOnBaord
         case lastMove
         case gameMoves
     }

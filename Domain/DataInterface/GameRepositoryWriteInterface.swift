@@ -7,10 +7,9 @@
 
 import Foundation
 
-protocol BoardRepositoryInterface {
+protocol GameRepositoryWriteInterface {
     func movePawnOnTheBoard(pawn : Pawn)
     func insertWallOnTheBoard(wall : Wall)
-    func updateBoard(board : Board)
-    func validateMovePawn(pawn : Pawn) -> BoardConflict
-    func validateInsertWall(wall : Wall) -> BoardConflict
+    func updateGame(game : Game)
 }
+

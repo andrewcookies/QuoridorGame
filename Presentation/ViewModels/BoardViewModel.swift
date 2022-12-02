@@ -13,7 +13,7 @@ protocol BoardViewModelProtocol {
     func insertWall(index : Int)
     func initializeMatch()
     
-    var boardListener : Published<Board>.Publisher { get }
+    var boardListener : Published<Game>.Publisher { get }
 }
 
 
@@ -22,7 +22,7 @@ final class BoardViewModel {
     private var useCases : GameUseCaseProtocol?
     private var subscribers: [AnyCancellable] = []
 
-    @Published private var localBoard : Board = Board.defaultValue
+    @Published private var currentGame : Game = Game.defaultValue
     
     init(useCases: GameUseCaseProtocol?) {
         self.useCases = useCases
@@ -30,9 +30,9 @@ final class BoardViewModel {
     }
     
     private func setupObserver(){
-        useCases?.board.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] board in
+        useCases?.match.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] game in
             guard let self = self else { return }
-            self.localBoard = board
+            self.currentGame = game
         }).store(in: &subscribers)
     }
     
@@ -40,8 +40,8 @@ final class BoardViewModel {
 
 extension BoardViewModel : BoardViewModelProtocol {
     
-    var boardListener: Published<Board>.Publisher {
-        $localBoard
+    var boardListener: Published<Game>.Publisher {
+        $currentGame
     }
     
     func movePawn(index: Int) {

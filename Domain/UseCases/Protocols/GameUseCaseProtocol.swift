@@ -28,6 +28,6 @@ protocol GameUseCaseProtocol {
     func movePawn(newPawn : Pawn) async -> GameEvent
     func insertWall(wall : Wall) async -> GameEvent
     
-    var board : Published<Board>.Publisher { get }
+    var match : Published<Game>.Publisher { get }
 }
 

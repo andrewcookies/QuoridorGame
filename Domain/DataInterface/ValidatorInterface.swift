@@ -14,6 +14,6 @@ enum BoardConflict {
 }
 
 protocol ValidatorInterface {
-    func validatePawnMove(pawn : Pawn, board : Board) -> [BoardConflict]
-    func validateInsertWall(wall : Wall, board : Board) -> [BoardConflict]
+    func validateMovePawn(pawn : Pawn) -> [BoardConflict]
+    func validateInsertWall(wall : Wall) -> [BoardConflict]
 }

@@ -7,14 +7,26 @@
 
 import Foundation
 
-final class Validator{}
+final class Validator{
+    
+    private let readerInterface : GameRepositoryReadInterface?
+    
+    init(readerInterface: GameRepositoryReadInterface?) {
+        self.readerInterface = readerInterface
+    }
+    
+}
 
 extension Validator : ValidatorInterface {
-    func validatePawnMove(pawn: Pawn, board: Board) -> [BoardConflict] {
+    func validateMovePawn(pawn: Pawn) -> [BoardConflict] {
+        let game = readerInterface?.getCurrentGame()
+        //TODO:
         return [.noConflicts]
     }
     
-    func validateInsertWall(wall: Wall, board: Board) -> [BoardConflict] {
+    func validateInsertWall(wall: Wall) -> [BoardConflict] {
+        let game = readerInterface?.getCurrentGame()
+        //TODO:
         return [.noConflicts]
     }
 }

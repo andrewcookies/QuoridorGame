@@ -11,25 +11,24 @@ import Combine
 
 final class GameUseCase {
     
-    private var userInfoInterface : UserInfoInterface?
-    private var boardInterface : BoardRepositoryInterface?
+    private var gameRepoWriterInterface : GameRepositoryWriteInterface?
+    private var validator : ValidatorInterface?
     private var gameInterface : GameInterface?
     
-    @Published private var localBoard : Board = Board.defaultValue
+    @Published private var localGame : Game = Game.defaultValue
 
     private var subscribers: [AnyCancellable] = []
 
-    init(userInfoInterface: UserInfoInterface?,
-         boardInterface: BoardRepositoryInterface?,
+    init(gameRepoWriterInterface: GameRepositoryWriteInterface?,
+         validator : ValidatorInterface?,
          gameInterface: GameInterface?) {
-        self.userInfoInterface = userInfoInterface
-        self.boardInterface = boardInterface
-        self.gameInterface = gameInterface
         
-        self.gameInterface?.boardListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] board in
+        self.gameRepoWriterInterface = gameRepoWriterInterface
+        self.gameInterface = gameInterface
+        self.gameInterface?.gameListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] game in
             guard let self = self else { return }
-            self.boardInterface?.updateBoard(board: board)
-            self.localBoard = board
+            self.gameRepoWriterInterface?.updateGame(game: game)
+            self.localGame = game
             
         }).store(in: &subscribers)
     }
@@ -64,11 +63,11 @@ extension GameUseCase : GameUseCaseProtocol {
     }
     
     func movePawn(newPawn: Pawn) async -> GameEvent {
-        let conflict = boardInterface?.validateMovePawn(pawn: newPawn) ?? .genericError
-        if conflict == .noConflicts {
+        let conflict = validator?.validateMovePawn(pawn: newPawn) ?? [.genericError]
+        if conflict.first == .noConflicts {
             do {
                 try await gameInterface?.updatePawn(pawn: newPawn)
-                boardInterface?.movePawnOnTheBoard(pawn: newPawn)
+                gameRepoWriterInterface?.movePawnOnTheBoard(pawn: newPawn)
                 return GameEvent.waitingOpponentMove
             } catch {
                 return GameEvent.error
@@ -79,24 +78,24 @@ extension GameUseCase : GameUseCaseProtocol {
     }
     
     func insertWall(wall: Wall) async -> GameEvent {
-        let conflict = boardInterface?.validateInsertWall(wall: wall) ?? .genericError
-        if conflict == .noConflicts {
+        let conflict = validator?.validateInsertWall(wall: wall) ?? [.genericError]
+        if conflict.first == .noConflicts {
             do {
                 try await gameInterface?.updateWalls(wall: wall)
-                boardInterface?.insertWallOnTheBoard(wall: wall)
+                gameRepoWriterInterface?.insertWallOnTheBoard(wall: wall)
                 return GameEvent.waitingOpponentMove
             } catch {
                 return GameEvent.error
             }
             
         } else {
-            return conflictsToEvent(conflict: conflict)
+            return conflictsToEvent(conflict: conflict.first ?? .genericError)
         }
     }
     
     
-    var board: Published<Board>.Publisher {
-        return $localBoard
+    var match: Published<Game>.Publisher {
+        return $localGame
     }
     
 }
