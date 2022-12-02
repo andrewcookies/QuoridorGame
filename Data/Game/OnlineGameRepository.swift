@@ -34,7 +34,7 @@ final class OnlineGameRepository {
         db = Firestore.firestore()
     }
     
-    private func startNewGame(){
+    private func startNewGame() async throws {
         let collection = db?.collection("games")
         let newPlayer = Player(name: playerName,
                                playerId: playerId,
@@ -47,35 +47,36 @@ final class OnlineGameRepository {
                         lastMove: Move.startValue,
                         gameMoves: [])
         
-        if let ref = collection?.addDocument(data: game.toDictionary()){
+        let ref = try await collection?.addDocument(data: game.toDictionary())
             //set Listener
-            self.currentGameId = ref.documentID
-            setGameListener(id: ref.documentID)
-        }
+        let documentID = ref?.documentID ?? ""
+        self.currentGameId = documentID
+        try await setGameListener(id: documentID)
+        
     }
     
-    private func joinMatch(game : Game, gameId : String) {
+    private func joinMatch(game : Game, gameId : String) async throws {
         let collection = db?.collection("games")
         let newPlayer =  Player(name: playerName,
                                 playerId: playerId,
                                 pawnPosition: Pawn.startValue,
                                 walls: [])
-
-        collection?.document(gameId).updateData([
-            "player2" : newPlayer.toDictionary(),
-            "state" : GameState.inProgress.rawValue
-        ])
         
-        setGameListener(id: gameId)
+        try await collection?.document(gameId).updateData([ "player2" : newPlayer.toDictionary(), "state" : GameState.inProgress.rawValue ])
+        try await self.setGameListener(id: gameId)
+
+
+        
     }
     
-    private func setGameListener(id:String){
+    private func setGameListener(id:String) async throws {
         let collection = db?.collection("games")
-        collection?.document(id).addSnapshotListener({ [weak self] documentSnapshot, error in
+        collection?.document(id).addSnapshotListener({ [weak self] (documentSnapshot,error) in
             if let document = documentSnapshot, let data = document.data(), let game = self?.gameMapper(from: data) {
                 self?.currentGame = game
             }
         })
+        
     }
     
 }
@@ -90,7 +91,7 @@ extension OnlineGameRepository : GameInterface {
         let collection = db?.collection("games")
         if let id = currentGameId {
             let move = Move(playerName: playerName, pawnMove: pawn, wallMove: Wall.nullValue)
-            var game = readerInterface?.getCurrentGame() ?? Game.defaultValue
+            let game = readerInterface?.getCurrentGame() ?? Game.defaultValue
             var playerKey = "-"
             var currentPlayer = game.player1
             
@@ -98,10 +99,10 @@ extension OnlineGameRepository : GameInterface {
                 playerKey = "player1"
             } else {
                 playerKey = "player2"
-                currentPlayer = currentGame.player2
+                currentPlayer = game.player2
             }
             
-            var player = Player(name: currentPlayer.name, playerId: currentPlayer.playerId, pawnPosition: pawn, walls: currentPlayer.walls)
+            let player = Player(name: currentPlayer.name, playerId: currentPlayer.playerId, pawnPosition: pawn, walls: currentPlayer.walls)
             var gameMoves = game.gameMoves
             gameMoves.append(move)
             
@@ -119,7 +120,7 @@ extension OnlineGameRepository : GameInterface {
         let collection = db?.collection("games")
         if let id = currentGameId {
             let move = Move(playerName: playerName, pawnMove: Pawn.defaultValue, wallMove: wall)
-            var game = readerInterface?.getCurrentGame() ?? Game.defaultValue
+            let game = readerInterface?.getCurrentGame() ?? Game.defaultValue
             var playerKey = "-"
             
             var currentPlayer = game.player1
@@ -127,12 +128,12 @@ extension OnlineGameRepository : GameInterface {
                 playerKey = "player1"
             } else {
                 playerKey = "player2"
-                currentPlayer = currentGame.player2
+                currentPlayer = game.player2
             }
            
             var walls = currentPlayer.walls
             walls.append(wall)
-            var player = Player(name: currentPlayer.name, playerId: currentPlayer.playerId, pawnPosition: currentPlayer.pawnPosition, walls: walls)
+            let player = Player(name: currentPlayer.name, playerId: currentPlayer.playerId, pawnPosition: currentPlayer.pawnPosition, walls: walls)
            
             var gameMoves = game.gameMoves
             gameMoves.append(move)
@@ -155,7 +156,7 @@ extension OnlineGameRepository : GameInterface {
         
         if waitingGames.count == 0 {
             //create new game and wait..
-            self.startNewGame()
+            try await startNewGame()
         } else {
             //join waiting match
             let gameDocument = waitingGames.first
@@ -163,7 +164,7 @@ extension OnlineGameRepository : GameInterface {
             let gameId = gameDocument?.documentID ?? ""
             let game = gameMapper(from: gameDictionary)
             self.currentGameId = gameId
-            self.joinMatch(game: game, gameId: gameId)
+            try await joinMatch(game: game, gameId: gameId)
         }
     }
     

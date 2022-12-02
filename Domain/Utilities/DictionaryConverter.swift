@@ -29,7 +29,13 @@ extension DictionaryConverter {
                     dictionary[key] = collectionValidHashable
                 }
                 
-                if let validHashable = element.value as? AnyHashable {
+                if let validHashable = element.value as? String {
+                    dictionary[key] = validHashable
+                }
+                if let validHashable = element.value as? Double {
+                    dictionary[key] = validHashable
+                }
+                if let validHashable = element.value as? Int {
                     dictionary[key] = validHashable
                 }
                 
