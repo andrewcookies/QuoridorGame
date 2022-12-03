@@ -6,12 +6,21 @@
 //
 
 import Foundation
-
-protocol GameInterface {
-    func searchMatch() async throws
-    func updatePawn(pawn : Pawn) async throws
-    func updateWalls(wall : Wall) async throws
-    
-    var gameListener : Published<Game>.Publisher { get }
+enum PlayerType {
+    case player1
+    case player2
 }
 
+protocol GameOutputInterface {
+    func sendMove(gameId : String, player : Player, moves : [Move], playerType : PlayerType) async throws
+}
+
+
+protocol GameInputInterface {
+    func searchMatch(player : Player) async throws -> String
+}
+
+
+protocol GameListenerInterface {
+    func initListemer(gameId : String) async throws
+}

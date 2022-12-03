@@ -20,22 +20,16 @@ protocol BoardViewModelProtocol {
 final class BoardViewModel {
     
     private var useCases : GameUseCaseProtocol?
+    private var matchmakingUseCase : MatchMakingUseCaseProtocol?
     private var subscribers: [AnyCancellable] = []
 
     @Published private var currentGame : Game = Game.defaultValue
     
-    init(useCases: GameUseCaseProtocol?) {
+    init(useCases: GameUseCaseProtocol?,
+         matchmakingUseCase : MatchMakingUseCaseProtocol?) {
         self.useCases = useCases
-        setupObserver()
+        self.matchmakingUseCase = matchmakingUseCase
     }
-    
-    private func setupObserver(){
-        useCases?.match.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] game in
-            guard let self = self else { return }
-            self.currentGame = game
-        }).store(in: &subscribers)
-    }
-    
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
@@ -60,9 +54,16 @@ extension BoardViewModel : BoardViewModelProtocol {
     
     func initializeMatch() {
         Task {
-            let res = await useCases?.initMatch()
+            let res = await matchmakingUseCase?.initMatch()
         }
     }
     
     
+}
+
+final class MatchMakingViewModel {}
+extension MatchMakingViewModel : PresentationGameListenerInterface {
+    func updatePresentationLayer(game: Game) {
+        //self.currentGame = game
+    }
 }

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 enum GameEvent {
     case waiting
@@ -19,15 +18,12 @@ enum GameEvent {
     case noWall
     case invalidPawn
     case noEvent
+    case searchingOpponents
 }
 
 
 protocol GameUseCaseProtocol {
-    
-    func initMatch() async -> GameEvent
     func movePawn(newPawn : Pawn) async -> GameEvent
     func insertWall(wall : Wall) async -> GameEvent
-    
-    var match : Published<Game>.Publisher { get }
 }
 

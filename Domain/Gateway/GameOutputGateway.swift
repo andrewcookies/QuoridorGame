@@ -1,0 +1,92 @@
+//
+//  GameGateway.swift
+//  QuoridorGame
+//
+//  Created by Andrea Colussi on 03/12/22.
+//
+
+import Foundation
+
+final class GameOutputGateway {
+    
+    private var gameInterface : GameOutputInterface?
+    private var dataBaseReaderInterface : GameRepositoryReadInterface?
+    private var userInterface : UserInfoInterface?
+
+    
+    init(gameInterface: GameOutputInterface?,
+         dataBaseReaderInterface : GameRepositoryReadInterface?,
+         userInterface : UserInfoInterface?) {
+        self.gameInterface = gameInterface
+        self.dataBaseReaderInterface = dataBaseReaderInterface
+    }
+}
+
+extension GameOutputGateway : GameGatewayOutputInterface {
+    func searchMatch() async throws {
+        <#code#>
+    }
+    
+    func updatePawn(pawn: Pawn) async throws {
+        if let currentGame = dataBaseReaderInterface?.getCurrentGame(),
+           let currentUser = userInterface?.getUserInfo() {
+            var playerType = PlayerType.player1
+            var player : Player = Player.defaultValue
+            
+            if currentGame.player1.playerId == currentUser.userId {
+                player = Player(name: currentGame.player1.name,
+                                playerId: currentGame.player1.playerId,
+                                pawnPosition: pawn,
+                                walls: currentGame.player1.walls)
+            } else {
+                playerType = .player2
+                player = Player(name: currentGame.player2.name,
+                                playerId: currentGame.player2.playerId,
+                                pawnPosition: pawn,
+                                walls: currentGame.player2.walls)
+            }
+            
+            let move = Move(playerName: player.name, pawnMove: pawn, wallMove: Wall.nullValue)
+            var currentMoves = currentGame.gameMoves
+            currentMoves.append(move)
+
+            let gameId = dataBaseReaderInterface?.getCurrentGameId() ?? "- -"
+            try await gameInterface?.sendMove(gameId : gameId, player: player, moves: currentMoves, playerType: playerType)
+        }
+    }
+    
+    func updateWall(wall: Wall) async throws {
+        if let currentGame = dataBaseReaderInterface?.getCurrentGame(),
+           let currentUser = userInterface?.getUserInfo() {
+            var playerType = PlayerType.player1
+            var player : Player = Player.defaultValue
+            
+            if currentGame.player1.playerId == currentUser.userId {
+                var currentWalls = currentGame.player1.walls
+                currentWalls.append(wall)
+                
+                player = Player(name: currentGame.player1.name,
+                                playerId: currentGame.player1.playerId,
+                                pawnPosition: currentGame.player1.pawnPosition,
+                                walls: currentWalls)
+            } else {
+                playerType = .player2
+                var currentWalls = currentGame.player2.walls
+                currentWalls.append(wall)
+                
+                player = Player(name: currentGame.player2.name,
+                                playerId: currentGame.player2.playerId,
+                                pawnPosition: currentGame.player2.pawnPosition,
+                                walls: currentWalls)
+            }
+            
+            let move = Move(playerName: player.name, pawnMove: Pawn.defaultValue, wallMove: wall)
+            var currentMoves = currentGame.gameMoves
+            currentMoves.append(move)
+            
+            let gameId = dataBaseReaderInterface?.getCurrentGameId() ?? "- -"
+            try await gameInterface?.sendMove(gameId : gameId, player: player, moves: currentMoves, playerType: playerType)
+        }
+    }
+    
+}

@@ -6,31 +6,20 @@
 //
 
 import Foundation
-import Combine
 
 
 final class GameUseCase {
     
-    private var gameRepoWriterInterface : GameRepositoryWriteInterface?
     private var validator : ValidatorInterface?
-    private var gameInterface : GameInterface?
+    private var gatewayOutputInterface : GameGatewayOutputInterface?
     
     @Published private var localGame : Game = Game.defaultValue
 
-    private var subscribers: [AnyCancellable] = []
-
-    init(gameRepoWriterInterface: GameRepositoryWriteInterface?,
-         validator : ValidatorInterface?,
-         gameInterface: GameInterface?) {
+    init(validator : ValidatorInterface?,
+         gatewayOutputInterface : GameGatewayOutputInterface?) {
         
-        self.gameRepoWriterInterface = gameRepoWriterInterface
-        self.gameInterface = gameInterface
-        self.gameInterface?.gameListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] game in
-            guard let self = self else { return }
-            self.gameRepoWriterInterface?.updateGame(game: game)
-            self.localGame = game
-            
-        }).store(in: &subscribers)
+        self.gatewayOutputInterface = gatewayOutputInterface
+        self.validator = validator
     }
     
     func conflictsToEvent(conflict : BoardConflict) -> GameEvent {
@@ -54,8 +43,7 @@ final class GameUseCase {
 extension GameUseCase : GameUseCaseProtocol {
     func initMatch() async -> GameEvent {
         do {
-            //TODO: check opponents turn
-            try await gameInterface?.searchMatch()
+            try await gatewayOutputInterface?.searchMatch()
             return GameEvent.waitingOpponentMove
         } catch {
             return GameEvent.error
@@ -66,8 +54,7 @@ extension GameUseCase : GameUseCaseProtocol {
         let conflict = validator?.validateMovePawn(pawn: newPawn) ?? [.genericError]
         if conflict.first == .noConflicts {
             do {
-                try await gameInterface?.updatePawn(pawn: newPawn)
-                gameRepoWriterInterface?.movePawnOnTheBoard(pawn: newPawn)
+                try await gatewayOutputInterface?.updatePawn(pawn: newPawn)
                 return GameEvent.waitingOpponentMove
             } catch {
                 return GameEvent.error
@@ -81,8 +68,7 @@ extension GameUseCase : GameUseCaseProtocol {
         let conflict = validator?.validateInsertWall(wall: wall) ?? [.genericError]
         if conflict.first == .noConflicts {
             do {
-                try await gameInterface?.updateWalls(wall: wall)
-                gameRepoWriterInterface?.insertWallOnTheBoard(wall: wall)
+                try await gatewayOutputInterface?.updateWall(wall: wall)
                 return GameEvent.waitingOpponentMove
             } catch {
                 return GameEvent.error

@@ -11,6 +11,8 @@ import Combine
 class BoardViewController: UIViewController {
 
     private var viewModel : BoardViewModelProtocol?
+    private var listener : PresentationGameListenerInterface?
+
     private var subscribers: [AnyCancellable] = []
 
     private var indexPawn = 0
@@ -22,7 +24,8 @@ class BoardViewController: UIViewController {
     }
 
     
-    init(viewModel: BoardViewModelProtocol) {
+    init(viewModel: BoardViewModelProtocol,
+         listener : PresentationGameListenerInterface?) {
         super.init(nibName: String(describing: "BoardViewController"), bundle: nil)
         self.viewModel = viewModel
     }
