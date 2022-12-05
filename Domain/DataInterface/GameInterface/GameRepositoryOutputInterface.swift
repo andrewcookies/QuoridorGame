@@ -11,16 +11,7 @@ enum PlayerType {
     case player2
 }
 
-protocol GameOutputInterface {
+protocol GameRepositoryOutputInterface {
     func sendMove(gameId : String, player : Player, moves : [Move], playerType : PlayerType) async throws
 }
 
-
-protocol GameInputInterface {
-    func searchMatch(player : Player) async throws -> String
-}
-
-
-protocol GameListenerInterface {
-    func initListemer(gameId : String) async throws
-}

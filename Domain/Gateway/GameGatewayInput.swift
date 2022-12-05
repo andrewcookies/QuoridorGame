@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class GameInputGateway {
+final class GameGatewayInput {
     
     private var dataBaseWriterInterface : GameRepositoryWriteInterface?
     private var controller : GameInputUseCaseProtocol?
@@ -20,7 +20,7 @@ final class GameInputGateway {
     }
 }
 
-extension GameInputGateway : GameGatewayInputInterface {
+extension GameGatewayInput : GameGatewayInputInterface {
     func updatedReceived(game: Game) {
         dataBaseWriterInterface?.updateGame(game: game)
         controller?.updateGameFromOpponent(game: game)

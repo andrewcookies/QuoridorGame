@@ -21,7 +21,7 @@ final class MultiplayerOutputGameRepository : EntityMapperInterface {
 }
 
 
-extension MultiplayerOutputGameRepository : GameOutputInterface {
+extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
     func sendMove(gameId : String, player: Player, moves: [Move], playerType: PlayerType) async throws {
         let playerKey = playerType == .player1 ? "player1" : "player2"
         let collection = db?.collection("games")

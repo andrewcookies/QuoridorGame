@@ -33,8 +33,8 @@ final class Coordinator {
     private func getBoardViewController() -> BoardViewController {
         
         //Ouput
-        let gamerepositoryOutput = MultiplayerOutputGameRepository()
-        let gatewayOutput = GameOutputGateway(gameInterface: gamerepositoryOutput,
+        let gameRepositoryOutput = MultiplayerOutputGameRepository()
+        let gatewayOutput = GameGatewayOutput(gameInterface: gameRepositoryOutput,
                                               dataBaseReaderInterface: gameDB,
                                               userInterface: userDB)
         let validator = Validator(readerInterface: gameDB)
@@ -42,22 +42,22 @@ final class Coordinator {
         
         let userCase = GameOutputUseCase(validator: validator, gatewayOutputInterface: gatewayOutput)
         
-        //Listener
-        let listenerViewModel = MatchMakingViewModel()
-        
-        //Input
-        let gatewayInput = GameInputGateway(dataBaseWriterInterface: gameDB,
-                                 controller: listenerViewModel)
-        let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gatewayInput)
-        let matchMaking = MatchMakingUseCase(gameInputInterface: gameRepositoryInput,
-                                             userInterface: userDB,
-                                             dbWriter: gameDB)
+        //MatchMaking and Input
+        let gameInputUseCase = GameInputViewModel()
+        let gameGatewayInput = GameGatewayInput(dataBaseWriterInterface: gameDB, controller: gameInputUseCase)
+        let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gameGatewayInput)
+        let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: gameRepositoryInput,
+                                                    userInterface: userDB,
+                                                    dbWriter: gameDB)
+
+
         
         
         //viewModel
         
-        let viewModel = BoardViewModel(useCases: userCase, matchmakingUseCase: matchMaking)
-        let viewController = BoardViewController(viewModel: viewModel, listener: listenerViewModel)
+        let viewModel = BoardViewModel(useCases: userCase, matchmakingUseCase: matchMakingUseCase)
+        let gameInputViewModel = GameInputViewModel()
+        let viewController = BoardViewController(viewModel: viewModel, listener: gameInputViewModel)
         
         return viewController
     }

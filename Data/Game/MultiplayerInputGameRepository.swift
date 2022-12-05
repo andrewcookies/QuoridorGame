@@ -12,7 +12,7 @@ import FirebaseCore
 final class MultiplayerInputGameRepository : EntityMapperInterface {
     
     private var gatewayInputInterface : GameGatewayInputInterface?
-    private var listener : GameListenerInterface?
+ //   private var listener : GameListenerInterface?
 
     private let db : Firestore?
     private var currentGameId : String?
@@ -63,7 +63,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
     
 }
 
-extension MultiplayerInputGameRepository : GameInputInterface {
+extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
     func searchMatch(player : Player) async throws -> String {
         let collection = db?.collection("games")
         

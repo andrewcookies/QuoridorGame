@@ -9,11 +9,11 @@ import Foundation
 
 final class MatchMakingUseCase {
     
-    private var gameInputInterface : GameInputInterface?
+    private var gameInputInterface : GameRepositoryInputInterface?
     private var userInterface : UserInfoInterface?
     private var dbWriter : GameRepositoryWriteInterface?
     
-    init(gameInputInterface: GameInputInterface?,
+    init(gameInputInterface: GameRepositoryInputInterface?,
          userInterface : UserInfoInterface?,
          dbWriter : GameRepositoryWriteInterface?) {
         self.gameInputInterface = gameInputInterface

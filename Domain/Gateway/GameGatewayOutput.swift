@@ -7,14 +7,14 @@
 
 import Foundation
 
-final class GameOutputGateway {
+final class GameGatewayOutput {
     
-    private var gameInterface : GameOutputInterface?
+    private var gameInterface : GameRepositoryOutputInterface?
     private var dataBaseReaderInterface : GameRepositoryReadInterface?
     private var userInterface : UserInfoInterface?
 
     
-    init(gameInterface: GameOutputInterface?,
+    init(gameInterface: GameRepositoryOutputInterface?,
          dataBaseReaderInterface : GameRepositoryReadInterface?,
          userInterface : UserInfoInterface?) {
         self.gameInterface = gameInterface
@@ -22,11 +22,7 @@ final class GameOutputGateway {
     }
 }
 
-extension GameOutputGateway : GameGatewayOutputInterface {
-    func searchMatch() async throws {
-        <#code#>
-    }
-    
+extension GameGatewayOutput : GameGatewayOutputInterface {
     func updatePawn(pawn: Pawn) async throws {
         if let currentGame = dataBaseReaderInterface?.getCurrentGame(),
            let currentUser = userInterface?.getUserInfo() {
