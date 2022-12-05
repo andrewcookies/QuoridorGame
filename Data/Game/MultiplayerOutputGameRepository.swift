@@ -16,6 +16,9 @@ final class MultiplayerOutputGameRepository : EntityMapperInterface {
     
     
     init() {
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
         db = Firestore.firestore()
     }
 }

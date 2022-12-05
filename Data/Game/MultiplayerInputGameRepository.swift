@@ -19,19 +19,22 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
     
     
     init(gatewayInputInterface: GameGatewayInputInterface) {
-        FirebaseApp.configure()
+        if FirebaseApp.app() == nil {
+            FirebaseApp.configure()
+        }
         db = Firestore.firestore()
         self.gatewayInputInterface = gatewayInputInterface
     }
 
     private func startNewGame(player : Player) async throws -> String {
         let collection = db?.collection("games")
-
-        let game = Game(created: Date().timeIntervalSince1970,
+        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.defaultValue)
+        let timestamp = Double((Date().timeIntervalSince1970 * 1000.0).rounded())
+        let game = Game(created: timestamp,
                         state: .waiting,
                         player1: player,
                         player2: Player.defaultValue,
-                        lastMove: Move.startValue,
+                        lastMove: move,
                         gameMoves: [])
         
         let ref = try await collection?.addDocument(data: game.toDictionary())

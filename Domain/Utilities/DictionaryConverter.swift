@@ -29,6 +29,10 @@ extension DictionaryConverter {
                     dictionary[key] = collectionValidHashable
                 }
                 
+                if let validHashable = element.value as? AnyHashable {
+                    dictionary[key] = (validHashable as? GameState)?.rawValue
+                }
+                
                 if let validHashable = element.value as? String {
                     dictionary[key] = validHashable
                 }
@@ -39,6 +43,7 @@ extension DictionaryConverter {
                     dictionary[key] = validHashable
                 }
                 
+
                 if let convertor = element.value as? DictionaryConverter {
                     dictionary[key] = convertor.toDictionary()
                 }
