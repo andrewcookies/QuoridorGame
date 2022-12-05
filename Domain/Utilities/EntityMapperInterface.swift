@@ -10,7 +10,6 @@ import Foundation
 protocol EntityMapperInterface {
     func pawnMapper(from : Any ) -> Pawn
     func wallMapper(from : Any ) -> Wall
-    func boardMapper(from : Any ) -> Board
     func gameMapper(from : Any ) -> Game
     func playerMapper(from : Any) -> Player
     func moveMapper(from : Any) -> Move
@@ -36,21 +35,6 @@ extension EntityMapperInterface {
         return Wall.defaultValue
     }
     
-    func boardMapper(from: Any) -> Board {
-        if let d = from as? [String:Any] {
-            let player1Pawn = pawnMapper(from: d["player1Pawn"] as? [String:Any] ?? [:])
-            let player2Pawn = pawnMapper(from: d["player2Pawn"] as? [String:Any] ?? [:])
-            let player1RemaingWalls = d["player1RemaingWalls"] as? Int ?? 0
-            let player2RemaingWalls = d["player2RemaingWalls"] as? Int ?? 0
-            let wallsOnBoard = d["wallsOnBoard"] as? [Wall] ?? []
-            return Board(player1Pawn: player1Pawn,
-                         player1RemaingWalls: player1RemaingWalls,
-                         player2Pawn: player2Pawn,
-                         player2RemaingWalls: player2RemaingWalls,
-                         wallsOnBoard: wallsOnBoard)
-        }
-        return Board.defaultValue
-    }
     
     func gameMapper(from: Any) -> Game {
         if let d = from as? [String:Any] {
