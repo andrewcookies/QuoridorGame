@@ -7,6 +7,6 @@
 
 import Foundation
 //To be implemented by ViewModel
-protocol PresentationGameListenerInterface {
-    func updatePresentationLayer(game : Game)
+protocol GameInputUseCaseProtocol {
+    func updateGameFromOpponent(game : Game)
 }

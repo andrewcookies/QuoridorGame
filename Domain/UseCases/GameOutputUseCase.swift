@@ -8,7 +8,7 @@
 import Foundation
 
 
-final class GameUseCase {
+final class GameOutputUseCase {
     
     private var validator : ValidatorInterface?
     private var gatewayOutputInterface : GameGatewayOutputInterface?
@@ -40,16 +40,7 @@ final class GameUseCase {
     }
 }
 
-extension GameUseCase : GameUseCaseProtocol {
-    func initMatch() async -> GameEvent {
-        do {
-            try await gatewayOutputInterface?.searchMatch()
-            return GameEvent.waitingOpponentMove
-        } catch {
-            return GameEvent.error
-        }
-    }
-    
+extension GameOutputUseCase : GameOutputUseCaseProtocol {
     func movePawn(newPawn: Pawn) async -> GameEvent {
         let conflict = validator?.validateMovePawn(pawn: newPawn) ?? [.genericError]
         if conflict.first == .noConflicts {
@@ -78,10 +69,4 @@ extension GameUseCase : GameUseCaseProtocol {
             return conflictsToEvent(conflict: conflict.first ?? .genericError)
         }
     }
-    
-    
-    var match: Published<Game>.Publisher {
-        return $localGame
-    }
-    
 }

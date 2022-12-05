@@ -11,7 +11,7 @@ import Combine
 class BoardViewController: UIViewController {
 
     private var viewModel : BoardViewModelProtocol?
-    private var listener : PresentationGameListenerInterface?
+    private var listener : GameInputViewModelProtocol?
 
     private var subscribers: [AnyCancellable] = []
 
@@ -25,7 +25,7 @@ class BoardViewController: UIViewController {
 
     
     init(viewModel: BoardViewModelProtocol,
-         listener : PresentationGameListenerInterface?) {
+         listener : GameInputViewModelProtocol?) {
         super.init(nibName: String(describing: "BoardViewController"), bundle: nil)
         self.viewModel = viewModel
     }
@@ -35,7 +35,7 @@ class BoardViewController: UIViewController {
     }
     
     private func setupObserver(){
-        viewModel?.boardListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] board in
+        listener?.gameEventListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] board in
             guard let self = self else { return }
            
             print("BoardViewController - board updated")

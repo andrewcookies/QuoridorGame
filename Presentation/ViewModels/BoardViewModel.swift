@@ -13,19 +13,19 @@ protocol BoardViewModelProtocol {
     func insertWall(index : Int)
     func initializeMatch()
     
-    var boardListener : Published<Game>.Publisher { get }
+    var gameEvent : Published<GameEvent>.Publisher { get }
 }
 
 
 final class BoardViewModel {
     
-    private var useCases : GameUseCaseProtocol?
+    private var useCases : GameOutputUseCaseProtocol?
     private var matchmakingUseCase : MatchMakingUseCaseProtocol?
     private var subscribers: [AnyCancellable] = []
 
-    @Published private var currentGame : Game = Game.defaultValue
+    @Published private var currentGameEvent : GameEvent = .noEvent
     
-    init(useCases: GameUseCaseProtocol?,
+    init(useCases: GameOutputUseCaseProtocol?,
          matchmakingUseCase : MatchMakingUseCaseProtocol?) {
         self.useCases = useCases
         self.matchmakingUseCase = matchmakingUseCase
@@ -34,14 +34,15 @@ final class BoardViewModel {
 
 extension BoardViewModel : BoardViewModelProtocol {
     
-    var boardListener: Published<Game>.Publisher {
-        $currentGame
+    var gameEvent: Published<GameEvent>.Publisher {
+        $currentGameEvent
     }
     
     func movePawn(index: Int) {
         let p = Pawn(position: index)
         Task {
             let res = await useCases?.movePawn(newPawn: p)
+            currentGameEvent = res ?? .error
         }
     }
     
@@ -49,21 +50,16 @@ extension BoardViewModel : BoardViewModelProtocol {
         let w = Wall(orientation: .horizontal, position: .bottom, topLeftCell: index)
         Task {
             let res = await useCases?.insertWall(wall: w)
+            currentGameEvent = res ?? .error
         }
     }
     
     func initializeMatch() {
         Task {
             let res = await matchmakingUseCase?.initMatch()
+            currentGameEvent = res ?? .error
         }
     }
-    
-    
 }
 
-final class MatchMakingViewModel {}
-extension MatchMakingViewModel : PresentationGameListenerInterface {
-    func updatePresentationLayer(game: Game) {
-        //self.currentGame = game
-    }
-}
+

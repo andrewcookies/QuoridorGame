@@ -22,7 +22,7 @@ enum GameEvent {
 }
 
 
-protocol GameUseCaseProtocol {
+protocol GameOutputUseCaseProtocol {
     func movePawn(newPawn : Pawn) async -> GameEvent
     func insertWall(wall : Wall) async -> GameEvent
 }

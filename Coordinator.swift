@@ -40,7 +40,7 @@ final class Coordinator {
         let validator = Validator(readerInterface: gameDB)
         
         
-        let userCase = GameUseCase(validator: validator, gatewayOutputInterface: gatewayOutput)
+        let userCase = GameOutputUseCase(validator: validator, gatewayOutputInterface: gatewayOutput)
         
         //Listener
         let listenerViewModel = MatchMakingViewModel()

@@ -10,11 +10,11 @@ import Foundation
 final class GameInputGateway {
     
     private var dataBaseWriterInterface : GameRepositoryWriteInterface?
-    private var controller : PresentationGameListenerInterface?
+    private var controller : GameInputUseCaseProtocol?
 
     
     init(dataBaseWriterInterface: GameRepositoryWriteInterface?,
-         controller: PresentationGameListenerInterface?) {
+         controller: GameInputUseCaseProtocol?) {
         self.dataBaseWriterInterface = dataBaseWriterInterface
         self.controller = controller
     }
@@ -23,7 +23,7 @@ final class GameInputGateway {
 extension GameInputGateway : GameGatewayInputInterface {
     func updatedReceived(game: Game) {
         dataBaseWriterInterface?.updateGame(game: game)
-        controller?.updatePresentationLayer(game: game)
+        controller?.updateGameFromOpponent(game: game)
     }
 }
 
