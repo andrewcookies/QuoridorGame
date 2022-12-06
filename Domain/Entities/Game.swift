@@ -9,6 +9,8 @@ import Foundation
 enum GameState : String, Codable {
     case inProgress
     case waiting
+    case win
+    case lost
     case terminated
 }
 

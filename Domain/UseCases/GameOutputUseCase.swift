@@ -22,51 +22,40 @@ final class GameOutputUseCase {
         self.validator = validator
     }
     
-    func conflictsToEvent(conflict : BoardConflict) -> GameEvent {
-        switch conflict {
-            
-        case .genericError:
-            return .error
-
-        case .wrongWallPosition:
-            return .invalidWall
-        
-        case .noMoreWalls:
-            return .noWall
-            
-        default:
-            return .error
-        }
-    }
 }
 
 extension GameOutputUseCase : GameOutputUseCaseProtocol {
     func movePawn(newPawn: Pawn) async -> GameEvent {
-        let conflict = validator?.validateMovePawn(pawn: newPawn) ?? [.genericError]
-        if conflict.first == .noConflicts {
-            do {
+        let event = validator?.validateMovePawn(pawn: newPawn) ?? .error
+        do{
+            if event == .noEvent {
                 try await gatewayOutputInterface?.updatePawn(pawn: newPawn)
-                return GameEvent.waitingOpponentMove
-            } catch {
-                return GameEvent.error
+                return .waitingOpponentMove
+            } else if event == .matchWon || event == .matchLost {
+                try await gatewayOutputInterface?.updateState(state: event == .matchWon ? .win : .lost)
+                return  event
+            } else {
+                return event
             }
-        } else {
-            return .invalidPawn
+        } catch {
+            return .error
         }
     }
     
     func insertWall(wall: Wall) async -> GameEvent {
-        let conflict = validator?.validateInsertWall(wall: wall) ?? [.genericError]
-        if conflict.first == .noConflicts {
-            do {
+        let event = validator?.validateInsertWall(wall: wall) ?? .error
+        do{
+            if event == .noEvent {
                 try await gatewayOutputInterface?.updateWall(wall: wall)
-                return GameEvent.waitingOpponentMove
-            } catch {
-                return GameEvent.error
+                return .waitingOpponentMove
+            } else if event == .matchWon || event == .matchLost {
+                try await gatewayOutputInterface?.updateState(state: event == .matchWon ? .win : .lost)
+                return  event
+            } else {
+                return event
             }
-            
-        } else {
-            return conflictsToEvent(conflict: conflict.first ?? .genericError)
+        } catch {
+            return .error
         }
     }
 }

@@ -12,17 +12,22 @@ import FirebaseCore
 final class MultiplayerInputGameRepository : EntityMapperInterface {
     
     private var gatewayInputInterface : GameGatewayInputInterface?
-    private var dbWriter : GameRepositoryWriteInterface?
+    private var localRepoWriter : GameRepositoryWriteInterface?
+    private var userInterface : UserInfoInterface?
     
     private let db : Firestore?
     
     
-    init(gatewayInputInterface: GameGatewayInputInterface) {
+    init(gatewayInputInterface: GameGatewayInputInterface,
+         localRepoWriter : GameRepositoryWriteInterface?,
+         userInterface : UserInfoInterface?) {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
         db = Firestore.firestore()
         self.gatewayInputInterface = gatewayInputInterface
+        self.userInterface = userInterface
+        self.localRepoWriter = localRepoWriter
     }
 
     private func startNewGame(player : Player) async throws -> String {
@@ -39,7 +44,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         let ref = try await collection?.addDocument(data: game.toDictionary())
             //set Listener
         let documentID = ref?.documentID ?? ""
-        dbWriter?.setCurrentGameId(id: documentID)
+        localRepoWriter?.setCurrentGameId(id: documentID)
         try await setGameListener(id: documentID)
         return documentID
     }
@@ -56,8 +61,17 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
     private func setGameListener(id:String) async throws {
         let collection = db?.collection("games")
         collection?.document(id).addSnapshotListener({ [weak self] (documentSnapshot,error) in
-            if let document = documentSnapshot, let data = document.data(), let game = self?.gameMapper(from: data) {
-                self?.gatewayInputInterface?.updatedReceived(game: game)
+            if let document = documentSnapshot,
+                let data = document.data(),
+                let game = self?.gameMapper(from: data) {
+                let lastMove = game.lastMove
+                let currentPlayerName = self?.userInterface?.getUserInfo().name
+                
+                //avoid game update from my last move
+                if lastMove.playerName != currentPlayerName {
+                    self?.gatewayInputInterface?.updatedReceived(game: game)
+                }
+                
             }
         })
         
@@ -81,7 +95,7 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
             let gameDictionary = gameDocument?.data() ?? [:]
             let gameId = gameDocument?.documentID ?? ""
             let game = gameMapper(from: gameDictionary)
-            dbWriter?.setCurrentGameId(id: gameId)
+            localRepoWriter?.setCurrentGameId(id: gameId)
             try await joinMatch(player: player, game: game, gameId: gameId)
         }
     }

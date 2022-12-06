@@ -23,6 +23,12 @@ final class GameGatewayOutput {
 }
 
 extension GameGatewayOutput : GameGatewayOutputInterface {
+    func updateState(state: GameState) async throws {
+        if let _ = dataBaseReaderInterface?.getCurrentGame() {
+            try await gameInterface?.updateState(state: state)
+        }
+    }
+    
     func updatePawn(pawn: Pawn) async throws {
         if let currentGame = dataBaseReaderInterface?.getCurrentGame(),
            let currentUser = userInterface?.getUserInfo() {

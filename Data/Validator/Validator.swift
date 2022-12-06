@@ -18,15 +18,16 @@ final class Validator{
 }
 
 extension Validator : ValidatorInterface {
-    func validateMovePawn(pawn: Pawn) -> [BoardConflict] {
+    func validateMovePawn(pawn: Pawn) -> GameEvent {
         let game = readerInterface?.getCurrentGame()
-        //TODO:
-        return [.noConflicts]
+        //TODO: check pawn move and if the game is over (win or lost)
+        return .noEvent
     }
     
-    func validateInsertWall(wall: Wall) -> [BoardConflict] {
+    func validateInsertWall(wall: Wall) -> GameEvent {
         let game = readerInterface?.getCurrentGame()
-        //TODO:
-        return [.noConflicts]
+        //TODO: check wall move and if the game is over (win or lost)
+        return .noEvent
     }
+
 }

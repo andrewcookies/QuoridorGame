@@ -10,4 +10,5 @@ import Foundation
 protocol GameGatewayOutputInterface {
     func updatePawn(pawn: Pawn) async throws
     func updateWall(wall: Wall) async throws
+    func updateState(state : GameState) async throws
 }

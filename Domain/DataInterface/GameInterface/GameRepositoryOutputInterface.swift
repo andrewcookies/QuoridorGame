@@ -13,5 +13,6 @@ enum PlayerType {
 
 protocol GameRepositoryOutputInterface {
     func sendMove(player : Player, moves : [Move], playerType : PlayerType) async throws
+    func updateState(state : GameState) async throws
 }
 

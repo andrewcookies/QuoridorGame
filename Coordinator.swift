@@ -43,7 +43,7 @@ final class Coordinator {
         //MatchMaking and Input
         let gameInputUseCase = GameInputViewModel()
         let gameGatewayInput = GameGatewayInput(dataBaseWriterInterface: gameDB, controller: gameInputUseCase)
-        let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gameGatewayInput)
+        let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gameGatewayInput, localRepoWriter: gameDB, userInterface: userDB)
         let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: gameRepositoryInput,
                                                     userInterface: userDB)
 

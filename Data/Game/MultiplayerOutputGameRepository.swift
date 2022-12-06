@@ -27,6 +27,16 @@ final class MultiplayerOutputGameRepository : EntityMapperInterface {
 
 
 extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
+    func updateState(state: GameState) async throws {
+        guard let gameId = dbReader?.getCurrentGameId() else {
+            return
+        }
+        let collection = db?.collection("games")
+        try await collection?.document(gameId).updateData([
+            "state" : state.rawValue
+        ])
+    }
+    
     func sendMove(player: Player, moves: [Move], playerType: PlayerType) async throws {
         guard let gameId = dbReader?.getCurrentGameId() else {
             return 

@@ -6,14 +6,8 @@
 //
 
 import Foundation
-enum BoardConflict {
-    case noConflicts
-    case genericError
-    case wrongWallPosition
-    case noMoreWalls
-}
 
 protocol ValidatorInterface {
-    func validateMovePawn(pawn : Pawn) -> [BoardConflict]
-    func validateInsertWall(wall : Wall) -> [BoardConflict]
+    func validateMovePawn(pawn : Pawn) -> GameEvent
+    func validateInsertWall(wall : Wall) -> GameEvent
 }
