@@ -18,4 +18,5 @@ enum GameEvent {
     case invalidPawn
     case noEvent
     case searchingOpponents
+    case endGame
 }
