@@ -11,14 +11,11 @@ final class MatchMakingUseCase {
     
     private var gameInputInterface : GameRepositoryInputInterface?
     private var userInterface : UserInfoInterface?
-    private var dbWriter : GameRepositoryWriteInterface?
     
     init(gameInputInterface: GameRepositoryInputInterface?,
-         userInterface : UserInfoInterface?,
-         dbWriter : GameRepositoryWriteInterface?) {
+         userInterface : UserInfoInterface) {
         self.gameInputInterface = gameInputInterface
         self.userInterface = userInterface
-        self.dbWriter = dbWriter
     }
 }
 
@@ -29,8 +26,7 @@ extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
                                 playerId: userInterface?.getUserInfo().userId ?? "- -",
                                 pawnPosition: Pawn.startValue,
                                 walls: [])
-            guard let gameId = try await gameInputInterface?.searchMatch(player: player) else { return .error }
-            dbWriter?.setCurrentGameId(id: gameId)
+            try await gameInputInterface?.searchMatch(player: player)
             return .searchingOpponents
         } catch {
             return .error

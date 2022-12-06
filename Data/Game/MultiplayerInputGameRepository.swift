@@ -12,10 +12,9 @@ import FirebaseCore
 final class MultiplayerInputGameRepository : EntityMapperInterface {
     
     private var gatewayInputInterface : GameGatewayInputInterface?
- //   private var listener : GameListenerInterface?
-
+    private var dbWriter : GameRepositoryWriteInterface?
+    
     private let db : Firestore?
-    private var currentGameId : String?
     
     
     init(gatewayInputInterface: GameGatewayInputInterface) {
@@ -40,7 +39,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         let ref = try await collection?.addDocument(data: game.toDictionary())
             //set Listener
         let documentID = ref?.documentID ?? ""
-        self.currentGameId = documentID
+        dbWriter?.setCurrentGameId(id: documentID)
         try await setGameListener(id: documentID)
         return documentID
     }
@@ -67,7 +66,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
 }
 
 extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
-    func searchMatch(player : Player) async throws -> String {
+    func searchMatch(player : Player) async throws {
         let collection = db?.collection("games")
         
         let querySnapshot = try await collection?.whereField(Game.CodingKeys.state.rawValue, isEqualTo: GameState.waiting.rawValue).getDocuments()
@@ -75,17 +74,15 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
         
         if waitingGames.count == 0 {
             //create new game and wait..
-            let id = try await startNewGame(player: player)
-            return id
+            try await startNewGame(player: player)
         } else {
             //join waiting match
             let gameDocument = waitingGames.first
             let gameDictionary = gameDocument?.data() ?? [:]
             let gameId = gameDocument?.documentID ?? ""
             let game = gameMapper(from: gameDictionary)
-            self.currentGameId = gameId
+            dbWriter?.setCurrentGameId(id: gameId)
             try await joinMatch(player: player, game: game, gameId: gameId)
-            return gameId
         }
     }
 }

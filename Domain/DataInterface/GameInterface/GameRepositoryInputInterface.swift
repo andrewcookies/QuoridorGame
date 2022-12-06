@@ -8,5 +8,5 @@
 import Foundation
 
 protocol GameRepositoryInputInterface {
-    func searchMatch(player : Player) async throws -> String
+    func searchMatch(player : Player) async throws
 }

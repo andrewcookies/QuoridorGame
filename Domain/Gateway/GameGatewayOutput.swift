@@ -46,8 +46,7 @@ extension GameGatewayOutput : GameGatewayOutputInterface {
             var currentMoves = currentGame.gameMoves
             currentMoves.append(move)
 
-            let gameId = dataBaseReaderInterface?.getCurrentGameId() ?? "- -"
-            try await gameInterface?.sendMove(gameId : gameId, player: player, moves: currentMoves, playerType: playerType)
+            try await gameInterface?.sendMove(player: player, moves: currentMoves, playerType: playerType)
         }
     }
     
@@ -80,8 +79,7 @@ extension GameGatewayOutput : GameGatewayOutputInterface {
             var currentMoves = currentGame.gameMoves
             currentMoves.append(move)
             
-            let gameId = dataBaseReaderInterface?.getCurrentGameId() ?? "- -"
-            try await gameInterface?.sendMove(gameId : gameId, player: player, moves: currentMoves, playerType: playerType)
+            try await gameInterface?.sendMove(player: player, moves: currentMoves, playerType: playerType)
         }
     }
     

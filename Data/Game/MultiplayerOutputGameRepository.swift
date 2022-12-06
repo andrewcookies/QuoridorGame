@@ -13,19 +13,24 @@ final class MultiplayerOutputGameRepository : EntityMapperInterface {
     
     
     private let db : Firestore?
+    private let dbReader : GameRepositoryReadInterface?
     
     
-    init() {
+    init( dbReader : GameRepositoryReadInterface?) {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
+        self.dbReader = dbReader
         db = Firestore.firestore()
     }
 }
 
 
 extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
-    func sendMove(gameId : String, player: Player, moves: [Move], playerType: PlayerType) async throws {
+    func sendMove(player: Player, moves: [Move], playerType: PlayerType) async throws {
+        guard let gameId = dbReader?.getCurrentGameId() else {
+            return 
+        }
         let playerKey = playerType == .player1 ? "player1" : "player2"
         let collection = db?.collection("games")
         let move = moves.last

@@ -24,16 +24,14 @@ final class Coordinator {
     }
     
     func start() {
-        //navigation..
         let vc = getBoardViewController()
         navigationController?.pushViewController(vc, animated: false)
-        
     }
     
     private func getBoardViewController() -> BoardViewController {
         
         //Ouput
-        let gameRepositoryOutput = MultiplayerOutputGameRepository()
+        let gameRepositoryOutput = MultiplayerOutputGameRepository(dbReader: gameDB)
         let gatewayOutput = GameGatewayOutput(gameInterface: gameRepositoryOutput,
                                               dataBaseReaderInterface: gameDB,
                                               userInterface: userDB)
@@ -47,8 +45,7 @@ final class Coordinator {
         let gameGatewayInput = GameGatewayInput(dataBaseWriterInterface: gameDB, controller: gameInputUseCase)
         let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gameGatewayInput)
         let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: gameRepositoryInput,
-                                                    userInterface: userDB,
-                                                    dbWriter: gameDB)
+                                                    userInterface: userDB)
 
 
         
