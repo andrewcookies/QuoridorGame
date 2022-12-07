@@ -24,8 +24,17 @@ final class Coordinator {
     }
     
     func start() {
-        let vc = getBoardViewController()
+        let vc = getLoginViewController()
         navigationController?.pushViewController(vc, animated: false)
+    }
+    
+    private func getLoginViewController() -> LoginViewController {
+        let navigation = LoginViewNavigation(startGame: { [weak self] in
+            self?.startGame()
+        })
+        let viewModel = LoginViewModel(userInterface: userDB, navigation: navigation)
+        let viewController = LoginViewController(viewModel: viewModel)
+        return viewController
     }
     
     private func getBoardViewController() -> BoardViewController {
@@ -60,5 +69,11 @@ final class Coordinator {
     }
     
    
+    //MARK: Navigation Actions
+    private func startGame() {
+        let vc = getBoardViewController()
+        navigationController?.pushViewController(vc, animated: false)
+    }
+    
     
 }

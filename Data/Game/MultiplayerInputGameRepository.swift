@@ -69,7 +69,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                 
                 //avoid game update from my last move
                 GameLog.shared.debug(message: "updated received from \(game.lastMove.playerName), gameState \(game.state)", className: "MultiplayerInputGameRepository")
-                if lastMove.playerName != currentPlayerName && (game.state != .inProgress || game.state != .waiting) {
+                if lastMove.playerName != currentPlayerName {
                     self?.gatewayInputInterface?.updatedReceived(game: game)
                 }
                 

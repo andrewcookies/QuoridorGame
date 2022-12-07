@@ -7,11 +7,17 @@
 
 import Foundation
 
-final class UserRepository {}
+final class UserRepository {
+    private var currentUser : User?
+}
 
 extension UserRepository : UserInfoInterface {
+    
     func getUserInfo() -> User {
-        let random = Int.random(in: 0...100)
-        return User(userId: "\(random)", name: "User_\(random)")
+        return currentUser ?? User(userId: "-", name: "-")
+    }
+    
+    func setUserInfo(user: User) {
+        currentUser = user
     }
 }

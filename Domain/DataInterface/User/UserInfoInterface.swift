@@ -8,4 +8,5 @@
 import Foundation
 protocol UserInfoInterface {
     func getUserInfo() -> User
+    func setUserInfo(user : User)
 }
