@@ -53,7 +53,14 @@ extension GameGatewayOutput : GameGatewayOutputInterface {
             var currentMoves = currentGame.gameMoves
             currentMoves.append(move)
 
-            try await gameInterface?.sendMove(player: player, moves: currentMoves, playerType: playerType)
+            let game = Game(created: currentGame.created,
+                            state: currentGame.state,
+                            player1: playerType == .player1 ? player : currentGame.player1,
+                            player2: playerType == .player2 ? player : currentGame.player2,
+                            lastMove: move,
+                            gameMoves: currentMoves)
+            
+            try await gameInterface?.updateGame(game: game)
         }
     }
     
@@ -85,8 +92,15 @@ extension GameGatewayOutput : GameGatewayOutputInterface {
             let move = Move(playerName: player.name, pawnMove: Pawn.defaultValue, wallMove: wall)
             var currentMoves = currentGame.gameMoves
             currentMoves.append(move)
+                        
+            let game = Game(created: currentGame.created,
+                            state: currentGame.state,
+                            player1: playerType == .player1 ? player : currentGame.player1,
+                            player2: playerType == .player2 ? player : currentGame.player2,
+                            lastMove: move,
+                            gameMoves: currentMoves)
             
-            try await gameInterface?.sendMove(player: player, moves: currentMoves, playerType: playerType)
+            try await gameInterface?.updateGame(game: game)
         }
     }
     
