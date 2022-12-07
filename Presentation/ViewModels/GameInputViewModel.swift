@@ -18,10 +18,23 @@ final class GameInputViewModel {
 
 }
 
-extension GameInputViewModel : GameInputUseCaseProtocol {
-    func updateGameFromOpponent(game: Game) {
-        self.currentGame = game
+extension GameInputViewModel : PresentationLayerInputListenerInterface {
+    func opponentRequestRestartGame(game: Game) {
+        //TODO: handle
     }
+    
+    func opponentQuitMatch(game: Game) {
+        //TODO: handle
+    }
+    
+    func opponentWonMatch(game: Game) {
+        //TODO: handle
+    }
+    
+    func opponentMadeMove(game: Game) {
+        //TODO: handle
+    }
+    
 }
 
 extension GameInputViewModel : GameInputViewModelProtocol {

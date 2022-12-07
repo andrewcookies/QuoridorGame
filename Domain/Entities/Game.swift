@@ -10,8 +10,8 @@ enum GameState : String, Codable {
     case inProgress
     case waiting
     case win
-    case lost
-    case terminated
+    case restart
+    case quit
 }
 
 struct Game : Codable, DictionaryConverter {
@@ -25,7 +25,7 @@ struct Game : Codable, DictionaryConverter {
     
     static var defaultValue : Game {
         return Game(created: 0,
-                    state: .terminated,
+                    state: .waiting,
                     player1: Player.defaultValue,
                     player2: Player.defaultValue,
                     lastMove: Move.defaultValue,
