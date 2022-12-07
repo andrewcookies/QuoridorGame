@@ -27,7 +27,7 @@ final class GameOutputUseCase {
 extension GameOutputUseCase : GameOutputUseCaseProtocol {
     func quitMatch() async -> GameEvent {
         do{
-            try await gatewayOutputInterface?.updateState(state: .terminated)
+            try await gatewayOutputInterface?.updateState(state: .quit)
             return .endGame
         } catch {
             return .error
@@ -40,8 +40,8 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
             if event == .noEvent {
                 try await gatewayOutputInterface?.updatePawn(pawn: newPawn)
                 return .waitingOpponentMove
-            } else if event == .matchWon || event == .matchLost {
-                try await gatewayOutputInterface?.updateState(state: event == .matchWon ? .win : .lost)
+            } else if event == .matchWon {
+                try await gatewayOutputInterface?.updateState(state: .win )
                 return  event
             } else {
                 return event
@@ -57,8 +57,8 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
             if event == .noEvent {
                 try await gatewayOutputInterface?.updateWall(wall: wall)
                 return .waitingOpponentMove
-            } else if event == .matchWon || event == .matchLost {
-                try await gatewayOutputInterface?.updateState(state: event == .matchWon ? .win : .lost)
+            } else if event == .matchWon {
+                try await gatewayOutputInterface?.updateState(state: .win)
                 return  event
             } else {
                 return event

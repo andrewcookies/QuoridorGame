@@ -68,7 +68,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                 let currentPlayerName = self?.userInterface?.getUserInfo().name
                 
                 //avoid game update from my last move
-                if lastMove.playerName != currentPlayerName {
+                if lastMove.playerName != currentPlayerName && game.state != .inProgress {
                     self?.gatewayInputInterface?.updatedReceived(game: game)
                 }
                 

@@ -32,9 +32,13 @@ extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
             return
         }
         let collection = db?.collection("games")
-        try await collection?.document(gameId).updateData([
-            "state" : state.rawValue
-        ])
+        if state == .quit {
+            try await collection?.document(gameId).delete()
+        } else {
+            try await collection?.document(gameId).updateData([
+                "state" : state.rawValue
+            ])
+        }
     }
     
     func sendMove(player: Player, moves: [Move], playerType: PlayerType) async throws {
