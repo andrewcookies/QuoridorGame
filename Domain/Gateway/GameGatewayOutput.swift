@@ -19,6 +19,7 @@ final class GameGatewayOutput {
          userInterface : UserInfoInterface?) {
         self.gameInterface = gameInterface
         self.dataBaseReaderInterface = dataBaseReaderInterface
+        self.userInterface = userInterface
     }
 }
 

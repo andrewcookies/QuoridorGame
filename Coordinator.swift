@@ -53,7 +53,9 @@ final class Coordinator {
         let gameInputViewModel = GameInputViewModel()
         let gameInputUseCase = GameInputUseCase(viewModelListener: gameInputViewModel)
         let gameGatewayInput = GameGatewayInput(dataBaseWriterInterface: gameDB, controller: gameInputUseCase)
-        let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gameGatewayInput, localRepoWriter: gameDB, userInterface: userDB)
+        let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gameGatewayInput,
+                                                                 localRepoWriter: gameDB,
+                                                                 userInterface: userDB)
         let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: gameRepositoryInput,
                                                     userInterface: userDB)
 
@@ -72,6 +74,7 @@ final class Coordinator {
     //MARK: Navigation Actions
     private func startGame() {
         let vc = getBoardViewController()
+        navigationController?.popViewController(animated: false)
         navigationController?.pushViewController(vc, animated: false)
     }
     

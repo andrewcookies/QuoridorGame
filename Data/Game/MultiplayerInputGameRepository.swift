@@ -39,7 +39,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                         player1: player,
                         player2: Player.defaultValue,
                         lastMove: move,
-                        gameMoves: [])
+                        gameMoves: [move])
         
         let ref = try await collection?.addDocument(data: game.toDictionary())
             //set Listener
@@ -53,8 +53,17 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                            game : Game,
                            gameId : String) async throws {
         let collection = db?.collection("games")
-
-        try await collection?.document(gameId).updateData([ "player2" : player.toDictionary(), "state" : GameState.inProgress.rawValue ])
+        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.defaultValue)
+        var moves = game.gameMoves
+        moves.append(move)
+        let newGame = Game(created: game.created,
+                           state: .inProgress,
+                           player1: game.player1,
+                           player2: player,
+                           lastMove: move,
+                           gameMoves: moves)
+        
+        try await collection?.document(gameId).setData(newGame.toDictionary())
         try await self.setGameListener(id: gameId)
     }
     
@@ -68,8 +77,8 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                 let currentPlayerName = self?.userInterface?.getUserInfo().name
                 
                 //avoid game update from my last move
-                GameLog.shared.debug(message: "updated received from \(game.lastMove.playerName), gameState \(game.state)", className: "MultiplayerInputGameRepository")
-                if lastMove.playerName != currentPlayerName {
+                if lastMove.playerName != currentPlayerName || game.state != .inProgress {
+                    GameLog.shared.debug(message: "updated received from \(game.lastMove.playerName), gameState \(game.state)", className: "MultiplayerInputGameRepository")
                     self?.gatewayInputInterface?.updatedReceived(game: game)
                 }
                 

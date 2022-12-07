@@ -9,6 +9,11 @@ import Foundation
 import FirebaseFirestore
 import FirebaseCore
 
+enum APIError : Error {
+    case currentInfoNIL
+    
+}
+
 final class MultiplayerOutputGameRepository : EntityMapperInterface {
     
     
@@ -28,9 +33,7 @@ final class MultiplayerOutputGameRepository : EntityMapperInterface {
 
 extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
     func updateState(state: GameState) async throws {
-        guard let gameId = dbReader?.getCurrentGameId() else {
-            return
-        }
+        guard let gameId = dbReader?.getCurrentGameId() else { throw APIError.currentInfoNIL }
         let collection = db?.collection("games")
         try await collection?.document(gameId).updateData([
             "state" : state.rawValue
@@ -38,17 +41,25 @@ extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
     }
     
     func sendMove(player: Player, moves: [Move], playerType: PlayerType) async throws {
-        guard let gameId = dbReader?.getCurrentGameId() else {
-            return 
-        }
+        guard let gameId = dbReader?.getCurrentGameId(), let currentGame = dbReader?.getCurrentGame() else { throw APIError.currentInfoNIL }
         let playerKey = playerType == .player1 ? "player1" : "player2"
         let collection = db?.collection("games")
-        let move = moves.last
+        let move = moves.last ?? Move.defaultValue
+        
+        let game = Game(created: currentGame.created,
+                        state: currentGame.state,
+                        player1: playerType == .player1 ? player : currentGame.player1,
+                        player2: playerType == .player2 ? player : currentGame.player2,
+                        lastMove: move,
+                        gameMoves: moves)
+        try await collection?.document(gameId).setData(game.toDictionary())
+        /*
         try await collection?.document(gameId).updateData([
             playerKey : player.toDictionary(),
-            "lastMove" : move?.toDictionary(),
+            "lastMove" : move.toDictionary(),
             "gameMoves" : moves
         ])
+         */
     }
 }
 
