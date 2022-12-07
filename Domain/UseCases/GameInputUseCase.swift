@@ -19,6 +19,7 @@ class GameInputUseCase {
 extension GameInputUseCase : GameInputUseCaseProtocol {
     func updateGameFromOpponent(game: Game) {
         let state = game.state
+        GameLog.shared.debug(message: "game update received : \(state.rawValue)", className: "GameInputUseCase")
         switch state {
         case .inProgress, .waiting:
             viewModelListener?.opponentMadeMove(game: game)

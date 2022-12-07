@@ -68,6 +68,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                 let currentPlayerName = self?.userInterface?.getUserInfo().name
                 
                 //avoid game update from my last move
+                GameLog.shared.debug(message: "updated received from \(game.lastMove.playerName)\n gameState \(game.state)", className: "MultiplayerInputGameRepository")
                 if lastMove.playerName != currentPlayerName && game.state != .inProgress {
                     self?.gatewayInputInterface?.updatedReceived(game: game)
                 }
@@ -87,10 +88,10 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
         let waitingGames = querySnapshot?.documents ?? []
         
         if waitingGames.count == 0 {
-            //create new game and wait..
+            GameLog.shared.debug(message: "start new game", className: "MultiplayerInputGameRepository")
             try await startNewGame(player: player)
         } else {
-            //join waiting match
+            GameLog.shared.debug(message: "join existing game", className: "MultiplayerInputGameRepository")
             let gameDocument = waitingGames.first
             let gameDictionary = gameDocument?.data() ?? [:]
             let gameId = gameDocument?.documentID ?? ""

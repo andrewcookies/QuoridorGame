@@ -11,6 +11,7 @@ import Combine
 protocol BoardViewModelProtocol {
     func movePawn(index : Int)
     func insertWall(index : Int)
+    func quitMatch()
     func initializeMatch()
     
     var gameEvent : Published<GameEvent>.Publisher { get }
@@ -33,6 +34,13 @@ final class BoardViewModel {
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
+    func quitMatch() {
+        Task {
+            let res = await useCases?.quitMatch()
+            currentGameEvent = res ?? .error
+        }
+    }
+    
     
     var gameEvent: Published<GameEvent>.Publisher {
         $currentGameEvent
