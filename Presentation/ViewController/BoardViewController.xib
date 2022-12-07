@@ -48,17 +48,28 @@
                                 <action selector="insertWall:" destination="-1" eventType="touchUpInside" id="ZpY-CK-2ZP"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9BU-3P-LYE">
+                            <rect key="frame" x="20" y="294" width="353" height="35"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="Quit Game"/>
+                            <connections>
+                                <action selector="quit:" destination="-1" eventType="touchUpInside" id="04E-yS-ePW"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="orM-D5-Efh" secondAttribute="trailing" constant="20" id="B8Y-du-qx5"/>
                         <constraint firstAttribute="trailing" secondItem="vbC-ZT-cG0" secondAttribute="trailing" constant="20" id="Cho-F7-wJg"/>
                         <constraint firstItem="vbC-ZT-cG0" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" constant="20" id="I5i-bb-HFG"/>
+                        <constraint firstItem="9BU-3P-LYE" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" constant="20" id="KQj-wt-dAQ"/>
                         <constraint firstAttribute="trailing" secondItem="wH1-3y-Yjt" secondAttribute="trailing" constant="20" id="OKV-2W-Vjh"/>
                         <constraint firstItem="orM-D5-Efh" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" constant="20" id="TwB-Ln-bVH"/>
                         <constraint firstItem="wH1-3y-Yjt" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" constant="20" id="c4y-gG-qGC"/>
                         <constraint firstItem="orM-D5-Efh" firstAttribute="top" secondItem="wH1-3y-Yjt" secondAttribute="bottom" constant="50" id="e6G-vm-3bR"/>
                         <constraint firstItem="vbC-ZT-cG0" firstAttribute="top" secondItem="orM-D5-Efh" secondAttribute="bottom" constant="50" id="h48-UA-zPf"/>
+                        <constraint firstAttribute="trailing" secondItem="9BU-3P-LYE" secondAttribute="trailing" constant="20" id="iJ8-ZD-jhB"/>
+                        <constraint firstItem="9BU-3P-LYE" firstAttribute="top" secondItem="vbC-ZT-cG0" secondAttribute="bottom" constant="50" id="kAV-db-Sfh"/>
                         <constraint firstItem="wH1-3y-Yjt" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" constant="30" id="yHa-aK-pmG"/>
                     </constraints>
                 </view>

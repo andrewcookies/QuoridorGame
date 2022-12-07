@@ -69,5 +69,8 @@ class BoardViewController: UIViewController {
         viewModel?.insertWall(index: indexWall)
     }
     
+    @IBAction func quit(_ sender: UIButton) {
+        viewModel?.quitMatch()
+    }
     
 }

@@ -68,8 +68,8 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                 let currentPlayerName = self?.userInterface?.getUserInfo().name
                 
                 //avoid game update from my last move
-                GameLog.shared.debug(message: "updated received from \(game.lastMove.playerName)\n gameState \(game.state)", className: "MultiplayerInputGameRepository")
-                if lastMove.playerName != currentPlayerName && game.state != .inProgress {
+                GameLog.shared.debug(message: "updated received from \(game.lastMove.playerName), gameState \(game.state)", className: "MultiplayerInputGameRepository")
+                if lastMove.playerName != currentPlayerName && (game.state != .inProgress || game.state != .waiting) {
                     self?.gatewayInputInterface?.updatedReceived(game: game)
                 }
                 

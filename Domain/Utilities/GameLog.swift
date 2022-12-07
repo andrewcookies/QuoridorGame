@@ -12,6 +12,6 @@ final class GameLog {
     
     func debug(message : String, className : String){
         let log = "GAMELOG [" + className + "] - " + message
-        print("log")
+        print(log)
     }
 }

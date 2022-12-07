@@ -39,7 +39,7 @@ extension EntityMapperInterface {
     func gameMapper(from: Any) -> Game {
         if let d = from as? [String:Any] {
             let created = d["created"] as? Double ?? 0.0
-            let state = GameState(rawValue: d["state"] as? String ?? "") ?? .terminated
+            let state = GameState(rawValue: d["state"] as? String ?? "") ?? .quit
             let player1 = playerMapper(from: d["player1"] as? [String:Any] ?? [:])
             let player2 = playerMapper(from: d["player2"] as? [String:Any] ?? [:])
             let lastMove = moveMapper(from: d["lastMove"] as? [String:Any] ?? [:])
