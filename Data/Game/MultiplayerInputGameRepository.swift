@@ -32,7 +32,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
 
     private func startNewGame(player : Player) async throws -> String {
         let collection = db?.collection("games")
-        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.defaultValue)
+        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue)
         let timestamp = Double((Date().timeIntervalSince1970 * 1000.0).rounded())
         let game = Game(created: timestamp,
                         state: .waiting,
@@ -53,7 +53,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                            game : Game,
                            gameId : String) async throws {
         let collection = db?.collection("games")
-        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.defaultValue)
+        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue)
         var moves = game.gameMoves
         moves.append(move)
         let newGame = Game(created: game.created,

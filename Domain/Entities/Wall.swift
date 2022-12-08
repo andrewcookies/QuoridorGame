@@ -12,32 +12,23 @@ enum WallOrientation: String, Codable {
     case null
 }
 
-enum WallPosition: String, Codable {
-    case top
-    case bottom
-    case middle
-    case right
-    case left
-    case null
-}
-
 struct Wall : Codable, DictionaryConverter {
     let orientation : WallOrientation
-    let position : WallPosition
     let topLeftCell : Int
-    
+    let topRightCell : Int
+    let bottomLeftCell : Int
+    let bottomRightCell : Int
+
     enum CodingKeys: String, CodingKey {
         case orientation
-        case position
         case topLeftCell
+        case topRightCell
+        case bottomLeftCell
+        case bottomRightCell
     }
     
-    static var defaultValue : Wall {
-        return Wall(orientation: .horizontal, position: .bottom, topLeftCell: 10)
+    static var initValue : Wall {
+        return Wall(orientation: .null, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
     }
     
-    static var nullValue : Wall {
-        return Wall(orientation: .null, position: .null, topLeftCell: -1)
-
-    }
 }

@@ -31,6 +31,12 @@ final class BoardViewModel {
         self.useCases = useCases
         self.matchmakingUseCase = matchmakingUseCase
     }
+    
+    private func getWallFromIndex(index : Int) -> Wall {
+        //TODO:
+        return Wall.initValue
+    }
+    
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
@@ -55,7 +61,7 @@ extension BoardViewModel : BoardViewModelProtocol {
     }
     
     func insertWall(index: Int) {
-        let w = Wall(orientation: .horizontal, position: .bottom, topLeftCell: index)
+        let w = getWallFromIndex(index: index)
         Task {
             let res = await useCases?.insertWall(wall: w)
             currentGameEvent = res ?? .error

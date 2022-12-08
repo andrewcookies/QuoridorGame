@@ -27,12 +27,15 @@ extension EntityMapperInterface {
     func wallMapper(from: Any) -> Wall {
         
         if let d = from as? [String:Any] {
-            let position = WallPosition(rawValue: d["position"] as? String ?? "") ?? .top
             let orientation = WallOrientation(rawValue: d["orientation"] as? String ?? "") ?? .vertical
             let topLeftCell = d["topLeftCell"] as? Int ?? 0
-            return Wall(orientation: orientation, position: position, topLeftCell: topLeftCell)
+            let topRightCell = d["topRightCell"] as? Int ?? 0
+            let bottomLeftCell = d["bottomLeftCell"] as? Int ?? 0
+            let bottomRightCell = d["bottomRightCell"] as? Int ?? 0
+
+            return Wall(orientation: orientation, topLeftCell: topLeftCell, topRightCell: topRightCell, bottomLeftCell: bottomLeftCell, bottomRightCell: bottomRightCell)
         }
-        return Wall.defaultValue
+        return Wall.initValue
     }
     
     

@@ -49,7 +49,7 @@ extension GameGatewayOutput : GameGatewayOutputInterface {
                                 walls: currentGame.player2.walls)
             }
             
-            let move = Move(playerName: player.name, pawnMove: pawn, wallMove: Wall.nullValue)
+            let move = Move(playerName: player.name, pawnMove: pawn, wallMove: Wall.initValue)
             var currentMoves = currentGame.gameMoves
             currentMoves.append(move)
 

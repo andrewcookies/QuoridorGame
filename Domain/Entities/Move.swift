@@ -13,11 +13,11 @@ struct Move : Codable, DictionaryConverter {
     let wallMove : Wall
     
     static var defaultValue : Move {
-        return Move(playerName: "- -", pawnMove: Pawn.defaultValue, wallMove: Wall.defaultValue)
+        return Move(playerName: "- -", pawnMove: Pawn.defaultValue, wallMove: Wall.initValue)
     }
     
     static var startValue : Move {
-        return Move(playerName: "start", pawnMove: Pawn.startValue, wallMove: Wall.nullValue)
+        return Move(playerName: "start", pawnMove: Pawn.startValue, wallMove: Wall.initValue)
     }
     
     enum CodingKeys: String, CodingKey {
