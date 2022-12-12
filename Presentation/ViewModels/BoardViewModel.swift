@@ -8,6 +8,19 @@
 import Foundation
 import Combine
 
+enum DrawMode {
+    case normal
+    case reverse
+}
+
+struct UIBoard {
+
+    let drawMode : DrawMode
+    let playerName : String
+    let opponentName : String
+}
+
+
 protocol BoardViewModelProtocol {
     func movePawn(index : Int)
     func insertWall(index : Int)

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="BoardCellView" customModule="QuoridorGame" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="90" height="90"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3sR-CQ-yLi">
+                    <rect key="frame" x="0.0" y="0.0" width="90" height="91"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E6U-2V-3jj" userLabel="TopSubview">
+                            <rect key="frame" x="0.0" y="0.0" width="90" height="9"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H2X-gU-CIH" userLabel="LeftSubview">
+                            <rect key="frame" x="0.0" y="0.0" width="9" height="91"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MDW-Tg-5uF" userLabel="BottomSubview">
+                            <rect key="frame" x="0.0" y="82" width="90" height="9"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DfK-aG-IEZ" userLabel="RigthSubview">
+                            <rect key="frame" x="81" y="0.0" width="9" height="91"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="MDW-Tg-5uF" secondAttribute="trailing" id="0lz-a9-76z"/>
+                        <constraint firstAttribute="trailing" secondItem="DfK-aG-IEZ" secondAttribute="trailing" id="6ZV-8L-Kue"/>
+                        <constraint firstItem="E6U-2V-3jj" firstAttribute="height" secondItem="3sR-CQ-yLi" secondAttribute="height" multiplier="0.1" id="APU-HT-98w"/>
+                        <constraint firstAttribute="trailing" secondItem="E6U-2V-3jj" secondAttribute="trailing" id="HnA-Cf-lEJ"/>
+                        <constraint firstAttribute="bottom" secondItem="DfK-aG-IEZ" secondAttribute="bottom" id="LpR-HB-XZh"/>
+                        <constraint firstItem="E6U-2V-3jj" firstAttribute="leading" secondItem="3sR-CQ-yLi" secondAttribute="leading" id="OV8-Eh-iUX"/>
+                        <constraint firstAttribute="bottom" secondItem="MDW-Tg-5uF" secondAttribute="bottom" id="QGA-Kx-YPZ"/>
+                        <constraint firstItem="DfK-aG-IEZ" firstAttribute="top" secondItem="3sR-CQ-yLi" secondAttribute="top" id="bRW-Tb-ESZ"/>
+                        <constraint firstItem="DfK-aG-IEZ" firstAttribute="width" secondItem="3sR-CQ-yLi" secondAttribute="width" multiplier="0.1" id="ekb-nt-rip"/>
+                        <constraint firstItem="H2X-gU-CIH" firstAttribute="width" secondItem="3sR-CQ-yLi" secondAttribute="width" multiplier="0.1" id="iIT-dc-F3V"/>
+                        <constraint firstItem="E6U-2V-3jj" firstAttribute="top" secondItem="3sR-CQ-yLi" secondAttribute="top" id="iSL-D1-WPq"/>
+                        <constraint firstItem="H2X-gU-CIH" firstAttribute="top" secondItem="3sR-CQ-yLi" secondAttribute="top" id="kYG-0J-nix"/>
+                        <constraint firstItem="H2X-gU-CIH" firstAttribute="leading" secondItem="3sR-CQ-yLi" secondAttribute="leading" id="oGa-UA-dSv"/>
+                        <constraint firstAttribute="bottom" secondItem="H2X-gU-CIH" secondAttribute="bottom" id="vFi-8G-SDB"/>
+                        <constraint firstItem="MDW-Tg-5uF" firstAttribute="leading" secondItem="3sR-CQ-yLi" secondAttribute="leading" id="wz3-A2-MwH"/>
+                        <constraint firstItem="MDW-Tg-5uF" firstAttribute="height" secondItem="3sR-CQ-yLi" secondAttribute="height" multiplier="0.1" id="zjN-fM-1kd"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="3sR-CQ-yLi" firstAttribute="centerY" secondItem="vUN-kp-3ea" secondAttribute="centerY" constant="-29" id="b9h-fh-p1v"/>
+                <constraint firstItem="3sR-CQ-yLi" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" constant="1" id="faA-4s-1FR"/>
+                <constraint firstItem="3sR-CQ-yLi" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="oQ5-mN-jIG"/>
+                <constraint firstItem="3sR-CQ-yLi" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="uKW-RV-9EM"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="bottomWallView" destination="MDW-Tg-5uF" id="Yr4-VD-Lod"/>
+                <outlet property="cellView" destination="3sR-CQ-yLi" id="VQP-tg-S5n"/>
+                <outlet property="leftWallView" destination="H2X-gU-CIH" id="u67-cc-kML"/>
+                <outlet property="rightWallView" destination="DfK-aG-IEZ" id="L5g-62-fUK"/>
+                <outlet property="topWallView" destination="E6U-2V-3jj" id="Vnz-zB-SXg"/>
+            </connections>
+            <point key="canvasLocation" x="62" y="20"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>
