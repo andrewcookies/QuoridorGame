@@ -10,9 +10,13 @@ import Combine
 
 class BoardViewController: UIViewController {
 
+    @IBOutlet private var boardView : UIView!
+    
     private var viewModel : BoardViewModelProtocol?
     private var listener : GameInputViewModelProtocol?
-
+    private var board : UIBoard = UIBoard(drawMode: .normal, player: Player.startPlayerValue, opponent: Player.startOpponentValue)
+    private var allowedCells : [Int] = []
+    
     private var subscribers: [AnyCancellable] = []
 
     private var indexPawn = 0
@@ -21,6 +25,7 @@ class BoardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupObserver()
+        setupBoard()
     }
 
     
@@ -43,6 +48,38 @@ class BoardViewController: UIViewController {
         }).store(in: &subscribers)
     }
 
+    private func setupBoard(){
+        let width = Int(boardView.frame.width)
+        let cellWidth = Int(width/numberOfCellPerRow)
+        let cellHeight = cellWidth
+        let totalWalls = board.player.walls + board.opponent.walls
+        let playerPosition = board.player.pawnPosition.position
+        let opponentPosition = board.opponent.pawnPosition.position
+        
+        for row in 0..<numberOfCellPerRow {
+            for column in 0..<numberOfCellPerRow{
+                let currentIndex = row+column
+                let v = BoardCellView(frame: CGRect(x: column*cellWidth, y: row, width: cellWidth, height: cellWidth))
+                
+                var cellType = BoardCellType.normalCell
+                if currentIndex == playerPosition {
+                    cellType = .playerCell
+                } else if currentIndex == opponentPosition {
+                    cellType = .opponentCell
+                } else if allowedCells.contains(currentIndex) {
+                    cellType = .allowedCell
+                }
+                
+                let walls = totalWalls.filter({ $0.bottomLeftCell == currentIndex || $0.bottomRightCell == currentIndex || $0.topLeftCell == currentIndex || $0.topRightCell == currentIndex })
+                
+                
+                v.setup(index: currentIndex, mode: board.drawMode, type: cellType, delegate: self, walls: walls)
+                boardView.addSubview(v)
+
+            }
+        }
+                
+    }
     /*
     // MARK: - Navigation
 
@@ -72,5 +109,10 @@ class BoardViewController: UIViewController {
     @IBAction func quit(_ sender: UIButton) {
         viewModel?.quitMatch()
     }
+    
+}
+
+
+extension BoardViewController : BoardCellDelegate {
     
 }

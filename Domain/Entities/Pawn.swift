@@ -15,11 +15,11 @@ struct Pawn : Codable, DictionaryConverter {
     }
     
     static var startValue : Pawn {
-        return Pawn(position: 4)
+        return Pawn(position: startPlayer1PawnPosition)
     }
     
     static var startOppositePlayer : Pawn {
-        return Pawn(position: 84)
+        return Pawn(position: startPlayer1PawnPosition)
     }
     
     enum CodingKeys: String, CodingKey {

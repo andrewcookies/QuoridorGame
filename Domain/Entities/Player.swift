@@ -13,9 +13,14 @@ struct Player : Codable, DictionaryConverter {
     let pawnPosition : Pawn
     let walls : [Wall]
     
-    static var defaultValue : Player {
-        return Player(name: "none", playerId: "-1", pawnPosition: Pawn.defaultValue, walls: [])
+    static var startPlayerValue : Player {
+        return Player(name: "-", playerId: "-1", pawnPosition: Pawn.startValue, walls: [])
     }
+    
+    static var startOpponentValue : Player {
+        return Player(name: "-", playerId: "-1", pawnPosition: Pawn.startOppositePlayer, walls: [])
+    }
+    
         
     
     enum CodingKeys: String, CodingKey {

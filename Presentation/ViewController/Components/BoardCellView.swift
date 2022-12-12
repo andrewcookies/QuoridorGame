@@ -19,13 +19,13 @@ enum BoardCellType {
 }
 
 class BoardCellView: UIView {
-
+    
     @IBOutlet weak var cellView: UIView!
     @IBOutlet weak var topWallView: UIView!
     @IBOutlet weak var leftWallView: UIView!
     @IBOutlet weak var bottomWallView: UIView!
     @IBOutlet weak var rightWallView: UIView!
-
+    
     private var drawMode : DrawMode = .normal
     private var cellIndex : Int = -1
     private var cellType : BoardCellType = .normalCell
@@ -35,19 +35,31 @@ class BoardCellView: UIView {
         super.awakeFromNib()
     }
     
-    static func loadView() -> BoardCellView? {
-        guard let view =  Bundle.main.loadNibNamed("BoardCellView", owner: self, options: nil)?.first as? BoardCellView else { return nil }
-        return view
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    /*
+     static func loadView() -> BoardCellView? {
+     guard let view =  Bundle.main.loadNibNamed("BoardCellView", owner: self, options: nil)?.first as? BoardCellView else { return nil }
+     return view
+     }
+     */
     
     func setup(index : Int,
                mode : DrawMode,
                type : BoardCellType,
                delegate : BoardCellDelegate?,
-               wall : Wall? = nil){
+               walls : [Wall]){
         drawMode = mode
-        cellIndex = index
         cellType = type
+        
+        
+        cellIndex = index // add reverse logic for index
+
         
         switch cellType {
         case .playerCell:
@@ -55,10 +67,10 @@ class BoardCellView: UIView {
             
         case .opponentCell:
             backgroundColor = colorOpponentPawn
-
+            
         case .allowedCell:
             backgroundColor = colorAllowedCell
-
+            
         case .normalCell:
             backgroundColor = colorCell
         }
@@ -67,9 +79,8 @@ class BoardCellView: UIView {
         bottomWallView.backgroundColor = colorEmptyWall
         rightWallView.backgroundColor = colorEmptyWall
         leftWallView.backgroundColor = colorEmptyWall
-
         
-        if let w = wall {
+        for w in walls {
             if cellIndex == w.topLeftCell {
                 if w.orientation == .horizontal {
                     bottomWallView.backgroundColor = colorWall
@@ -184,11 +195,11 @@ class BoardCellView: UIView {
     }
     
     /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
-
+     // Only override draw() if you perform custom drawing.
+     // An empty implementation adversely affects performance during animation.
+     override func draw(_ rect: CGRect) {
+     // Drawing code
+     }
+     */
+    
 }

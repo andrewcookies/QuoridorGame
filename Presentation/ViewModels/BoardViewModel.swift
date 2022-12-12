@@ -16,8 +16,8 @@ enum DrawMode {
 struct UIBoard {
 
     let drawMode : DrawMode
-    let playerName : String
-    let opponentName : String
+    let player : Player
+    let opponent : Player
 }
 
 
