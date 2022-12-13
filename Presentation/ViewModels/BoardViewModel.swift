@@ -22,10 +22,11 @@ struct UIBoard {
 
 
 protocol BoardViewModelProtocol {
-    func movePawn(index : Int)
-    func insertWall(index : Int)
+    func movePawn(pawn : Pawn)
+    func insertWall(wall : Wall)
     func quitMatch()
     func initializeMatch()
+    func allowedPawnMoves() -> [Pawn]
     
     var gameEvent : Published<GameEvent>.Publisher { get }
 }
@@ -45,14 +46,13 @@ final class BoardViewModel {
         self.matchmakingUseCase = matchmakingUseCase
     }
     
-    private func getWallFromIndex(index : Int) -> Wall {
-        //TODO:
-        return Wall.initValue
-    }
-    
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
+    func allowedPawnMoves() -> [Pawn] {
+        return useCases?.allowedPawnMoves() ?? []
+    }
+    
     func quitMatch() {
         Task {
             let res = await useCases?.quitMatch()
@@ -65,18 +65,16 @@ extension BoardViewModel : BoardViewModelProtocol {
         $currentGameEvent
     }
     
-    func movePawn(index: Int) {
-        let p = Pawn(position: index)
+    func movePawn(pawn: Pawn) {
         Task {
-            let res = await useCases?.movePawn(newPawn: p)
+            let res = await useCases?.movePawn(newPawn: pawn)
             currentGameEvent = res ?? .error
         }
     }
     
-    func insertWall(index: Int) {
-        let w = getWallFromIndex(index: index)
+    func insertWall(wall: Wall) {
         Task {
-            let res = await useCases?.insertWall(wall: w)
+            let res = await useCases?.insertWall(wall: wall)
             currentGameEvent = res ?? .error
         }
     }

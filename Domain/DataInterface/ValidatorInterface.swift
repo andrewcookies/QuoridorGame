@@ -10,4 +10,5 @@ import Foundation
 protocol ValidatorInterface {
     func validateMovePawn(pawn : Pawn) -> GameEvent
     func validateInsertWall(wall : Wall) -> GameEvent
+    func fetchAllowedPawn() -> [Pawn]
 }

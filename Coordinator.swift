@@ -44,7 +44,7 @@ final class Coordinator {
         let gatewayOutput = GameGatewayOutput(gameInterface: gameRepositoryOutput,
                                               dataBaseReaderInterface: gameDB,
                                               userInterface: userDB)
-        let validator = Validator(readerInterface: gameDB)
+        let validator = Validator(readerInterface: gameDB, userInterface: userDB)
         
         
         let userCase = GameOutputUseCase(validator: validator, gatewayOutputInterface: gatewayOutput)

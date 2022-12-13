@@ -25,6 +25,10 @@ final class GameOutputUseCase {
 }
 
 extension GameOutputUseCase : GameOutputUseCaseProtocol {
+    func allowedPawnMoves() -> [Pawn] {
+        return validator?.fetchAllowedPawn() ?? []
+    }
+    
     func quitMatch() async -> GameEvent {
         do{
             try await gatewayOutputInterface?.updateState(state: .quit)

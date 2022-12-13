@@ -37,7 +37,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         let game = Game(created: timestamp,
                         state: .waiting,
                         player1: player,
-                        player2: Player.defaultValue,
+                        player2: Player.startOpponentValue,
                         lastMove: move,
                         gameMoves: [move])
         

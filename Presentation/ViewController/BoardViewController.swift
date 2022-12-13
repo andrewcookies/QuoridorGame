@@ -15,7 +15,8 @@ class BoardViewController: UIViewController {
     private var viewModel : BoardViewModelProtocol?
     private var listener : GameInputViewModelProtocol?
     private var board : UIBoard = UIBoard(drawMode: .normal, player: Player.startPlayerValue, opponent: Player.startOpponentValue)
-    private var allowedCells : [Int] = []
+    private var allowedCells : [Pawn] = []
+    private var boardViewCells : [BoardCellView] = []
     
     private var subscribers: [AnyCancellable] = []
 
@@ -53,20 +54,21 @@ class BoardViewController: UIViewController {
         let cellWidth = Int(width/numberOfCellPerRow)
         let cellHeight = cellWidth
         let totalWalls = board.player.walls + board.opponent.walls
-        let playerPosition = board.player.pawnPosition.position
-        let opponentPosition = board.opponent.pawnPosition.position
+        let playerPosition = board.player.pawnPosition
+        let opponentPosition = board.opponent.pawnPosition
         
         for row in 0..<numberOfCellPerRow {
             for column in 0..<numberOfCellPerRow{
                 let currentIndex = row+column
+                let currentPawn = Pawn(position: currentIndex)
                 let v = BoardCellView(frame: CGRect(x: column*cellWidth, y: row, width: cellWidth, height: cellWidth))
                 
                 var cellType = BoardCellType.normalCell
-                if currentIndex == playerPosition {
+                if currentPawn == playerPosition {
                     cellType = .playerCell
-                } else if currentIndex == opponentPosition {
+                } else if currentPawn == opponentPosition {
                     cellType = .opponentCell
-                } else if allowedCells.contains(currentIndex) {
+                } else if allowedCells.contains(where:{ currentPawn == $0 }) {
                     cellType = .allowedCell
                 }
                 
@@ -75,10 +77,19 @@ class BoardViewController: UIViewController {
                 
                 v.setup(index: currentIndex, mode: board.drawMode, type: cellType, delegate: self, walls: walls)
                 boardView.addSubview(v)
+                boardViewCells.append(v)
 
             }
         }
                 
+    }
+    
+    private func updateBoardPawnCells(allowed : Bool){
+        for c in allowedCells {
+            if let pawnCell = boardViewCells.filter({ $0.getIndex() == c.position }).first{
+                pawnCell.updateColor(allowed: allowed)
+            }
+        }
     }
     /*
     // MARK: - Navigation
@@ -92,27 +103,28 @@ class BoardViewController: UIViewController {
     */
 
     
-    @IBAction func searchMatch(_ sender: UIButton) {
-        viewModel?.initializeMatch()
-    }
-    
-    @IBAction func putWall(_ sender: UIButton) {
-        indexPawn += 1
-        viewModel?.movePawn(index: indexPawn)
-    }
-    
-    @IBAction func insertWall(_ sender: UIButton) {
-        indexWall += 1
-        viewModel?.insertWall(index: indexWall)
-    }
-    
-    @IBAction func quit(_ sender: UIButton) {
-        viewModel?.quitMatch()
-    }
-    
 }
 
 
 extension BoardViewController : BoardCellDelegate {
+    func tapCell(pawnCell: Pawn) {
+        if pawnCell == board.player.pawnPosition {
+            if allowedCells.count > 0 {
+                updateBoardPawnCells(allowed: false)
+                allowedCells = []
+            } else {
+                allowedCells = viewModel?.allowedPawnMoves() ?? []
+                updateBoardPawnCells(allowed: false)
+            }
+            
+        } else {
+            if allowedCells.contains(where: { $0 == pawnCell}){
+                viewModel?.movePawn(pawn: pawnCell)
+            }
+        }
+    }
     
+    func tapWall(wall: Wall) {
+        viewModel?.insertWall(wall: wall)
+    }
 }

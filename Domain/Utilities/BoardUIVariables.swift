@@ -29,3 +29,4 @@ let bufferLeftRightCell = 1
 let bufferTopDownCell = 10
 let bufferTopRightBottomLeftNormalCell = 11
 let bufferTopLeftBottomRightReverseCell = 9
+let leftRightBorder = [-1,9,19,29,39,49,59,69,79]

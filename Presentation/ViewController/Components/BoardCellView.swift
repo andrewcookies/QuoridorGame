@@ -42,12 +42,15 @@ class BoardCellView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    /*
-     static func loadView() -> BoardCellView? {
-     guard let view =  Bundle.main.loadNibNamed("BoardCellView", owner: self, options: nil)?.first as? BoardCellView else { return nil }
-     return view
-     }
-     */
+    
+    
+    func getIndex()->Int {
+        return cellIndex
+    }
+    
+    func updateColor(allowed : Bool){
+        backgroundColor = allowed ? colorAllowedCell : colorCell
+    }
     
     func setup(index : Int,
                mode : DrawMode,

@@ -26,8 +26,8 @@ struct Game : Codable, DictionaryConverter {
     static var defaultValue : Game {
         return Game(created: 0,
                     state: .waiting,
-                    player1: Player.defaultValue,
-                    player2: Player.defaultValue,
+                    player1: Player.startPlayerValue,
+                    player2: Player.startOpponentValue,
                     lastMove: Move.defaultValue,
                     gameMoves: [])
     }

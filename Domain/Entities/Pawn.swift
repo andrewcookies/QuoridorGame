@@ -27,4 +27,9 @@ struct Pawn : Codable, DictionaryConverter {
     }
     
     
+    static func == (lhs: Pawn, rhs: Pawn) -> Bool {
+        return lhs.position == rhs.position
+    }
+    
+    
 }

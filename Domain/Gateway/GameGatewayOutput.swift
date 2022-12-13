@@ -34,7 +34,7 @@ extension GameGatewayOutput : GameGatewayOutputInterface {
         if let currentGame = dataBaseReaderInterface?.getCurrentGame(),
            let currentUser = userInterface?.getUserInfo() {
             var playerType = PlayerType.player1
-            var player : Player = Player.defaultValue
+            var player : Player = Player.startPlayerValue
             
             if currentGame.player1.playerId == currentUser.userId {
                 player = Player(name: currentGame.player1.name,
@@ -68,7 +68,7 @@ extension GameGatewayOutput : GameGatewayOutputInterface {
         if let currentGame = dataBaseReaderInterface?.getCurrentGame(),
            let currentUser = userInterface?.getUserInfo() {
             var playerType = PlayerType.player1
-            var player : Player = Player.defaultValue
+            var player : Player = Player.startPlayerValue
             
             if currentGame.player1.playerId == currentUser.userId {
                 var currentWalls = currentGame.player1.walls

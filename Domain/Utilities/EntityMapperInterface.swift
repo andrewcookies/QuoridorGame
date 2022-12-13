@@ -77,7 +77,7 @@ extension EntityMapperInterface {
             
             return Player(name: name, playerId: playerId,pawnPosition: pawnPosition,walls: tmpWalls)
         }
-        return Player.defaultValue
+        return Player.startPlayerValue
     }
     
     func moveMapper(from: Any) -> Move {
