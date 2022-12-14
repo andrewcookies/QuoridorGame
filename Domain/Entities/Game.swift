@@ -41,6 +41,9 @@ struct Game : Codable, DictionaryConverter {
         case gameMoves
     }
     
+    func getTotalWalls() -> [Wall] {
+        return player1.walls + player2.walls
+    }
     
 }
 

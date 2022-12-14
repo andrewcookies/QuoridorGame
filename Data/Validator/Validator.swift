@@ -27,7 +27,7 @@ extension Validator : ValidatorInterface {
         var res = [Int]()
         
         if let p = player  {
-            let totalWall = (game?.player1.walls ?? []) + (game?.player2.walls ?? [])
+            let totalWall = game?.getTotalWalls() ?? []
             let currentPosition = p.pawnPosition.position
             
             let northPosition = currentPosition + bufferTopDownCell

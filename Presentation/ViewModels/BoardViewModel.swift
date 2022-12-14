@@ -8,22 +8,9 @@
 import Foundation
 import Combine
 
-enum DrawMode {
-    case normal
-    case reverse
-}
-
-struct UIBoard {
-
-    let drawMode : DrawMode
-    let player : Player
-    let opponent : Player
-}
-
-
 protocol BoardViewModelProtocol {
-    func movePawn(pawn : Pawn)
-    func insertWall(wall : Wall)
+    func movePawn(cellIndex : Int)
+    func insertWall(cellIndex : Int, side : BoardCellSide)
     func quitMatch()
     func initializeMatch()
     func allowedPawnMoves() -> [Pawn]
@@ -49,6 +36,15 @@ final class BoardViewModel {
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
+    func insertWall(cellIndex: Int, side: BoardCellSide) {
+        <#code#>
+    }
+    
+    func movePawn(cellIndex: Int) {
+        //TODO:
+        
+    }
+    
     func allowedPawnMoves() -> [Pawn] {
         return useCases?.allowedPawnMoves() ?? []
     }

@@ -7,15 +7,15 @@
 
 import UIKit
 protocol BoardCellDelegate : AnyObject {
-    func tapCell(pawnCell : Pawn)
-    func tapWall(wall : Wall)
+    func tapCell(index : Int)
+    func tapWall(index: Int, side: BoardCellSide)
 }
 
-enum BoardCellType {
-    case playerCell
-    case opponentCell
-    case allowedCell
-    case normalCell
+enum BoardCellSide {
+    case topSide
+    case leftSide
+    case rightSide
+    case bottomSide
 }
 
 class BoardCellView: UIView {
@@ -26,9 +26,7 @@ class BoardCellView: UIView {
     @IBOutlet weak var bottomWallView: UIView!
     @IBOutlet weak var rightWallView: UIView!
     
-    private var drawMode : DrawMode = .normal
     private var cellIndex : Int = -1
-    private var cellType : BoardCellType = .normalCell
     private weak var delegate : BoardCellDelegate?
     
     override  func awakeFromNib() {
@@ -52,65 +50,31 @@ class BoardCellView: UIView {
         backgroundColor = allowed ? colorAllowedCell : colorCell
     }
     
-    func setup(index : Int,
-               mode : DrawMode,
-               type : BoardCellType,
-               delegate : BoardCellDelegate?,
-               walls : [Wall]){
-        drawMode = mode
-        cellType = type
+    func setup(cell : BoardCell){
         
         
-        cellIndex = index // add reverse logic for index
-
+        cellIndex = cell.index
+        let contentType = cell.contentType
         
-        switch cellType {
-        case .playerCell:
+        switch contentType {
+        case .playerPawn:
             backgroundColor = colorPlayerPawn
             
-        case .opponentCell:
+        case .opponentPawn:
             backgroundColor = colorOpponentPawn
             
-        case .allowedCell:
+        case .allowed:
             backgroundColor = colorAllowedCell
             
-        case .normalCell:
+        case .empty:
             backgroundColor = colorCell
         }
         
-        topWallView.backgroundColor = colorEmptyWall
-        bottomWallView.backgroundColor = colorEmptyWall
-        rightWallView.backgroundColor = colorEmptyWall
-        leftWallView.backgroundColor = colorEmptyWall
-        
-        for w in walls {
-            if cellIndex == w.topLeftCell {
-                if w.orientation == .horizontal {
-                    bottomWallView.backgroundColor = colorWall
-                } else {
-                    rightWallView.backgroundColor = colorWall
-                }
-            } else if cellIndex == w.topRightCell {
-                if w.orientation == .horizontal {
-                    bottomWallView.backgroundColor = colorWall
-                } else {
-                    leftWallView.backgroundColor = colorWall
-                }
-                
-            } else if cellIndex == w.bottomRightCell {
-                if w.orientation == .horizontal {
-                    topWallView.backgroundColor = colorWall
-                } else {
-                    leftWallView.backgroundColor = colorWall
-                }
-            } else if cellIndex == w.bottomLeftCell {
-                if w.orientation == .horizontal {
-                    topWallView.backgroundColor = colorWall
-                } else {
-                    rightWallView.backgroundColor = colorWall
-                }
-            }
-        }
+        topWallView.backgroundColor = getColor(type: cell.topBorder)
+        bottomWallView.backgroundColor = getColor(type: cell.bottomBorder)
+        rightWallView.backgroundColor = getColor(type: cell.rightBorder)
+        leftWallView.backgroundColor = getColor(type: cell.leftBorder)
+
         
         cellView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapCell)))
         topWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTopWall)))
@@ -120,81 +84,35 @@ class BoardCellView: UIView {
         
     }
     
+    func getColor(type : BorderType) -> UIColor {
+        switch type {
+        case .wall:
+            return colorWall
+        case .empty:
+            return colorEmptyWall
+        case .boardBorder:
+            return colorBorder
+        }
+    }
+    
     @objc func tapCell(){
-        let pawn = Pawn(position: cellIndex)
-        delegate?.tapCell(pawnCell: pawn)
+        delegate?.tapCell(index: cellIndex)
     }
     
     @objc func tapTopWall(){
-        let wall = Wall.initValue
-        if drawMode == .normal {
-            let wall = Wall(orientation: .horizontal,
-                            topLeftCell: cellIndex + bufferTopDownCell,
-                            topRightCell: cellIndex + bufferTopRightBottomLeftNormalCell,
-                            bottomLeftCell: cellIndex + bufferLeftRightCell,
-                            bottomRightCell: cellIndex)
-        } else {
-            let wall = Wall(orientation: .horizontal,
-                            topLeftCell: cellIndex - bufferTopDownCell,
-                            topRightCell: cellIndex - bufferTopRightBottomLeftNormalCell ,
-                            bottomLeftCell: cellIndex - bufferLeftRightCell,
-                            bottomRightCell: cellIndex)
-        }
-        delegate?.tapWall(wall: wall)
+        delegate?.tapWall(index: cellIndex, side: .topSide)
     }
     
     @objc func tapBottomWall(){
-        let wall = Wall.initValue
-        if drawMode == .normal {
-            let wall = Wall(orientation: .horizontal,
-                            topLeftCell: cellIndex,
-                            topRightCell: cellIndex + bufferLeftRightCell,
-                            bottomLeftCell: cellIndex - bufferTopDownCell,
-                            bottomRightCell: cellIndex - bufferTopLeftBottomRightReverseCell)
-        } else {
-            let wall = Wall(orientation: .horizontal,
-                            topLeftCell: cellIndex,
-                            topRightCell: cellIndex + bufferLeftRightCell ,
-                            bottomLeftCell: cellIndex + bufferLeftRightCell,
-                            bottomRightCell: cellIndex + bufferTopLeftBottomRightReverseCell)
-        }
-        delegate?.tapWall(wall: wall)
+        delegate?.tapWall(index: cellIndex, side: .bottomSide)
     }
     
     @objc func tapLeftWall(){
-        let wall = Wall.initValue
-        if drawMode == .normal {
-            let wall = Wall(orientation: .vertical,
-                            topLeftCell: cellIndex + bufferTopLeftBottomRightReverseCell,
-                            topRightCell: cellIndex + bufferTopDownCell,
-                            bottomLeftCell: cellIndex - bufferLeftRightCell,
-                            bottomRightCell: cellIndex)
-        } else {
-            let wall = Wall(orientation: .vertical,
-                            topLeftCell: cellIndex - bufferTopLeftBottomRightReverseCell,
-                            topRightCell: cellIndex + bufferTopDownCell,
-                            bottomLeftCell: cellIndex + bufferLeftRightCell,
-                            bottomRightCell: cellIndex)
-        }
-        delegate?.tapWall(wall: wall)
+        delegate?.tapWall(index: cellIndex, side: .leftSide)
     }
     
     @objc func tapRightWall(){
-        let wall = Wall.initValue
-        if drawMode == .normal {
-            let wall = Wall(orientation: .vertical,
-                            topLeftCell: cellIndex + bufferTopDownCell,
-                            topRightCell: cellIndex + bufferTopRightBottomLeftNormalCell,
-                            bottomLeftCell: cellIndex,
-                            bottomRightCell: cellIndex + bufferLeftRightCell)
-        } else {
-            let wall = Wall(orientation: .vertical,
-                            topLeftCell: cellIndex - bufferTopDownCell,
-                            topRightCell: cellIndex - bufferTopRightBottomLeftNormalCell,
-                            bottomLeftCell: cellIndex,
-                            bottomRightCell: cellIndex - bufferLeftRightCell)
-        }
-        delegate?.tapWall(wall: wall)
+        delegate?.tapWall(index: cellIndex, side: .rightSide)
     }
     
     /*

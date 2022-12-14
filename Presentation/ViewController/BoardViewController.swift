@@ -14,7 +14,7 @@ class BoardViewController: UIViewController {
     
     private var viewModel : BoardViewModelProtocol?
     private var listener : GameInputViewModelProtocol?
-    private var board : UIBoard = UIBoard(drawMode: .normal, player: Player.startPlayerValue, opponent: Player.startOpponentValue)
+    private var board : Board = Board(cells: [[]], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
     private var allowedCells : [Pawn] = []
     private var boardViewCells : [BoardCellView] = []
     
@@ -57,27 +57,18 @@ class BoardViewController: UIViewController {
         let playerPosition = board.player.pawnPosition
         let opponentPosition = board.opponent.pawnPosition
         
-        for row in 0..<numberOfCellPerRow {
-            for column in 0..<numberOfCellPerRow{
-                let currentIndex = row+column
-                let currentPawn = Pawn(position: currentIndex)
-                let v = BoardCellView(frame: CGRect(x: column*cellWidth, y: row, width: cellWidth, height: cellWidth))
+        let rowSequence = board.drawMode == .normal ? [8,7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7,8]
+        let columnSequence = board.drawMode == .normal ?  [0,1,2,3,4,5,6,7,8] : [8,7,6,5,4,3,2,1,0]
+        //TODO:
+        for rowIndex in rowSequence {
+            let cellRow = board.cells[rowIndex]
+            
+            for columnIndex in columnSequence {
+                let cell = cellRow[columnIndex]
                 
-                var cellType = BoardCellType.normalCell
-                if currentPawn == playerPosition {
-                    cellType = .playerCell
-                } else if currentPawn == opponentPosition {
-                    cellType = .opponentCell
-                } else if allowedCells.contains(where:{ currentPawn == $0 }) {
-                    cellType = .allowedCell
-                }
-                
-                let walls = totalWalls.filter({ $0.bottomLeftCell == currentIndex || $0.bottomRightCell == currentIndex || $0.topLeftCell == currentIndex || $0.topRightCell == currentIndex })
-                
-                
-                v.setup(index: currentIndex, mode: board.drawMode, type: cellType, delegate: self, walls: walls)
-                boardView.addSubview(v)
-                boardViewCells.append(v)
+               // let v = BoardCellView(frame: CGRect(x: column*cellWidth, y: row, width: cellWidth, height: cellWidth))
+              //  boardView.addSubview(v)
+               // boardViewCells.append(v)
 
             }
         }
@@ -91,24 +82,14 @@ class BoardViewController: UIViewController {
             }
         }
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-
-     // Pass the selected object to the new view controller.
-    }
-    */
 
     
 }
 
 
 extension BoardViewController : BoardCellDelegate {
-    func tapCell(pawnCell: Pawn) {
-        if pawnCell == board.player.pawnPosition {
+    func tapCell(index: Int) {
+        if index == board.player.pawnPosition.position {
             if allowedCells.count > 0 {
                 updateBoardPawnCells(allowed: false)
                 allowedCells = []
@@ -118,13 +99,14 @@ extension BoardViewController : BoardCellDelegate {
             }
             
         } else {
-            if allowedCells.contains(where: { $0 == pawnCell}){
-                viewModel?.movePawn(pawn: pawnCell)
+            if allowedCells.contains(where: { $0.position == index}){
+                viewModel?.movePawn(cellIndex: index)
             }
         }
     }
     
-    func tapWall(wall: Wall) {
-        viewModel?.insertWall(wall: wall)
+    func tapWall(index: Int, side: BoardCellSide) {
+        viewModel?.insertWall(cellIndex: index, side: side)
     }
+
 }
