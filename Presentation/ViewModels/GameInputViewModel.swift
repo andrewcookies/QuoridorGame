@@ -10,6 +10,7 @@ import Combine
 
 protocol GameInputViewModelProtocol {
     var gameEventListener : Published<Board>.Publisher { get }
+    func getWall(cellIndex: Int, side: BoardCellSide) -> Wall
 }
 
 
@@ -20,6 +21,67 @@ final class GameInputViewModel {
     init(userInfo : UserInfoInterface?){
         self.userInfo = userInfo
         currentBoard = Board(cells: [[]], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
+    }
+    
+    
+    private func initBoard(game : Game) -> Board {
+        let currentPlayerId = userInfo?.getUserInfo().userId
+        var drawMode: DrawMode = currentPlayerId == game.player1.playerId ? .normal : .reverse
+        var currentPlayer = game.player1
+        var opponentPlayer = game.player2
+        var rows = [(0..<numberOfCellPerRow)]
+        var columns  = [(0..<numberOfCellPerRow)]
+        
+        if drawMode == .reverse {
+            rows = rows.reversed()
+            columns = rows.reversed()
+            currentPlayer = game.player2
+            opponentPlayer = game.player1
+        }
+        
+        
+        var cells = [[BoardCell]]()
+        for row in 0..<numberOfCellPerRow {
+            var boardRow = [BoardCell]()
+            for column in 0..<numberOfCellPerRow {
+                let currentIndex = row+column
+                var contentType = ContentType.empty
+                var topBorder = BorderType.empty
+                var leftBorder = BorderType.empty
+                var rightBorder = BorderType.empty
+                var bottomBorder = BorderType.empty
+                
+                if topCellsBorder.contains(currentIndex) {
+                    topBorder = .boardBorder
+                }
+                
+                if bottomCellsBorder.contains(currentIndex) {
+                    bottomBorder = .boardBorder
+                }
+                
+                if rightCellsBorder.contains(currentIndex) {
+                    rightBorder = .boardBorder
+                }
+                
+                if leftCellsBorder.contains(currentIndex) {
+                    leftBorder = .boardBorder
+                }
+                
+                if currentIndex == currentPlayer.pawnPosition.position {
+                    contentType = .playerPawn
+                }
+                
+                if currentIndex == opponentPlayer.pawnPosition.position {
+                    contentType = .opponentPawn
+                }
+                
+                let boardCell = BoardCell(index: currentIndex, topBorder: topBorder, leftBorder: leftBorder, rightBorder: rightBorder, bottomBorder: bottomBorder, contentType: contentType)
+                boardRow.append(boardCell)
+                
+            }
+            cells.append(boardRow)
+        }
+        return Board(cells: cells, player: currentPlayer, opponent: opponentPlayer, drawMode: drawMode)
     }
     
     private func convertGameToBoard(game : Game) -> Board {
@@ -129,6 +191,44 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
 }
 
 extension GameInputViewModel : GameInputViewModelProtocol {
+    func getWall(cellIndex: Int, side: BoardCellSide) -> Wall {
+        let drawMode = currentBoard.drawMode
+        var wall = Wall.initValue
+        
+        if side == .topSide {
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex + bufferTopDownCell - bufferLeftRightCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
+            let bottomLeftIndex =  cellIndex
+            wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        
+        if side == .bottomSide {
+            let topLeftIndex = cellIndex
+            let topRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferTopDownCell + bufferLeftRightCell : cellIndex - bufferTopDownCell - bufferLeftRightCell
+            let bottomLeftIndex =  drawMode == .normal ? cellIndex + bufferTopDownCell : cellIndex - bufferTopDownCell
+            wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        
+        if side == .rightSide {
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex + bufferTopDownCell - bufferLeftRightCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
+            let bottomLeftIndex = cellIndex
+            wall = Wall(orientation: .vertical, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        
+        if side == .leftSide {
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell - bufferLeftRightCell : cellIndex + bufferTopDownCell + bufferLeftRightCell
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
+            let bottomRigthIndex = cellIndex
+            let bottomLeftIndex = drawMode == .normal ? cellIndex - bufferLeftRightCell : cellIndex + bufferLeftRightCell
+            wall = Wall(orientation: .vertical, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        return wall
+    }
+    
     var gameEventListener: Published<Board>.Publisher {
         $currentBoard
     }

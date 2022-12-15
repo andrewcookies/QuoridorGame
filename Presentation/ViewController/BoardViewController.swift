@@ -16,7 +16,6 @@ class BoardViewController: UIViewController {
     private var listener : GameInputViewModelProtocol?
     private var board : Board = Board(cells: [[]], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
     private var allowedCells : [Pawn] = []
-    private var boardViewCells : [BoardCellView] = []
     
     private var subscribers: [AnyCancellable] = []
 
@@ -26,7 +25,7 @@ class BoardViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupObserver()
-        setupBoard()
+        initBoard()
     }
 
     
@@ -49,27 +48,22 @@ class BoardViewController: UIViewController {
         }).store(in: &subscribers)
     }
 
-    private func setupBoard(){
+    private func initBoard(){
         let width = Int(boardView.frame.width)
         let cellWidth = Int(width/numberOfCellPerRow)
         let cellHeight = cellWidth
-        let totalWalls = board.player.walls + board.opponent.walls
-        let playerPosition = board.player.pawnPosition
-        let opponentPosition = board.opponent.pawnPosition
+
         
-        let rowSequence = board.drawMode == .normal ? [8,7,6,5,4,3,2,1,0] : [0,1,2,3,4,5,6,7,8]
-        let columnSequence = board.drawMode == .normal ?  [0,1,2,3,4,5,6,7,8] : [8,7,6,5,4,3,2,1,0]
-        //TODO:
+        let rowSequence = (0..<numberOfCellPerRow)
+        let columnSequence = (0..<numberOfCellPerRow)
+        
         for rowIndex in rowSequence {
             let cellRow = board.cells[rowIndex]
-            
             for columnIndex in columnSequence {
                 let cell = cellRow[columnIndex]
-                
-               // let v = BoardCellView(frame: CGRect(x: column*cellWidth, y: row, width: cellWidth, height: cellWidth))
-              //  boardView.addSubview(v)
-               // boardViewCells.append(v)
-
+                let v = BoardCellView(frame: CGRect(x: columnIndex*cellWidth, y: rowIndex, width: cellWidth, height: cellWidth))
+                v.setup(cell: cell)
+                boardView.addSubview(v)
             }
         }
                 
@@ -77,7 +71,7 @@ class BoardViewController: UIViewController {
     
     private func updateBoardPawnCells(allowed : Bool){
         for c in allowedCells {
-            if let pawnCell = boardViewCells.filter({ $0.getIndex() == c.position }).first{
+            if let pawnCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == c.position  }).first as? BoardCellView {
                 pawnCell.updateColor(allowed: allowed)
             }
         }
@@ -92,7 +86,7 @@ extension BoardViewController : BoardCellDelegate {
         if index == board.player.pawnPosition.position {
             if allowedCells.count > 0 {
                 updateBoardPawnCells(allowed: false)
-                allowedCells = []
+                allowedCells.removeAll()
             } else {
                 allowedCells = viewModel?.allowedPawnMoves() ?? []
                 updateBoardPawnCells(allowed: false)
@@ -100,13 +94,15 @@ extension BoardViewController : BoardCellDelegate {
             
         } else {
             if allowedCells.contains(where: { $0.position == index}){
-                viewModel?.movePawn(cellIndex: index)
+                viewModel?.movePawn(pawn: Pawn(position: index))
             }
         }
     }
     
     func tapWall(index: Int, side: BoardCellSide) {
-        viewModel?.insertWall(cellIndex: index, side: side)
+        if let wall = listener?.getWall(cellIndex: index, side: side) {
+            viewModel?.insertWall(wall: wall)
+        }
     }
 
 }

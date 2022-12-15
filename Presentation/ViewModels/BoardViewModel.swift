@@ -9,8 +9,8 @@ import Foundation
 import Combine
 
 protocol BoardViewModelProtocol {
-    func movePawn(cellIndex : Int)
-    func insertWall(cellIndex : Int, side : BoardCellSide)
+    func movePawn(pawn : Pawn)
+    func insertWall(wall : Wall)
     func quitMatch()
     func initializeMatch()
     func allowedPawnMoves() -> [Pawn]
@@ -36,15 +36,6 @@ final class BoardViewModel {
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
-    func insertWall(cellIndex: Int, side: BoardCellSide) {
-        <#code#>
-    }
-    
-    func movePawn(cellIndex: Int) {
-        //TODO:
-        
-    }
-    
     func allowedPawnMoves() -> [Pawn] {
         return useCases?.allowedPawnMoves() ?? []
     }
