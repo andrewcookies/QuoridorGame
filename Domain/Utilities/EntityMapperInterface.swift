@@ -82,10 +82,11 @@ extension EntityMapperInterface {
     
     func moveMapper(from: Any) -> Move {
         if let d = from as? [String:Any] {
-            let playerName = d["playerName"] as? String ?? ""
+            let playerId = d["playerId"] as? String ?? ""
             let pawnMove = pawnMapper(from: d["pawnMove"] as? [String:Any] ?? [:])
             let wallMove = wallMapper(from: d["wallMove"] as? [String:Any] ?? [:])
-            return Move(playerName: playerName, pawnMove: pawnMove, wallMove: wallMove)
+            let moveType = MoveType(rawValue: d["moveType"] as? String ?? "") ?? .movePawn
+            return Move(playerId: playerId, pawnMove: pawnMove, wallMove: wallMove, moveType: moveType)
         }
         return Move.defaultValue
     }

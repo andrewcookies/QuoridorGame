@@ -12,21 +12,21 @@ enum MoveType : String, Codable {
 }
 
 struct Move : Codable, DictionaryConverter {
-    let playerName : String
+    let playerId : String
     let pawnMove : Pawn
     let wallMove : Wall
     let moveType : MoveType
     
     static var defaultValue : Move {
-        return Move(playerName: "- -", pawnMove: Pawn.defaultValue, wallMove: Wall.initValue, moveType: .movePawn)
+        return Move(playerId: "- -", pawnMove: Pawn.defaultValue, wallMove: Wall.initValue, moveType: .movePawn)
     }
     
     static var startValue : Move {
-        return Move(playerName: "start", pawnMove: Pawn.startValue, wallMove: Wall.initValue, moveType: .movePawn)
+        return Move(playerId: "start", pawnMove: Pawn.startValue, wallMove: Wall.initValue, moveType: .movePawn)
     }
     
     enum CodingKeys: String, CodingKey {
-        case playerName
+        case playerId
         case pawnMove
         case wallMove
         case moveType

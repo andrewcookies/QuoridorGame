@@ -50,7 +50,7 @@ final class Coordinator {
         let userCase = GameOutputUseCase(validator: validator, gatewayOutputInterface: gatewayOutput)
         
         //MatchMaking and Input
-        let gameInputViewModel = GameInputViewModel()
+        let gameInputViewModel = GameInputViewModel(userInfo: userDB)
         let gameInputUseCase = GameInputUseCase(viewModelListener: gameInputViewModel)
         let gameGatewayInput = GameGatewayInput(dataBaseWriterInterface: gameDB, controller: gameInputUseCase)
         let gameRepositoryInput = MultiplayerInputGameRepository(gatewayInputInterface: gameGatewayInput,
@@ -66,6 +66,8 @@ final class Coordinator {
         
         let viewModel = BoardViewModel(useCases: userCase, matchmakingUseCase: matchMakingUseCase)
         let viewController = BoardViewController(viewModel: viewModel, listener: gameInputViewModel)
+        
+        gameInputViewModel.viewControllerProtocol = viewController
         
         return viewController
     }

@@ -12,17 +12,17 @@ enum BorderType {
     case boardBorder
 }
 
-enum ContentType {
+enum BoardContentType {
     case empty
     case allowed
     case playerPawn
     case opponentPawn
 }
 struct BoardCell {
-    let index : Int
-    let topBorder : BorderType
-    let leftBorder : BorderType
-    let rightBorder : BorderType
-    let bottomBorder : BorderType
-    let contentType : ContentType
+    var index : Int
+    var topBorder : BorderType
+    var leftBorder : BorderType
+    var rightBorder : BorderType
+    var bottomBorder : BorderType
+    var contentType : BoardContentType
 }

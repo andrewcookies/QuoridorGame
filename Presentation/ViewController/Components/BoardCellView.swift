@@ -27,6 +27,7 @@ class BoardCellView: UIView {
     @IBOutlet weak var rightWallView: UIView!
     
     private var cellIndex : Int = -1
+    private var contentType : BoardContentType = .empty
     private weak var delegate : BoardCellDelegate?
     
     override  func awakeFromNib() {
@@ -42,7 +43,7 @@ class BoardCellView: UIView {
     }
     
     
-    func getIndex()->Int {
+    func getIndex() -> Int {
         return cellIndex
     }
     
@@ -54,7 +55,7 @@ class BoardCellView: UIView {
         
         
         cellIndex = cell.index
-        let contentType = cell.contentType
+        contentType = cell.contentType
         
         switch contentType {
         case .playerPawn:

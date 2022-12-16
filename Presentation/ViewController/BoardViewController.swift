@@ -8,6 +8,12 @@
 import UIKit
 import Combine
 
+protocol BoardViewControllerProtocol {
+    func updateOpponentPawn(start : BoardCell, destination : BoardCell)
+    func updateWall(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
+    func initBoard(board : Board)
+}
+
 class BoardViewController: UIViewController {
 
     @IBOutlet private var boardView : UIView!
@@ -24,8 +30,6 @@ class BoardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupObserver()
-        initBoard()
     }
 
     
@@ -39,16 +43,18 @@ class BoardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setupObserver(){
-        listener?.gameEventListener.receive(on: DispatchQueue.main).sink(receiveValue: { [weak self] board in
-            guard let self = self else { return }
-           
-            print("BoardViewController - board updated")
-            
-        }).store(in: &subscribers)
+    private func updateBoardAllowedPawnCells(allowed : Bool){
+        for c in allowedCells {
+            if let pawnCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == c.position  }).first as? BoardCellView {
+                pawnCell.updateColor(allowed: allowed)
+            }
+        }
     }
 
-    private func initBoard(){
+}
+
+extension BoardViewController : BoardViewControllerProtocol {
+    func initBoard(board: Board) {
         let width = Int(boardView.frame.width)
         let cellWidth = Int(width/numberOfCellPerRow)
         let cellHeight = cellWidth
@@ -66,30 +72,43 @@ class BoardViewController: UIViewController {
                 boardView.addSubview(v)
             }
         }
-                
     }
     
-    private func updateBoardPawnCells(allowed : Bool){
-        for c in allowedCells {
-            if let pawnCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == c.position  }).first as? BoardCellView {
-                pawnCell.updateColor(allowed: allowed)
-            }
+    func updateOpponentPawn(start: BoardCell, destination: BoardCell) {
+        if let opponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == start.index  }).first as? BoardCellView {
+            opponentCell.setup(cell: start)
+        }
+        if let newOpponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == destination.index }).first as? BoardCellView {
+            newOpponentCell.setup(cell: destination)
         }
     }
-
     
+    func updateWall(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == topRight.index  }).first as? BoardCellView {
+            cell.setup(cell: topRight)
+        }
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == topLeft.index  }).first as? BoardCellView {
+            cell.setup(cell: topLeft)
+        }
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == bottomRight.index  }).first as? BoardCellView {
+            cell.setup(cell: bottomRight)
+        }
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == bottomLeft.index  }).first as? BoardCellView {
+            cell.setup(cell: bottomLeft)
+        }
+        
+    }
 }
-
 
 extension BoardViewController : BoardCellDelegate {
     func tapCell(index: Int) {
         if index == board.player.pawnPosition.position {
             if allowedCells.count > 0 {
-                updateBoardPawnCells(allowed: false)
+                updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
             } else {
                 allowedCells = viewModel?.allowedPawnMoves() ?? []
-                updateBoardPawnCells(allowed: false)
+                updateBoardAllowedPawnCells(allowed: false)
             }
             
         } else {

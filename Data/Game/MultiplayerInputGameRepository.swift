@@ -32,7 +32,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
 
     private func startNewGame(player : Player) async throws -> String {
         let collection = db?.collection("games")
-        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue)
+        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
         let timestamp = Double((Date().timeIntervalSince1970 * 1000.0).rounded())
         let game = Game(created: timestamp,
                         state: .waiting,
@@ -53,7 +53,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                            game : Game,
                            gameId : String) async throws {
         let collection = db?.collection("games")
-        let move = Move(playerName: player.name, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue)
+        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
         var moves = game.gameMoves
         moves.append(move)
         let newGame = Game(created: game.created,
@@ -74,11 +74,11 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                 let data = document.data(),
                 let game = self?.gameMapper(from: data) {
                 let lastMove = game.lastMove
-                let currentPlayerName = self?.userInterface?.getUserInfo().name
+                let currentPlayerId = self?.userInterface?.getUserInfo().userId
                 
                 //avoid game update from my last move
-                if lastMove.playerName != currentPlayerName || game.state != .inProgress {
-                    GameLog.shared.debug(message: "updated received from \(game.lastMove.playerName), gameState \(game.state)", className: "MultiplayerInputGameRepository")
+                if lastMove.playerId != currentPlayerId || game.state != .inProgress {
+                    GameLog.shared.debug(message: "updated received from \(game.lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
                     self?.gatewayInputInterface?.updatedReceived(game: game)
                 }
                 

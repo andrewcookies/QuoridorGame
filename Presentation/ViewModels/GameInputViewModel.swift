@@ -9,14 +9,14 @@ import Foundation
 import Combine
 
 protocol GameInputViewModelProtocol {
-    var gameEventListener : Published<Board>.Publisher { get }
     func getWall(cellIndex: Int, side: BoardCellSide) -> Wall
 }
 
-
 final class GameInputViewModel {
-    @Published private var currentBoard : Board
+    private var currentBoard : Board
     private var userInfo : UserInfoInterface?
+    
+    var viewControllerProtocol : BoardViewControllerProtocol?
     
     init(userInfo : UserInfoInterface?){
         self.userInfo = userInfo
@@ -26,7 +26,7 @@ final class GameInputViewModel {
     
     private func initBoard(game : Game) -> Board {
         let currentPlayerId = userInfo?.getUserInfo().userId
-        var drawMode: DrawMode = currentPlayerId == game.player1.playerId ? .normal : .reverse
+        let drawMode: DrawMode = currentPlayerId == game.player1.playerId ? .normal : .reverse
         var currentPlayer = game.player1
         var opponentPlayer = game.player2
         var rows = [(0..<numberOfCellPerRow)]
@@ -34,7 +34,7 @@ final class GameInputViewModel {
         
         if drawMode == .reverse {
             rows = rows.reversed()
-            columns = rows.reversed()
+            columns = columns.reversed()
             currentPlayer = game.player2
             opponentPlayer = game.player1
         }
@@ -45,7 +45,7 @@ final class GameInputViewModel {
             var boardRow = [BoardCell]()
             for column in 0..<numberOfCellPerRow {
                 let currentIndex = row+column
-                var contentType = ContentType.empty
+                var contentType = BoardContentType.empty
                 var topBorder = BorderType.empty
                 var leftBorder = BorderType.empty
                 var rightBorder = BorderType.empty
@@ -84,90 +84,6 @@ final class GameInputViewModel {
         return Board(cells: cells, player: currentPlayer, opponent: opponentPlayer, drawMode: drawMode)
     }
     
-    private func convertGameToBoard(game : Game) -> Board {
-        
-        let currentPlayerId = userInfo?.getUserInfo().userId
-        let totalWalls = game.getTotalWalls()
-        var cells = [[BoardCell]]()
-        var drawMode = DrawMode.normal
-        var currentPlayer = game.player1
-        var opponentPlayer = game.player2
-        
-        if currentPlayerId == game.player2.playerId {
-            drawMode = DrawMode.reverse
-            currentPlayer = game.player2
-            opponentPlayer = game.player1
-        }
-
-        
-        for row in 0..<numberOfCellPerRow {
-            var boardRow = [BoardCell]()
-            for column in 0..<numberOfCellPerRow {
-                let currentIndex = row+column
-                var topBorder = BorderType.empty
-                var leftBorder = BorderType.empty
-                var rightBorder = BorderType.empty
-                var bottomBorder = BorderType.empty
-                var contentType = ContentType.empty
-                
-                if topCellsBorder.contains(currentIndex) {
-                    topBorder = .boardBorder
-                }
-                
-                if bottomCellsBorder.contains(currentIndex) {
-                    bottomBorder = .boardBorder
-                }
-                
-                if rightCellsBorder.contains(currentIndex) {
-                    rightBorder = .boardBorder
-                }
-                
-                if leftCellsBorder.contains(currentIndex) {
-                    leftBorder = .boardBorder
-                }
-                
-                
-                for w in totalWalls {
-                    if w.orientation == .horizontal {
-                        if currentIndex == w.topLeftCell || currentIndex == w.topRightCell {
-                            bottomBorder = .wall
-                        }
-                        
-                        if currentIndex == w.bottomLeftCell || currentIndex == w.bottomRightCell {
-                            topBorder = .wall
-                        }
-                            
-                    } else {
-                        if currentIndex == w.topLeftCell || currentIndex == w.bottomLeftCell {
-                            rightBorder = .wall
-                        }
-                        
-                        if currentIndex == w.topRightCell || currentIndex == w.bottomRightCell {
-                            leftBorder = .wall
-                        }
-                        
-                    }
-                }
-                
-                if currentIndex == currentPlayer.pawnPosition.position {
-                    contentType = .playerPawn
-                }
-                
-                if currentIndex == opponentPlayer.pawnPosition.position {
-                    contentType = .opponentPawn
-                }
-                
-                
-                let cell = BoardCell(index: currentIndex, topBorder: topBorder, leftBorder: leftBorder, rightBorder: rightBorder, bottomBorder: bottomBorder, contentType: contentType)
-                boardRow.append(cell)
-            }
-            cells.append(boardRow)
-        }
-        
-        
-        return Board(cells: cells, player: currentPlayer, opponent: opponentPlayer, drawMode: drawMode)
-    }
-
 }
 
 extension GameInputViewModel : PresentationLayerInputListenerInterface {
@@ -184,8 +100,85 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
     }
     
     func opponentMadeMove(game: Game) {
-        let board = convertGameToBoard(game: game)
-        currentBoard = board
+        let lastMove = game.lastMove
+        let currentPlayerId = userInfo?.getUserInfo().userId
+        if currentPlayerId != lastMove.playerId {
+            if game.gameMoves.count == 2 {
+                //the opponent player accepted to play and put its pawn
+                currentBoard = initBoard(game: game)
+                viewControllerProtocol?.initBoard(board: currentBoard)
+            } else {
+                //the opponent make a move
+                if lastMove.moveType == .movePawn {
+                    //move pawn
+                    let newPosition = lastMove.pawnMove.position
+                    let newRow = newPosition/10
+                    let newColumn = newPosition%10
+                    
+            
+                    for (rowId,_) in currentBoard.cells.enumerated() {
+                        for (columnId,_) in currentBoard.cells.enumerated() {
+                            let cell = currentBoard.cells[rowId][columnId]
+                            if cell.contentType == .opponentPawn {
+                                currentBoard.cells[rowId][columnId].contentType = .empty
+                                currentBoard.cells[newRow][newColumn].contentType = .playerPawn
+                                viewControllerProtocol?.updateOpponentPawn(start: currentBoard.cells[rowId][columnId], destination: currentBoard.cells[newRow][newColumn])
+                                break
+                            }
+                        }
+                    }
+                    
+            
+                } else {
+                    //insert wall
+                    let wall = lastMove.wallMove
+                    
+                    let topRightIndex = wall.topRightCell
+                    let topRightRow = topRightIndex/10
+                    let topRightColumn = topRightIndex%10
+                    if wall.orientation == .horizontal {
+                        currentBoard.cells[topRightRow][topRightColumn].bottomBorder = .wall
+                    } else {
+                        currentBoard.cells[topRightRow][topRightColumn].leftBorder = .wall
+                    }
+                    let topRightCell = currentBoard.cells[topRightRow][topRightColumn]
+                    
+                    let bottomRightIndex = wall.bottomRightCell
+                    let bottomRightRow = bottomRightIndex/10
+                    let bottomRightColumn = bottomRightIndex%10
+                    if wall.orientation == .horizontal {
+                        currentBoard.cells[bottomRightRow][bottomRightColumn].topBorder = .wall
+                    } else {
+                        currentBoard.cells[bottomRightRow][bottomRightColumn].leftBorder = .wall
+                    }
+                    let bottomRightCell = currentBoard.cells[bottomRightRow][bottomRightColumn]
+                    
+                    let topLeftIndex = wall.topLeftCell
+                    let topLeftRow = topLeftIndex/10
+                    let topLeftColumn = topLeftIndex%10
+                    if wall.orientation == .horizontal {
+                        currentBoard.cells[topLeftRow][topLeftColumn].bottomBorder = .wall
+                    } else {
+                        currentBoard.cells[topLeftRow][topLeftColumn].rightBorder = .wall
+                    }
+                    let topLeftCell = currentBoard.cells[topLeftRow][topLeftColumn]
+                    
+                    let bottomLeftIndex = wall.bottomLeftCell
+                    let bottomLeftRow = bottomLeftIndex/10
+                    let bottomLeftColumn = bottomLeftIndex%10
+                    if wall.orientation == .horizontal {
+                        currentBoard.cells[bottomLeftRow][bottomLeftColumn].topBorder = .wall
+                    } else {
+                        currentBoard.cells[bottomLeftRow][bottomLeftColumn].rightBorder = .wall
+                    }
+                    let bottomLeftCell = currentBoard.cells[bottomLeftRow][bottomLeftColumn]
+                    
+                    viewControllerProtocol?.updateWall(topRight: topRightCell, topLeft: topLeftCell, bottomRight: bottomRightCell, bottomLeft: bottomLeftCell)
+                    
+                }
+            }
+            
+        }
     }
     
 }
@@ -227,9 +220,5 @@ extension GameInputViewModel : GameInputViewModelProtocol {
             wall = Wall(orientation: .vertical, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
         }
         return wall
-    }
-    
-    var gameEventListener: Published<Board>.Publisher {
-        $currentBoard
     }
 }
