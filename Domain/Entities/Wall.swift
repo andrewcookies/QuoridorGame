@@ -12,7 +12,7 @@ enum WallOrientation: String, Codable {
     case null
 }
 
-struct Wall : Codable, DictionaryConverter {
+struct Wall : Codable {
     let orientation : WallOrientation
     let topLeftCell : Int
     let topRightCell : Int

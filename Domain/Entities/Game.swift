@@ -14,7 +14,7 @@ enum GameState : String, Codable {
     case quit
 }
 
-struct Game : Codable, DictionaryConverter {
+struct Game : Codable {
     
     let created : Double
     let state : GameState

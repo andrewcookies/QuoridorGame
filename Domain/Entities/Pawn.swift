@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct Pawn : Codable, DictionaryConverter {
+struct Pawn : Codable {
     let position : Int
     
   

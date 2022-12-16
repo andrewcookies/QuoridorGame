@@ -11,7 +11,7 @@ enum MoveType : String, Codable {
     case movePawn
 }
 
-struct Move : Codable, DictionaryConverter {
+struct Move : Codable {
     let playerId : String
     let pawnMove : Pawn
     let wallMove : Wall

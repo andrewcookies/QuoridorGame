@@ -11,6 +11,7 @@ import FirebaseCore
 
 enum APIError : Error {
     case currentInfoNIL
+    case parseError
     
 }
 
@@ -33,9 +34,18 @@ final class MultiplayerOutputGameRepository : EntityMapperInterface {
 
 extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
     func updateGame(game: Game) async throws {
-        let collection = db?.collection("games")
-        guard let gameId = dbReader?.getCurrentGameId() else { throw APIError.currentInfoNIL }
-        try await collection?.document(gameId).setData(game.toDictionary())
+        do {
+            let collection = db?.collection("games")
+            guard let gameId = dbReader?.getCurrentGameId() else { throw APIError.currentInfoNIL }
+            
+            let data = try JSONEncoder().encode(game)
+            guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String:Any] else { throw APIError.currentInfoNIL }
+            
+            try await collection?.document(gameId).setData(dictionary)
+            
+        } catch {
+            throw APIError.currentInfoNIL
+        }
     }
     
     func updateState(state: GameState) async throws {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Player : Codable, DictionaryConverter {
+struct Player : Codable {
     let name : String
     let playerId : String
     let pawnPosition : Pawn

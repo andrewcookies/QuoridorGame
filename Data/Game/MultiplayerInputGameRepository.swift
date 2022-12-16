@@ -41,7 +41,10 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                         lastMove: move,
                         gameMoves: [move])
         
-        let ref = try await collection?.addDocument(data: game.toDictionary())
+        let data = try JSONEncoder().encode(game)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String:Any] else { throw APIError.currentInfoNIL }
+        
+        let ref = try await collection?.addDocument(data: dictionary)
             //set Listener
         let documentID = ref?.documentID ?? ""
         localRepoWriter?.setCurrentGameId(id: documentID)
@@ -63,7 +66,10 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                            lastMove: move,
                            gameMoves: moves)
         
-        try await collection?.document(gameId).setData(newGame.toDictionary())
+        let data = try JSONEncoder().encode(newGame)
+        guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String:Any] else { throw APIError.currentInfoNIL }
+        
+        try await collection?.document(gameId).setData(dictionary)
         try await self.setGameListener(id: gameId)
     }
     
