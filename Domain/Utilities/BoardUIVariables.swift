@@ -24,8 +24,8 @@ let colorAllowedCell = UIColor.systemGray
 
 let numberOfCellPerRow = 9
 let numberWallPerPlayer = 10
-let startPlayer1PawnPosition = 4
-let startPlayer2PawnPosition = 84
+let startPlayer1PawnPosition = 84
+let startPlayer2PawnPosition = 4
 let bufferLeftRightCell = 1
 let bufferTopDownCell = 10
 let leftRightBorder = [-1,9,19,29,39,49,59,69,79]

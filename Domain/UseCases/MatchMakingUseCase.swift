@@ -20,16 +20,39 @@ final class MatchMakingUseCase {
 }
 
 extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
-    func initMatch() async -> GameEvent {
+    func searchMatch() async -> String {
+        do {
+            guard let gameId = try await gameInputInterface?.searchOpenMatch() else { return "nomatch" }
+            return gameId
+        } catch {
+            return "nomatch"
+        }
+    }
+    
+    func createMatch() async -> Game {
         do {
             let player = Player(name: userInterface?.getUserInfo().name ?? "- -",
                                 playerId: userInterface?.getUserInfo().userId ?? "- -",
                                 pawnPosition: Pawn.startValue,
                                 walls: [])
-            try await gameInputInterface?.searchMatch(player: player)
-            return .searchingOpponents
+            guard let gameId = try await gameInputInterface?.createMatch(player: player) else { return Game.defaultValue }
+            return gameId
         } catch {
-            return .error
+            return Game.defaultValue
         }
     }
+    
+    func joinMatch(gameId: String) async -> Game {
+        do {
+            let player = Player(name: userInterface?.getUserInfo().name ?? "- -",
+                                playerId: userInterface?.getUserInfo().userId ?? "- -",
+                                pawnPosition: Pawn.startValue,
+                                walls: [])
+            guard let game = try await gameInputInterface?.joinMatch(player: player, gameId: gameId) else { return Game.defaultValue }
+            return game
+        } catch {
+            return Game.defaultValue
+        }
+    }
+    
 }

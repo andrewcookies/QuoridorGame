@@ -68,8 +68,7 @@ extension BoardViewModel : BoardViewModelProtocol {
     
     func initializeMatch() {
         Task {
-            let res = await matchmakingUseCase?.initMatch()
-            currentGameEvent = res ?? .error
+          //TODO: redo everything
         }
     }
 }

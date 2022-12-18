@@ -30,7 +30,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         self.localRepoWriter = localRepoWriter
     }
 
-    private func startNewGame(player : Player) async throws -> String {
+    private func startNewGame(player : Player) async throws -> Game {
         let collection = db?.collection("games")
         let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
         let timestamp = Double((Date().timeIntervalSince1970 * 1000.0).rounded())
@@ -49,12 +49,12 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         let documentID = ref?.documentID ?? ""
         localRepoWriter?.setCurrentGameId(id: documentID)
         try await setGameListener(id: documentID)
-        return documentID
+        return game
     }
     
     private func joinMatch(player : Player,
                            game : Game,
-                           gameId : String) async throws {
+                           gameId : String) async throws -> Game {
         let collection = db?.collection("games")
         let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
         var moves = game.gameMoves
@@ -71,6 +71,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         
         try await collection?.document(gameId).setData(dictionary)
         try await self.setGameListener(id: gameId)
+        return newGame
     }
     
     private func setGameListener(id:String) async throws {
@@ -96,7 +97,35 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
 }
 
 extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
-    func searchMatch(player : Player) async throws {
+    func createMatch(player: Player) async throws -> Game {
+        GameLog.shared.debug(message: "createMatch", className: "MultiplayerInputGameRepository")
+        let game = try await startNewGame(player: player)
+        return game
+    }
+    
+    func joinMatch(player: Player, gameId : String) async throws -> Game{
+        GameLog.shared.debug(message: "join existing game \(gameId)", className: "MultiplayerInputGameRepository")
+        let collection = db?.collection("games")
+        
+        let querySnapshot = try await collection?.whereField(Game.CodingKeys.state.rawValue, isEqualTo: GameState.waiting.rawValue).getDocuments()
+        let waitingGames = querySnapshot?.documents ?? []
+        
+        if waitingGames.count == 0 {
+            GameLog.shared.debug(message: "wrong gameId", className: "MultiplayerInputGameRepository")
+            throw APIError.parseError
+        } else {
+            GameLog.shared.debug(message: "found gameId", className: "MultiplayerInputGameRepository")
+            let gameDocument = waitingGames.first
+            let gameDictionary = gameDocument?.data() ?? [:]
+            let gameId = gameDocument?.documentID ?? ""
+            let game = gameMapper(from: gameDictionary)
+            localRepoWriter?.setCurrentGameId(id: gameId)
+            try await joinMatch(player: player, game: game, gameId: gameId)
+            return game
+        }
+    }
+    
+    func searchOpenMatch() async throws -> String {
         let collection = db?.collection("games")
         
         let querySnapshot = try await collection?.whereField(Game.CodingKeys.state.rawValue, isEqualTo: GameState.waiting.rawValue).getDocuments()
@@ -104,7 +133,7 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
         
         if waitingGames.count == 0 {
             GameLog.shared.debug(message: "start new game", className: "MultiplayerInputGameRepository")
-            try await startNewGame(player: player)
+            return "nomatch"
         } else {
             GameLog.shared.debug(message: "join existing game", className: "MultiplayerInputGameRepository")
             let gameDocument = waitingGames.first
@@ -112,7 +141,8 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
             let gameId = gameDocument?.documentID ?? ""
             let game = gameMapper(from: gameDictionary)
             localRepoWriter?.setCurrentGameId(id: gameId)
-            try await joinMatch(player: player, game: game, gameId: gameId)
+            return gameId
         }
     }
+    
 }

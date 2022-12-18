@@ -8,5 +8,7 @@
 import Foundation
 
 protocol MatchMakingUseCaseProtocol {
-    func initMatch() async -> GameEvent
+    func searchMatch() async -> String
+    func createMatch() async -> Game
+    func joinMatch(gameId : String) async -> Game
 }
