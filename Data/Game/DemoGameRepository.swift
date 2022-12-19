@@ -8,6 +8,7 @@
 import Foundation
 
 final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOutputInterface {
+
     
     private var gatewayInputInterface : GameGatewayInputInterface?
     private var demoGame = Game.defaultValue
@@ -35,5 +36,19 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
         demoGame = game
         gatewayInputInterface?.updatedReceived(game: demoGame)
     }
+    
+    
+    func searchOpenMatch() async throws -> String {
+        return "DEMO_ID"
+    }
+    
+    func createMatch(player: Player) async throws -> Game {
+        throw MatchMakingError.APIError
+    }
+    
+    func joinMatch(player: Player, gameId: String) async throws -> Game {
+        return demoGame
+    }
+    
     
 }

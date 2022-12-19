@@ -44,7 +44,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         let data = try JSONEncoder().encode(game)
         guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String:Any] else { throw APIError.currentInfoNIL }
         
-        let ref = try await collection?.addDocument(data: dictionary)
+        let ref = collection?.addDocument(data: dictionary)
             //set Listener
         let documentID = ref?.documentID ?? ""
         localRepoWriter?.setCurrentGameId(id: documentID)

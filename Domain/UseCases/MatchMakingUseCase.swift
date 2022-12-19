@@ -20,38 +20,38 @@ final class MatchMakingUseCase {
 }
 
 extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
-    func searchMatch() async -> String {
+    func searchMatch() async -> Result<String,MatchMakingError> {
         do {
-            guard let gameId = try await gameInputInterface?.searchOpenMatch() else { return "nomatch" }
-            return gameId
+            guard let gameId = try await gameInputInterface?.searchOpenMatch() else { return .failure(.matchNotFound) }
+            return .success(gameId)
         } catch {
-            return "nomatch"
+            return .failure(.matchNotFound)
         }
     }
     
-    func createMatch() async -> Game {
+    func createMatch() async -> Result<Game,MatchMakingError> {
         do {
             let player = Player(name: userInterface?.getUserInfo().name ?? "- -",
                                 playerId: userInterface?.getUserInfo().userId ?? "- -",
                                 pawnPosition: Pawn.startValue,
                                 walls: [])
-            guard let gameId = try await gameInputInterface?.createMatch(player: player) else { return Game.defaultValue }
-            return gameId
+            guard let game = try await gameInputInterface?.createMatch(player: player) else { return .failure(.APIError) }
+            return .success(game)
         } catch {
-            return Game.defaultValue
+            return .failure(.APIError)
         }
     }
     
-    func joinMatch(gameId: String) async -> Game {
+    func joinMatch(gameId: String) async -> Result<Game,MatchMakingError> {
         do {
             let player = Player(name: userInterface?.getUserInfo().name ?? "- -",
                                 playerId: userInterface?.getUserInfo().userId ?? "- -",
                                 pawnPosition: Pawn.startValue,
                                 walls: [])
-            guard let game = try await gameInputInterface?.joinMatch(player: player, gameId: gameId) else { return Game.defaultValue }
-            return game
+            guard let game = try await gameInputInterface?.joinMatch(player: player, gameId: gameId) else { return .failure(.APIError) }
+            return .success(game)
         } catch {
-            return Game.defaultValue
+            return .failure(.APIError)
         }
     }
     

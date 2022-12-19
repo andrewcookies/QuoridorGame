@@ -57,7 +57,6 @@ extension BoardViewController : BoardViewControllerProtocol {
     func initBoard(board: Board) {
         let width = Int(boardView.frame.width)
         let cellWidth = Int(width/numberOfCellPerRow)
-        let cellHeight = cellWidth
 
         
         let rowSequence = (0..<numberOfCellPerRow)
