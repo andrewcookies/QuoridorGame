@@ -74,49 +74,57 @@ final class Coordinator {
         gameInputViewModel.viewControllerProtocol = viewController
         */
         
-        let gameInputRepo = resolveLocalDataBase()
+        let databaseRepo = resolveDataBaseRepository()
         let userRepo = resolveUserRepository()
-        let multiLocalDatabase = resolveMultiplayerLocalDataRepository()
-        let outputDataLayer = resolveBoardOutpuDataLayer()
-        
-        let inputUseCase = resolveBoardInputDomainLayer(userInterface: userRepo)
-        let matchMakingUseCase = resolveMatchMakingUseCase(gameInputRepository: gameInputRepo, userInterface: userRepo, useCase: inputUseCase, repoWriteInterface: gameInputRepo)
-        let gameOutputUseCase = resolveBoardOutputDomainLayer(userInterface: userRepo, repository: gameInputRepo)
-    
+        let multiplayerDataBaseRepository = resolveMultiplayerLocalDataRepository()
         
         
+        let outputDataLayer = resolveBoardOutpuDataLayer(localDataRepository : multiplayerDataBaseRepository)
         
-        return viewController
+        let outputUseCase = resolveBoardOutputDomainLayer(userDataBase : userRepo, gameDataBase : databaseRepo, dataLayerInterface : outputDataLayer)
+        
+        let gameInputUseCase = resolveBoardInputDomainLayer(userInterface: userRepo)
+        
+        let matchMakingUseCase = resolveMatchMakingUseCase(gameInputRepository: databaseRepo, userInterface: userRepo, useCase: gameInputUseCase, repoWriteInterface: <#T##GameRepositoryWriteInterface#>)
+        
+        return UIViewController()
     }
     
     //MARK: resoving clean components
     
     //DATA Layer
-    private func resolveUserRepository() -> UserInfoInterface {
+    private func resolveUserRepository() -> UserRepository {
+        //user data
         return UserRepository()
     }
     
     private func resolveMultiplayerLocalDataRepository() -> LocalGameRepository {
+        //store Game Multiplayer Info such as GameId
         return LocalGameRepository()
     }
     
-    private func resolveLocalDataBase() -> DataBaseRepository {
+    private func resolveDataBaseRepository() -> DataBaseRepository {
+        //store game object coming from Data Layer
         return DataBaseRepository()
     }
-   
-    private func resolveBoardOutpuDataLayer() -> MultiplayerOutputGameRepository {
-        let reader = resolveMultiplayerLocalDataRepository()
-        return MultiplayerOutputGameRepository(dbReader: reader)
-    }
     
+    
+   
+    private func resolveBoardOutpuDataLayer(localDataRepository : MultiplayerLocalRepositoryInterface) -> MultiplayerOutputGameRepository {
+        return MultiplayerOutputGameRepository(dbReader: localDataRepository)
+    }
+    private func resolveBoardInputDataLayer(dataBaseRepository : DataBaseRepository, inputUseCase : GameInputUseCaseProtocol) -> MultiplayerOutputGameRepository {
+        let gateway = GameGatewayInput(dataBaseWriterInterface: dataBaseRepository, controller: inputUseCase)
+        return MultiplayerInputGameRepository(gatewayInputInterface: <#T##GameGatewayInputInterface#>, localRepoWriter: <#T##MultiplayerLocalRepositoryInterface?#>, userInterface: <#T##UserInfoInterface?#>)
+    }
+        
     //DOMAIN LAYER
     
-    private func resolveBoardOutputDomainLayer(userInterface : UserInfoInterface, repository : GameRepositoryReadInterface) -> GameOutputUseCase {
+    private func resolveBoardOutputDomainLayer(userDataBase : UserInfoInterface, gameDataBase : GameRepositoryReadInterface, dataLayerInterface : GameRepositoryOutputInterface ) -> GameOutputUseCase {
         
-        let validator = Validator(readerInterface: repository, userInterface: userInterface)
-        let dataLayer = resolveBoardOutpuDataLayer()
+        let validator = Validator(readerInterface: gameDataBase, userInterface: userDataBase)
         
-        let gatewayOutput = GameGatewayOutput(gameInterface: dataLayer, dataBaseReaderInterface: repository, userInterface: userInterface)
+        let gatewayOutput = GameGatewayOutput(gameInterface: dataLayerInterface, dataBaseReaderInterface: gameDataBase, userInterface: userDataBase)
         
         let useCase = GameOutputUseCase(validator: validator, gatewayOutputInterface: gatewayOutput)
         
