@@ -12,7 +12,7 @@ protocol BoardViewModelProtocol {
     func movePawn(pawn : Pawn)
     func insertWall(wall : Wall)
     func quitMatch()
-    func initializeMatch()
+    func startMatch() -> Result<Board,MatchMakingError>
     func allowedPawnMoves() -> [Pawn]
     
     var gameEvent : Published<GameEvent>.Publisher { get }
@@ -66,9 +66,27 @@ extension BoardViewModel : BoardViewModelProtocol {
         }
     }
     
-    func initializeMatch() {
+    func startMatch() -> Result<Board,MatchMakingError> {
+        guard let mUseCase = matchmakingUseCase else { return .failure(.APIError)}
         Task {
-          //TODO: redo everything
+            let searchResult = await mUseCase.searchMatch()
+            switch searchResult {
+            case .success(let gameId):
+                let joinResult = await mUseCase.joinMatch(gameId: gameId)
+                switch joinResult {
+                case .success(let game):
+                    //HANDLE GAME: convert with BoardFactory
+                    return .failure(.APIError)
+                case .failure(let failure):
+                    return failure
+                }
+            case .failure(let error):
+                if error == .matchNotFound {
+                    let createResult = await mUseCase.createMatch()
+                } else {
+                    return error
+                }
+            }
         }
     }
 }
