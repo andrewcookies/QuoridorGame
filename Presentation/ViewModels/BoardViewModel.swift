@@ -9,13 +9,11 @@ import Foundation
 import Combine
 
 protocol BoardViewModelProtocol {
-    func movePawn(pawn : Pawn)
-    func insertWall(wall : Wall)
+    func movePawn(cellIndex: Int)
+    func insertWall(cellIndex: Int, side: BoardCellSide)
     func quitMatch()
-    func startMatch() -> Result<Board,MatchMakingError>
+    func startMatch() async -> Result<Board,MatchMakingError>
     func allowedPawnMoves() -> [Pawn]
-    
-    var gameEvent : Published<GameEvent>.Publisher { get }
 }
 
 
@@ -23,14 +21,20 @@ final class BoardViewModel {
     
     private var useCases : GameOutputUseCaseProtocol?
     private var matchmakingUseCase : MatchMakingUseCaseProtocol?
+    private var boardFactory : BoardFactoryInterface?
+
+    var viewControllerInterface : BoardViewControllerProtocol?
+    
     private var subscribers: [AnyCancellable] = []
 
     @Published private var currentGameEvent : GameEvent = .noEvent
     
     init(useCases: GameOutputUseCaseProtocol?,
-         matchmakingUseCase : MatchMakingUseCaseProtocol?) {
+         matchmakingUseCase : MatchMakingUseCaseProtocol?,
+         boardFactory : BoardFactoryInterface?) {
         self.useCases = useCases
         self.matchmakingUseCase = matchmakingUseCase
+        self.boardFactory = boardFactory
     }
     
 }
@@ -48,25 +52,39 @@ extension BoardViewModel : BoardViewModelProtocol {
     }
     
     
-    var gameEvent: Published<GameEvent>.Publisher {
-        $currentGameEvent
-    }
-    
-    func movePawn(pawn: Pawn) {
-        Task {
-            let res = await useCases?.movePawn(newPawn: pawn)
-            currentGameEvent = res ?? .error
+    func movePawn(cellIndex: Int) {
+        if let pawn = boardFactory?.resolvePawn(cellIndex: cellIndex){
+            Task {
+                viewControllerInterface?.handelEvent(gameEvent: .waiting)
+                let res = await useCases?.movePawn(newPawn: pawn)
+                if let wrapper = boardFactory?.getBoardCellsFromPawn(newMove: pawn) {
+                    if res == .invalidPawn || res == .waitingOpponentMove {
+                        viewControllerInterface?.handelEvent(gameEvent: res ?? .error)
+                    } else {
+                        viewControllerInterface?.updateOpponentPawn(start: wrapper.startPosition, destination: wrapper.endPosition)
+                    }
+                }
+            }
         }
     }
     
-    func insertWall(wall: Wall) {
-        Task {
-            let res = await useCases?.insertWall(wall: wall)
-            currentGameEvent = res ?? .error
+    func insertWall(cellIndex: Int, side: BoardCellSide) {
+        if let wall = boardFactory?.resolveWall(cellIndex: cellIndex, side: side){
+            Task {
+                viewControllerInterface?.handelEvent(gameEvent: .waiting)
+                let res = await useCases?.insertWall(wall: wall)
+                if let wrapper = boardFactory?.getBoardCellsFromWall(newWall: wall) {
+                    if res == .invalidWall || res == .waitingOpponentMove {
+                        viewControllerInterface?.handelEvent(gameEvent: res ?? .error)
+                    } else {
+                        viewControllerInterface?.updateWall(topRight: wrapper.topRight, topLeft: wrapper.bottomLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
+                    }
+                }
+            }
         }
     }
     
-    func startMatch() -> Result<Board,MatchMakingError> {
+    func startMatch() async -> Result<Board,MatchMakingError> {
         guard let mUseCase = matchmakingUseCase else { return .failure(.APIError)}
         Task {
             let searchResult = await mUseCase.searchMatch()
@@ -75,14 +93,21 @@ extension BoardViewModel : BoardViewModelProtocol {
                 let joinResult = await mUseCase.joinMatch(gameId: gameId)
                 switch joinResult {
                 case .success(let game):
-                    //HANDLE GAME: convert with BoardFactory
-                    return .failure(.APIError)
+                    let board = boardFactory?.updateBoard(game: game)
+                    return board
                 case .failure(let failure):
-                    return failure
+                    return .failure(failure)
                 }
             case .failure(let error):
                 if error == .matchNotFound {
                     let createResult = await mUseCase.createMatch()
+                    switch createResult {
+                    case .success(let game):
+                        let board = boardFactory?.resolveBoard(game: game)
+                        return board
+                    case .failure(let failure):
+                        return .APIError
+                    }
                 } else {
                     return error
                 }

@@ -12,6 +12,7 @@ protocol BoardViewControllerProtocol {
     func updateOpponentPawn(start : BoardCell, destination : BoardCell)
     func updateWall(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     func initBoard(board : Board)
+    func handelEvent(gameEvent : GameEvent)
 }
 
 class BoardViewController: UIViewController {
@@ -19,7 +20,6 @@ class BoardViewController: UIViewController {
     @IBOutlet private var boardView : UIView!
     
     private var viewModel : BoardViewModelProtocol?
-    private var listener : GameInputViewModelProtocol?
     private var board : Board = Board(cells: [[]], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
     private var allowedCells : [Pawn] = []
     
@@ -33,8 +33,7 @@ class BoardViewController: UIViewController {
     }
 
     
-    init(viewModel: BoardViewModelProtocol,
-         listener : GameInputViewModelProtocol?) {
+    init(viewModel: BoardViewModelProtocol) {
         super.init(nibName: String(describing: "BoardViewController"), bundle: nil)
         self.viewModel = viewModel
     }
@@ -54,6 +53,35 @@ class BoardViewController: UIViewController {
 }
 
 extension BoardViewController : BoardViewControllerProtocol {
+    func handelEvent(gameEvent: GameEvent) {
+        switch gameEvent {
+        case .waiting:
+            break
+        case .waitingOpponentMove:
+            break
+        case .matchWon:
+            break
+        case .matchLost:
+            break
+        case .updateBoard:
+            break
+        case .error:
+            break
+        case .invalidWall:
+            break
+        case .noWall:
+            break
+        case .invalidPawn:
+            break
+        case .noEvent:
+            break
+        case .searchingOpponents:
+            break
+        case .endGame:
+            break
+        }
+    }
+    
     func initBoard(board: Board) {
         let width = Int(boardView.frame.width)
         let cellWidth = Int(width/numberOfCellPerRow)
@@ -112,15 +140,13 @@ extension BoardViewController : BoardCellDelegate {
             
         } else {
             if allowedCells.contains(where: { $0.position == index}){
-                viewModel?.movePawn(pawn: Pawn(position: index))
+                viewModel?.movePawn(cellIndex: index)
             }
         }
     }
     
     func tapWall(index: Int, side: BoardCellSide) {
-        if let wall = listener?.getWall(cellIndex: index, side: side) {
-            viewModel?.insertWall(wall: wall)
-        }
+        viewModel?.insertWall(cellIndex: index, side: side)
     }
 
 }

@@ -29,9 +29,11 @@ struct WallWrapper {
 }
 
 protocol BoardFactoryInterface {
-    func resolveBoard(game : Game) -> Board
-    func movePawn(currentBoard : Board, newMove : Pawn) -> PawnWrapper
-    func insertWall(currentBoard : Board, newWall : Wall) -> WallWrapper
+    func updateBoard(game : Game) -> Board
+    func resolveWall(cellIndex: Int, side: BoardCellSide) -> Wall
+    func resolvePawn(cellIndex: Int) -> Pawn
+    func getBoardCellsFromPawn(newMove : Pawn) -> PawnWrapper
+    func getBoardCellsFromWall(newWall : Wall) -> WallWrapper
     func gameState(game : Game) -> GameStage
 }
 
@@ -39,6 +41,7 @@ protocol BoardFactoryInterface {
 final class BoardFactory {
     
     private var userInfo : UserInfoInterface?
+    private var currentBoard = Board(cells: [], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
     
     init(userInfo : UserInfoInterface?) {
         self.userInfo = userInfo
@@ -47,6 +50,48 @@ final class BoardFactory {
 }
 
 extension BoardFactory : BoardFactoryInterface {
+    func resolvePawn(cellIndex: Int) -> Pawn {
+        return Pawn(position: cellIndex)
+    }
+    
+    func resolveWall(cellIndex: Int, side: BoardCellSide) -> Wall {
+        let drawMode = currentBoard.drawMode
+        var wall = Wall.initValue
+        
+        if side == .topSide {
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex + bufferTopDownCell - bufferLeftRightCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
+            let bottomLeftIndex =  cellIndex
+            wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        
+        if side == .bottomSide {
+            let topLeftIndex = cellIndex
+            let topRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferTopDownCell + bufferLeftRightCell : cellIndex - bufferTopDownCell - bufferLeftRightCell
+            let bottomLeftIndex =  drawMode == .normal ? cellIndex + bufferTopDownCell : cellIndex - bufferTopDownCell
+            wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        
+        if side == .rightSide {
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex + bufferTopDownCell - bufferLeftRightCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
+            let bottomLeftIndex = cellIndex
+            wall = Wall(orientation: .vertical, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        
+        if side == .leftSide {
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell - bufferLeftRightCell : cellIndex + bufferTopDownCell + bufferLeftRightCell
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
+            let bottomRigthIndex = cellIndex
+            let bottomLeftIndex = drawMode == .normal ? cellIndex - bufferLeftRightCell : cellIndex + bufferLeftRightCell
+            wall = Wall(orientation: .vertical, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
+        }
+        return wall
+    }
+    
     func gameState(game: Game) -> GameStage {
         let lastMove = game.lastMove
         let currentPlayerId = userInfo?.getUserInfo().userId
@@ -60,7 +105,7 @@ extension BoardFactory : BoardFactoryInterface {
         return .noMove
     }
     
-    func resolveBoard(game: Game) -> Board {
+    func updateBoard(game: Game) -> Board {
         let currentPlayerId = userInfo?.getUserInfo().userId
         let drawMode: DrawMode = currentPlayerId == game.player1.playerId ? .normal : .reverse
         var currentPlayer = game.player1
@@ -117,10 +162,11 @@ extension BoardFactory : BoardFactoryInterface {
             }
             cells.append(boardRow)
         }
-        return Board(cells: cells, player: currentPlayer, opponent: opponentPlayer, drawMode: drawMode)
+        currentBoard = Board(cells: cells, player: currentPlayer, opponent: opponentPlayer, drawMode: drawMode)
+        return currentBoard
     }
     
-    func movePawn(currentBoard: Board, newMove: Pawn) -> PawnWrapper {
+    func getBoardCellsFromPawn(newMove: Pawn) -> PawnWrapper {
         let newPosition = newMove.position
         let newRow = newPosition/10
         let newColumn = newPosition%10
@@ -133,6 +179,7 @@ extension BoardFactory : BoardFactoryInterface {
                 if cell.contentType == .opponentPawn {
                     cb.cells[rowId][columnId].contentType = .empty
                     cb.cells[newRow][newColumn].contentType = .playerPawn
+                    currentBoard = cb
                     return PawnWrapper(updatedBoard: cb, startPosition: cb.cells[rowId][columnId], endPosition: cb.cells[newRow][newColumn])
                 }
             }
@@ -141,7 +188,7 @@ extension BoardFactory : BoardFactoryInterface {
         return PawnWrapper(updatedBoard: currentBoard, startPosition: defaultCell, endPosition: defaultCell)
     }
     
-    func insertWall(currentBoard: Board, newWall : Wall) -> WallWrapper {
+    func getBoardCellsFromWall(newWall : Wall) -> WallWrapper {
         let wall = newWall
         var cb = currentBoard
         
@@ -185,6 +232,7 @@ extension BoardFactory : BoardFactoryInterface {
         }
         let bottomLeftCell = cb.cells[bottomLeftRow][bottomLeftColumn]
         
+        currentBoard = cb
         return WallWrapper(updatedBoard: cb, topLeft: topLeftCell, topRight: topRightCell, bottomLeft: bottomLeftCell, bottomRight: bottomRightCell)
     }
     
