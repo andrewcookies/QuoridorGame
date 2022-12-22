@@ -46,6 +46,4 @@ extension DataBaseRepository : GameRepositoryReadInterface {
     func getCurrentGame() -> Game {
         return currentGame
     }
-    
-
 }

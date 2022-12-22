@@ -7,4 +7,17 @@
 
 import Foundation
 
-final class LocalGameRepository {}
+final class LocalGameRepository {
+    private var gameId : String = ""
+}
+
+
+extension LocalGameRepository : MultiplayerLocalRepositoryInterface {
+    func setCurrentGameId(gameId: String) {
+        self.gameId = gameId
+    }
+    
+    func getCurrentGameId() -> String {
+        return gameId
+    }
+}

@@ -9,5 +9,4 @@ import Foundation
 
 protocol GameRepositoryReadInterface {
     func getCurrentGame() -> Game
-    func getCurrentGameId() -> String
 }

@@ -12,7 +12,7 @@ protocol BoardViewModelProtocol {
     func movePawn(cellIndex: Int)
     func insertWall(cellIndex: Int, side: BoardCellSide)
     func quitMatch()
-    func startMatch() async -> Result<Board,MatchMakingError>
+    func startMatch()
     func allowedPawnMoves() -> [Pawn]
 }
 
@@ -84,8 +84,12 @@ extension BoardViewModel : BoardViewModelProtocol {
         }
     }
     
-    func startMatch() async -> Result<Board,MatchMakingError> {
-        guard let mUseCase = matchmakingUseCase else { return .failure(.APIError)}
+    func startMatch()  {
+        guard let mUseCase = matchmakingUseCase else {
+            viewControllerInterface?.handelEvent(gameEvent: .error)
+            return
+        }
+        
         Task {
             let searchResult = await mUseCase.searchMatch()
             switch searchResult {
@@ -93,23 +97,25 @@ extension BoardViewModel : BoardViewModelProtocol {
                 let joinResult = await mUseCase.joinMatch(gameId: gameId)
                 switch joinResult {
                 case .success(let game):
-                    let board = boardFactory?.updateBoard(game: game)
-                    return board
-                case .failure(let failure):
-                    return .failure(failure)
+                    if let board = boardFactory?.updateBoard(game: game) {
+                        viewControllerInterface?.initBoard(board: board)
+                    }
+                case .failure(_):
+                    viewControllerInterface?.handelEvent(gameEvent: .error)
                 }
             case .failure(let error):
                 if error == .matchNotFound {
                     let createResult = await mUseCase.createMatch()
                     switch createResult {
                     case .success(let game):
-                        let board = boardFactory?.resolveBoard(game: game)
-                        return board
-                    case .failure(let failure):
-                        return .APIError
+                        if let board = boardFactory?.updateBoard(game: game) {
+                            viewControllerInterface?.initBoard(board: board)
+                        }
+                    case .failure(_):
+                        viewControllerInterface?.handelEvent(gameEvent: .error)
                     }
                 } else {
-                    return error
+                    viewControllerInterface?.handelEvent(gameEvent: .error)
                 }
             }
         }

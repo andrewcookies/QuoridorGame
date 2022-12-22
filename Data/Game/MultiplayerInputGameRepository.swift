@@ -12,14 +12,14 @@ import FirebaseCore
 final class MultiplayerInputGameRepository : EntityMapperInterface {
     
     private var gatewayInputInterface : GameGatewayInputInterface?
-    private var localRepoWriter : GameRepositoryWriteInterface?
+    private var localRepoWriter : MultiplayerLocalRepositoryInterface?
     private var userInterface : UserInfoInterface?
     
     private let db : Firestore?
     
     
     init(gatewayInputInterface: GameGatewayInputInterface,
-         localRepoWriter : GameRepositoryWriteInterface?,
+         localRepoWriter : MultiplayerLocalRepositoryInterface?,
          userInterface : UserInfoInterface?) {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
@@ -47,7 +47,7 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         let ref = collection?.addDocument(data: dictionary)
             //set Listener
         let documentID = ref?.documentID ?? ""
-        localRepoWriter?.setCurrentGameId(id: documentID)
+        localRepoWriter?.setCurrentGameId(gameId: documentID)
         try await setGameListener(id: documentID)
         return game
     }
@@ -119,7 +119,7 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
             let gameDictionary = gameDocument?.data() ?? [:]
             let gameId = gameDocument?.documentID ?? ""
             let game = gameMapper(from: gameDictionary)
-            localRepoWriter?.setCurrentGameId(id: gameId)
+            localRepoWriter?.setCurrentGameId(gameId: gameId)
             try await joinMatch(player: player, game: game, gameId: gameId)
             return game
         }
@@ -140,7 +140,7 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
             let gameDictionary = gameDocument?.data() ?? [:]
             let gameId = gameDocument?.documentID ?? ""
             let game = gameMapper(from: gameDictionary)
-            localRepoWriter?.setCurrentGameId(id: gameId)
+            localRepoWriter?.setCurrentGameId(gameId: gameId)
             return gameId
         }
     }

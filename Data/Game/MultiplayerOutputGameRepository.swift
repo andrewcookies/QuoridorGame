@@ -19,10 +19,10 @@ final class MultiplayerOutputGameRepository : EntityMapperInterface {
     
     
     private let db : Firestore?
-    private let dbReader : GameRepositoryReadInterface?
+    private let dbReader : MultiplayerLocalRepositoryInterface?
     
     
-    init( dbReader : GameRepositoryReadInterface?) {
+    init( dbReader : MultiplayerLocalRepositoryInterface?) {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }

@@ -11,6 +11,5 @@ protocol GameRepositoryWriteInterface {
     func movePawnOnTheBoard(pawn : Pawn)
     func insertWallOnTheBoard(wall : Wall)
     func updateGame(game : Game)
-    func setCurrentGameId(id : String)
 }
 
