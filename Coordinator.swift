@@ -16,8 +16,6 @@ enum MatchType {
 final class Coordinator {
     
     private var navigationController : UINavigationController?
-    private let gameDB = DataBaseRepository()
-    private let userDB =  UserRepository()
     
     init(navigationController: UINavigationController? = nil) {
         self.navigationController = navigationController
@@ -29,20 +27,20 @@ final class Coordinator {
     }
     
     private func getLoginViewController() -> LoginViewController {
+        let userInfo = resolveUserRepository()
         let navigation = LoginViewNavigation(startGame: { [weak self] in
-            self?.startGame()
+            self?.startGame(userInfo : userInfo)
         })
-        let viewModel = LoginViewModel(userInterface: userDB, navigation: navigation)
+        let viewModel = LoginViewModel(userInterface: userInfo, navigation: navigation)
         let viewController = LoginViewController(viewModel: viewModel)
         return viewController
     }
     
-    private func getBoardViewController() -> BoardViewController {
+    private func getBoardViewController(userInfo : UserInfoInterface) -> BoardViewController {
         
-        let userRepo = resolveUserRepository()
         let multiplayerDataBaseRepository = resolveMultiplayerLocalDataRepository()
-        let boardFactory = BoardFactory(userInfo: userRepo)
-        let gameFactory = GameFactory(userInfo: userRepo)
+        let boardFactory = BoardFactory(userInfo: userInfo)
+        let gameFactory = GameFactory(userInfo: userInfo)
         
         let outputDataLayer = resolveBoardOutpuDataLayer(localDataRepository: multiplayerDataBaseRepository)
         
@@ -89,8 +87,8 @@ final class Coordinator {
     
     
     //MARK: Navigation Actions
-    private func startGame() {
-        let vc = getBoardViewController()
+    private func startGame(userInfo : UserInfoInterface) {
+        let vc = getBoardViewController(userInfo: userInfo)
         navigationController?.popViewController(animated: false)
         navigationController?.pushViewController(vc, animated: false)
     }

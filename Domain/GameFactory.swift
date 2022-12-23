@@ -187,8 +187,8 @@ extension GameFactory : GameFactoryProtocol {
     
     
     func getPlayerToJoinGame() -> Player {
-        let player = Player(name: userInfo.getUserInfo().name ?? "- -",
-                            playerId: userInfo.getUserInfo().userId ?? "- -",
+        let player = Player(name: userInfo.getUserInfo().name,
+                            playerId: userInfo.getUserInfo().userId,
                             pawnPosition: Pawn.startValue,
                             walls: [])
         return player
