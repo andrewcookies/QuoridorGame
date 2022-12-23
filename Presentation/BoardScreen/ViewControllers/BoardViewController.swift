@@ -79,6 +79,8 @@ extension BoardViewController : BoardViewControllerProtocol {
             break
         case .endGame:
             break
+        case .joiningMatch:
+            break
         }
     }
     
