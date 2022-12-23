@@ -7,23 +7,9 @@
 
 import Foundation
 
-final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOutputInterface {
+class DemoGameOutputRepository : GameRepositoryOutputInterface {
     
-    private var inputUseCase : GameInputUseCaseProtocol
-    private var demoGame = Game.defaultValue
-    
-    func createMatch(game: Game) async throws -> Game {
-        throw MatchMakingError.APIError
-    }
-    
-    init(inputUseCase : GameInputUseCaseProtocol){
-        self.inputUseCase = inputUseCase
-    }
-    
-    func searchMatch(player: Player) async throws {
-        throw MatchMakingError.APIError
-    }
-    
+    var demoGame = Game.defaultValue
     func updateState(state: GameState) async throws {
         let game = Game(created: demoGame.created,
                         state: state,
@@ -32,7 +18,7 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
                         lastMove: demoGame.lastMove,
                         gameMoves: demoGame.gameMoves)
         demoGame = game
-        inputUseCase.updateGameFromOpponent(game: game)
+        NotificationCenter.default.post(name: Notification.Name("update"), object: nil)
     }
     
     func updateGame(game: Game) async throws {
@@ -46,9 +32,25 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
                            lastMove: demoMove,
                            gameMoves: moves)
         demoGame = newGame
-        inputUseCase.updateGameFromOpponent(game: game)
+
     }
     
+  
+}
+
+
+class DemoGameInputRepository : DemoGameOutputRepository, GameRepositoryInputInterface{
+    
+    var inputUseCase : GameInputUseCaseProtocol
+    init(inputUseCase : GameInputUseCaseProtocol) {
+        self.inputUseCase = inputUseCase
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(update),name: Notification.Name("update"), object: nil)
+    }
+    
+    @objc func update(){
+        inputUseCase.updateGameFromOpponent(game: demoGame)
+    }
     
     func searchOpenMatch() async throws -> String {
         return "DEMO_ID"
@@ -72,4 +74,7 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
         return demoGame
     }
     
+    func createMatch(game: Game) async throws -> Game {
+        throw MatchMakingError.APIError
+    }
 }

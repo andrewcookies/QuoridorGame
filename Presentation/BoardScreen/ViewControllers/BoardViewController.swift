@@ -30,6 +30,7 @@ class BoardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel?.startMatch()
     }
 
     
@@ -96,9 +97,11 @@ extension BoardViewController : BoardViewControllerProtocol {
             let cellRow = board.cells[rowIndex]
             for columnIndex in columnSequence {
                 let cell = cellRow[columnIndex]
-                let v = BoardCellView(frame: CGRect(x: columnIndex*cellWidth, y: rowIndex, width: cellWidth, height: cellWidth))
-                v.setup(cell: cell)
-                boardView.addSubview(v)
+                if let v = BoardCellView.getView() as? BoardCellView {
+                    v.frame = CGRect(x: columnIndex*cellWidth, y: rowIndex*cellWidth, width: cellWidth, height: cellWidth)
+                    v.setup(cell: cell)
+                    boardView.addSubview(v)
+                }
             }
         }
     }

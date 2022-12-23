@@ -30,16 +30,16 @@ class BoardCellView: UIView {
     private var contentType : BoardContentType = .empty
     private weak var delegate : BoardCellDelegate?
     
+    
+    static func getView() -> UIView? {
+        guard let _view = Bundle.main.loadNibNamed("BoardCellView", owner: self, options: nil)?.first,
+              let view = _view as? BoardCellView
+        else { return nil }
+        return view
+    }
+    
     override  func awakeFromNib() {
         super.awakeFromNib()
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
     
     

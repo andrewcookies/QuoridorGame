@@ -78,21 +78,24 @@ extension BoardViewModel : BoardViewModelProtocol {
     }
     
     func startMatch()  {
-        
+        viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
         Task {
-            viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
             let searchResult = await matchmakingUseCase.searchMatch()
             switch searchResult {
             case .success(let gameId):
-                viewControllerInterface?.handelEvent(gameEvent: .joiningMatch)
                 let joinResult = await matchmakingUseCase.joinMatch(gameId: gameId)
                 switch joinResult {
+                    
                 case .success(let game):
-                    let board = boardFactory.updateBoard(game: game)
-                    viewControllerInterface?.initBoard(board: board)
+                    DispatchQueue.main.async {
+                        let board = self.boardFactory.updateBoard(game: game)
+                        self.viewControllerInterface?.initBoard(board: board)
+                    }
                     
                 case .failure(_):
-                    viewControllerInterface?.handelEvent(gameEvent: .error)
+                    DispatchQueue.main.async {
+                        self.viewControllerInterface?.handelEvent(gameEvent: .error)
+                    }
                 }
                 
             case .failure(let error):
@@ -100,14 +103,20 @@ extension BoardViewModel : BoardViewModelProtocol {
                     let createResult = await matchmakingUseCase.createMatch()
                     switch createResult {
                     case .success(let game):
-                        let board = boardFactory.updateBoard(game: game)
-                        viewControllerInterface?.initBoard(board: board)
+                        DispatchQueue.main.async {
+                            let board = self.boardFactory.updateBoard(game: game)
+                            self.viewControllerInterface?.initBoard(board: board)
+                        }
                         
                     case .failure(_):
-                        viewControllerInterface?.handelEvent(gameEvent: .error)
+                        DispatchQueue.main.async {
+                            self.viewControllerInterface?.handelEvent(gameEvent: .error)
+                        }
                     }
                 } else {
-                    viewControllerInterface?.handelEvent(gameEvent: .error)
+                    DispatchQueue.main.async {
+                        self.viewControllerInterface?.handelEvent(gameEvent: .error)
+                    }
                 }
             }
         }

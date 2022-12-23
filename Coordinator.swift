@@ -42,14 +42,14 @@ final class Coordinator {
         let boardFactory = BoardFactory(userInfo: userInfo)
         let gameFactory = GameFactory(userInfo: userInfo)
         
-        let outputDataLayer = resolveBoardOutpuDataLayer(localDataRepository: multiplayerDataBaseRepository)
+        let outputDataLayer = DemoGameOutputRepository()//resolveBoardOutpuDataLayer(localDataRepository: multiplayerDataBaseRepository)
         
         let outputUseCase = GameOutputUseCase(gameFactory: gameFactory, gameInterface: outputDataLayer)
        
         let inputViewModel = GameInputViewModel(boardFactory: boardFactory)
         let inputUseCase = GameInputUseCase(viewModelListener: inputViewModel, gameFactory: gameFactory)
         
-        let inputDataLayer = resolveBoardInputDataLayer(localGameRepository: multiplayerDataBaseRepository, inputUseCase: inputUseCase)
+        let inputDataLayer = DemoGameInputRepository(inputUseCase: inputUseCase)//resolveBoardInputDataLayer(localGameRepository: multiplayerDataBaseRepository, inputUseCase: inputUseCase)
         
         let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: inputDataLayer, gameFactory: gameFactory)
         
