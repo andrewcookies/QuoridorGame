@@ -36,7 +36,16 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
     }
     
     func updateGame(game: Game) async throws {
-        demoGame = game
+        let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: Pawn.startValue, wallMove:  Wall.initValue, moveType: .movePawn)
+        var moves = demoGame.gameMoves
+        moves.append(demoMove)
+        let newGame = Game(created: game.created,
+                           state: .inProgress,
+                           player1: game.player1,
+                           player2: game.player2,
+                           lastMove: demoMove,
+                           gameMoves: moves)
+        demoGame = newGame
         inputUseCase.updateGameFromOpponent(game: game)
     }
     
@@ -48,8 +57,10 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
     
     func joinMatch(player: Player, gameId: String) async throws -> Game {
         
+        let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: Pawn.startValue, wallMove:  Wall.initValue, moveType: .movePawn)
         let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
         var moves = demoGame.gameMoves
+        moves.append(demoMove)
         moves.append(move)
         let newGame = Game(created: demoGame.created,
                            state: .inProgress,
