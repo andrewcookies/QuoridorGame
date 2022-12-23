@@ -43,9 +43,21 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
     
     func searchOpenMatch() async throws -> String {
         return "DEMO_ID"
+       // throws MatchMakingError.notfou
     }
     
     func joinMatch(player: Player, gameId: String) async throws -> Game {
+        
+        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
+        var moves = demoGame.gameMoves
+        moves.append(move)
+        let newGame = Game(created: demoGame.created,
+                           state: .inProgress,
+                           player1: demoGame.player1,
+                           player2: player,
+                           lastMove: move,
+                           gameMoves: moves)
+        demoGame = newGame
         return demoGame
     }
     
