@@ -18,5 +18,6 @@ enum GameEvent : Error {
     case invalidPawn
     case noEvent
     case searchingOpponents
+    case joiningMatch
     case endGame
 }

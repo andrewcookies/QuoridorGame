@@ -80,9 +80,11 @@ extension BoardViewModel : BoardViewModelProtocol {
     func startMatch()  {
         
         Task {
+            viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
             let searchResult = await matchmakingUseCase.searchMatch()
             switch searchResult {
             case .success(let gameId):
+                viewControllerInterface?.handelEvent(gameEvent: .joiningMatch)
                 let joinResult = await matchmakingUseCase.joinMatch(gameId: gameId)
                 switch joinResult {
                 case .success(let game):
