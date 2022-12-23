@@ -72,7 +72,7 @@ final class Coordinator {
     
     private func resolveMultiplayerLocalDataRepository() -> MultiplayerLocalRepositoryInterface {
         //store Game Multiplayer Info such as GameId
-        return LocalGameRepository()
+        return MultiplayerLocalStorageRepository()
     }
     
     
