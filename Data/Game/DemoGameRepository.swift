@@ -8,17 +8,20 @@
 import Foundation
 
 final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOutputInterface {
-
     
-    private var gatewayInputInterface : GameGatewayInputInterface?
+    private var inputUseCase : GameInputUseCaseProtocol
     private var demoGame = Game.defaultValue
     
-    init(gatewayInputInterface : GameGatewayInputInterface?){
-        self.gatewayInputInterface = gatewayInputInterface
+    func createMatch(game: Game) async throws -> Game {
+        throw MatchMakingError.APIError
+    }
+    
+    init(inputUseCase : GameInputUseCaseProtocol){
+        self.inputUseCase = inputUseCase
     }
     
     func searchMatch(player: Player) async throws {
-        gatewayInputInterface?.updatedReceived(game: demoGame)
+        throw MatchMakingError.APIError
     }
     
     func updateState(state: GameState) async throws {
@@ -29,12 +32,12 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
                         lastMove: demoGame.lastMove,
                         gameMoves: demoGame.gameMoves)
         demoGame = game
-        gatewayInputInterface?.updatedReceived(game: game)
+        inputUseCase.updateGameFromOpponent(game: game)
     }
     
     func updateGame(game: Game) async throws {
         demoGame = game
-        gatewayInputInterface?.updatedReceived(game: demoGame)
+        inputUseCase.updateGameFromOpponent(game: game)
     }
     
     
@@ -42,13 +45,8 @@ final class DemoGameRepository : GameRepositoryInputInterface, GameRepositoryOut
         return "DEMO_ID"
     }
     
-    func createMatch(player: Player) async throws -> Game {
-        throw MatchMakingError.APIError
-    }
-    
     func joinMatch(player: Player, gameId: String) async throws -> Game {
         return demoGame
     }
-    
     
 }

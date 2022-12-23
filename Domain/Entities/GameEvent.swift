@@ -6,7 +6,7 @@
 //
 
 import Foundation
-enum GameEvent {
+enum GameEvent : Error {
     case waiting
     case waitingOpponentMove
     case matchWon

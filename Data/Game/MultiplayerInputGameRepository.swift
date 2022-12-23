@@ -11,36 +11,24 @@ import FirebaseCore
 
 final class MultiplayerInputGameRepository : EntityMapperInterface {
     
-    private var gatewayInputInterface : GameGatewayInputInterface?
+    private var gameInputUseCase : GameInputUseCaseProtocol?
     private var localRepoWriter : MultiplayerLocalRepositoryInterface?
-    private var userInterface : UserInfoInterface?
     
     private let db : Firestore?
     
     
-    init(gatewayInputInterface: GameGatewayInputInterface,
-         localRepoWriter : MultiplayerLocalRepositoryInterface?,
-         userInterface : UserInfoInterface?) {
+    init(gameInputUseCase: GameInputUseCaseProtocol,
+         localRepoWriter : MultiplayerLocalRepositoryInterface?) {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
         db = Firestore.firestore()
-        self.gatewayInputInterface = gatewayInputInterface
-        self.userInterface = userInterface
+        self.gameInputUseCase = gameInputUseCase
         self.localRepoWriter = localRepoWriter
     }
 
-    private func startNewGame(player : Player) async throws -> Game {
+    private func startNewGame(game : Game) async throws -> Game {
         let collection = db?.collection("games")
-        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
-        let timestamp = Double((Date().timeIntervalSince1970 * 1000.0).rounded())
-        let game = Game(created: timestamp,
-                        state: .waiting,
-                        player1: player,
-                        player2: Player.startOpponentValue,
-                        lastMove: move,
-                        gameMoves: [move])
-        
         let data = try JSONEncoder().encode(game)
         guard let dictionary = try JSONSerialization.jsonObject(with: data) as? [String:Any] else { throw APIError.currentInfoNIL }
         
@@ -81,14 +69,10 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
                 let data = document.data(),
                 let game = self?.gameMapper(from: data) {
                 let lastMove = game.lastMove
-                let currentPlayerId = self?.userInterface?.getUserInfo().userId
                 
                 //avoid game update from my last move
-                if lastMove.playerId != currentPlayerId || game.state != .inProgress {
-                    GameLog.shared.debug(message: "updated received from \(game.lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
-                    self?.gatewayInputInterface?.updatedReceived(game: game)
-                }
-                
+                GameLog.shared.debug(message: "updated received from \(game.lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
+                self?.gameInputUseCase?.updateGameFromOpponent(game: game)
             }
         })
         
@@ -97,9 +81,9 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
 }
 
 extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
-    func createMatch(player: Player) async throws -> Game {
+    func createMatch(game: Game) async throws -> Game {
         GameLog.shared.debug(message: "createMatch", className: "MultiplayerInputGameRepository")
-        let game = try await startNewGame(player: player)
+        let game = try await startNewGame(game: game)
         return game
     }
     

@@ -10,28 +10,26 @@ import Foundation
 
 final class GameOutputUseCase {
     
-    private var validator : ValidatorInterface?
-    private var gatewayOutputInterface : GameGatewayOutputInterface?
-    
-    @Published private var localGame : Game = Game.defaultValue
+    private var gameFactory : GameFactoryProtocol
+    private var gameInterface : GameRepositoryOutputInterface
 
-    init(validator : ValidatorInterface?,
-         gatewayOutputInterface : GameGatewayOutputInterface?) {
-        
-        self.gatewayOutputInterface = gatewayOutputInterface
-        self.validator = validator
+    init(gameFactory : GameFactoryProtocol,
+         gameInterface : GameRepositoryOutputInterface) {
+        self.gameFactory = gameFactory
+        self.gameInterface = gameInterface
     }
     
 }
 
 extension GameOutputUseCase : GameOutputUseCaseProtocol {
     func allowedPawnMoves() -> [Pawn] {
-        return validator?.fetchAllowedPawn() ?? []
+        return gameFactory.fetchAllowedPawn()
     }
     
     func quitMatch() async -> GameEvent {
         do{
-            try await gatewayOutputInterface?.updateState(state: .quit)
+            let currentGame = gameFactory.getGame()
+            try await gameInterface.updateState(state: .quit)
             return .endGame
         } catch {
             return .error
@@ -39,18 +37,17 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
     }
     
     func movePawn(newPawn: Pawn) async -> GameEvent {
-        let event = validator?.validateMovePawn(pawn: newPawn) ?? .error
-        do{
-            if event == .noEvent {
+        let result = gameFactory.updatePawn(pawn: newPawn)
+        do {
+            switch result {
+            case .success(let game):
                 GameLog.shared.debug(message: "update Pawn", className: "GameOutputUseCase")
-                try await gatewayOutputInterface?.updatePawn(pawn: newPawn)
+                try await gameInterface.updateGame(game: game)
                 return .waitingOpponentMove
-            } else if event == .matchWon {
-                GameLog.shared.debug(message: "match Won", className: "GameOutputUseCase")
-                try await gatewayOutputInterface?.updateState(state: .win )
-                return  event
-            } else {
-                GameLog.shared.debug(message: "move pawn conflict found \(event)", className: "GameOutputUseCase")
+            case .failure(let event):
+                if event == .matchWon {
+                    try await gameInterface.updateState(state: .win)
+                }
                 return event
             }
         } catch {
@@ -60,16 +57,18 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
     }
     
     func insertWall(wall: Wall) async -> GameEvent {
-        let event = validator?.validateInsertWall(wall: wall) ?? .error
-        do{
-            if event == .noEvent {
-                GameLog.shared.debug(message: "insert wall", className: "GameOutputUseCase")
-                try await gatewayOutputInterface?.updateWall(wall: wall)
+        let result = gameFactory.updateWall(wall: wall)
+        do {
+            switch result {
+            case .success(let game):
+                GameLog.shared.debug(message: "update wall", className: "GameOutputUseCase")
+                try await gameInterface.updateGame(game: game)
                 return .waitingOpponentMove
-            } else {
+            case .failure(let event):
                 GameLog.shared.debug(message: "insert wall conflict found \(event)", className: "GameOutputUseCase")
                 return event
             }
+            
         } catch {
             GameLog.shared.debug(message: "Exception during call", className: "GameOutputUseCase")
             return .error

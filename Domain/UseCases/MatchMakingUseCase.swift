@@ -9,20 +9,20 @@ import Foundation
 
 final class MatchMakingUseCase {
     
-    private var gameInputInterface : GameRepositoryInputInterface?
-    private var userInterface : UserInfoInterface?
+    private var gameInputInterface : GameRepositoryInputInterface
+    private var gameFactory : GameFactoryProtocol
     
-    init(gameInputInterface: GameRepositoryInputInterface?,
-         userInterface : UserInfoInterface) {
+    init(gameInputInterface: GameRepositoryInputInterface,
+         gameFactory : GameFactoryProtocol) {
         self.gameInputInterface = gameInputInterface
-        self.userInterface = userInterface
+        self.gameFactory = gameFactory
     }
 }
 
 extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
     func searchMatch() async -> Result<String,MatchMakingError> {
         do {
-            guard let gameId = try await gameInputInterface?.searchOpenMatch() else { return .failure(.matchNotFound) }
+            let gameId = try await gameInputInterface.searchOpenMatch()
             return .success(gameId)
         } catch {
             return .failure(.matchNotFound)
@@ -31,11 +31,8 @@ extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
     
     func createMatch() async -> Result<Game,MatchMakingError> {
         do {
-            let player = Player(name: userInterface?.getUserInfo().name ?? "- -",
-                                playerId: userInterface?.getUserInfo().userId ?? "- -",
-                                pawnPosition: Pawn.startValue,
-                                walls: [])
-            guard let game = try await gameInputInterface?.createMatch(player: player) else { return .failure(.APIError) }
+            let newGame = gameFactory.createGame()
+            let game = try await gameInputInterface.createMatch(game: newGame)
             return .success(game)
         } catch {
             return .failure(.APIError)
@@ -44,11 +41,8 @@ extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
     
     func joinMatch(gameId: String) async -> Result<Game,MatchMakingError> {
         do {
-            let player = Player(name: userInterface?.getUserInfo().name ?? "- -",
-                                playerId: userInterface?.getUserInfo().userId ?? "- -",
-                                pawnPosition: Pawn.startValue,
-                                walls: [])
-            guard let game = try await gameInputInterface?.joinMatch(player: player, gameId: gameId) else { return .failure(.APIError) }
+            let player = gameFactory.getPlayerToJoinGame()
+            let game = try await gameInputInterface.joinMatch(player: player, gameId: gameId)
             return .success(game)
         } catch {
             return .failure(.APIError)

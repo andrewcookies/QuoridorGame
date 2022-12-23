@@ -13,7 +13,6 @@ final class DataBaseRepository {
     
     init() {
         self.currentGame = Game.defaultValue
-        self.currentGameId = "- -"
     }
     
 }
