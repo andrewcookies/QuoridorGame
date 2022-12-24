@@ -125,7 +125,7 @@ extension BoardFactory : BoardFactoryInterface {
         for row in 0..<numberOfCellPerRow {
             var boardRow = [BoardCell]()
             for column in 0..<numberOfCellPerRow {
-                let currentIndex = row+column
+                let currentIndex = (bufferTopDownCell*row)+column
                 var contentType = BoardContentType.empty
                 var topBorder = BorderType.empty
                 var leftBorder = BorderType.empty

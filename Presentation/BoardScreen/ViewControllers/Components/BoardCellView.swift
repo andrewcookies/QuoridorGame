@@ -20,6 +20,7 @@ enum BoardCellSide {
 
 class BoardCellView: UIView {
     
+    @IBOutlet weak var tmpLabel: UILabel!
     @IBOutlet weak var cellView: UIView!
     @IBOutlet weak var topWallView: UIView!
     @IBOutlet weak var leftWallView: UIView!
@@ -48,7 +49,7 @@ class BoardCellView: UIView {
     }
     
     func updateColor(allowed : Bool){
-        backgroundColor = allowed ? colorAllowedCell : colorCell
+        cellView.backgroundColor = allowed ? colorAllowedCell : colorCell
     }
     
     func setup(cell : BoardCell){
@@ -59,16 +60,16 @@ class BoardCellView: UIView {
         
         switch contentType {
         case .playerPawn:
-            backgroundColor = colorPlayerPawn
+            cellView.backgroundColor = colorPlayerPawn
             
         case .opponentPawn:
-            backgroundColor = colorOpponentPawn
+            cellView.backgroundColor = colorOpponentPawn
             
         case .allowed:
-            backgroundColor = colorAllowedCell
+            cellView.backgroundColor = colorAllowedCell
             
         case .empty:
-            backgroundColor = colorCell
+            cellView.backgroundColor = colorCell
         }
         
         topWallView.backgroundColor = getColor(type: cell.topBorder)
@@ -82,6 +83,8 @@ class BoardCellView: UIView {
         bottomWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapBottomWall)))
         rightWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapRightWall)))
         leftWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapLeftWall)))
+        
+        tmpLabel.text = "\(cellIndex)"
         
     }
     

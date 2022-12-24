@@ -19,7 +19,7 @@ struct Pawn : Codable {
     }
     
     static var startOppositePlayer : Pawn {
-        return Pawn(position: startPlayer1PawnPosition)
+        return Pawn(position: startPlayer2PawnPosition)
     }
     
     enum CodingKeys: String, CodingKey {

@@ -90,15 +90,15 @@ extension BoardViewController : BoardViewControllerProtocol {
         let cellWidth = Int(width/numberOfCellPerRow)
 
         
-        let rowSequence = (0..<numberOfCellPerRow)
-        let columnSequence = (0..<numberOfCellPerRow)
+      //  let rowSequence = (0..<numberOfCellPerRow)
+      //  let columnSequence = (0..<numberOfCellPerRow)
         
-        for rowIndex in rowSequence {
-            let cellRow = board.cells[rowIndex]
-            for columnIndex in columnSequence {
-                let cell = cellRow[columnIndex]
+        for (rowId,cellsRow) in board.cells.enumerated() {
+            //let cellRow = board.cells[rowIndex]
+            for (columnId,cell) in cellsRow.enumerated() {
+               // let cell = cellRow[columnIndex]
                 if let v = BoardCellView.getView() as? BoardCellView {
-                    v.frame = CGRect(x: columnIndex*cellWidth, y: rowIndex*cellWidth, width: cellWidth, height: cellWidth)
+                    v.frame = CGRect(x: columnId*cellWidth, y: rowId*cellWidth, width: cellWidth, height: cellWidth)
                     v.setup(cell: cell)
                     boardView.addSubview(v)
                 }
