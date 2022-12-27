@@ -110,8 +110,8 @@ extension BoardFactory : BoardFactoryInterface {
         let drawMode: DrawMode = currentPlayerId == game.player1.playerId ? .normal : .reverse
         var currentPlayer = game.player1
         var opponentPlayer = game.player2
-        var rows = [(0..<numberOfCellPerRow)]
-        var columns  = [(0..<numberOfCellPerRow)]
+        var rows = Array(0..<numberOfCellPerRow)
+        var columns  = Array(0..<numberOfCellPerRow)
         
         if drawMode == .reverse {
             rows = rows.reversed()
@@ -122,9 +122,9 @@ extension BoardFactory : BoardFactoryInterface {
         
         
         var cells = [[BoardCell]]()
-        for row in 0..<numberOfCellPerRow {
+        for row in rows {
             var boardRow = [BoardCell]()
-            for column in 0..<numberOfCellPerRow {
+            for column in columns {
                 let currentIndex = (bufferTopDownCell*row)+column
                 var contentType = BoardContentType.empty
                 var topBorder = BorderType.empty
@@ -133,19 +133,35 @@ extension BoardFactory : BoardFactoryInterface {
                 var bottomBorder = BorderType.empty
                 
                 if topCellsBorder.contains(currentIndex) {
-                    topBorder = .boardBorder
+                    if drawMode == .reverse {
+                        bottomBorder = .boardBorder
+                    } else {
+                        topBorder = .boardBorder
+                    }
                 }
                 
                 if bottomCellsBorder.contains(currentIndex) {
-                    bottomBorder = .boardBorder
+                    if drawMode == .reverse {
+                        topBorder = .boardBorder
+                    } else {
+                        bottomBorder = .boardBorder
+                    }
                 }
                 
                 if rightCellsBorder.contains(currentIndex) {
-                    rightBorder = .boardBorder
+                    if drawMode == .reverse {
+                        leftBorder = .boardBorder
+                    } else {
+                        rightBorder = .boardBorder
+                    }
                 }
                 
                 if leftCellsBorder.contains(currentIndex) {
-                    leftBorder = .boardBorder
+                    if drawMode == .reverse {
+                        rightBorder = .boardBorder
+                    } else {
+                        leftBorder = .boardBorder
+                    }
                 }
                 
                 if currentIndex == currentPlayer.pawnPosition.position {
