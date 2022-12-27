@@ -207,14 +207,23 @@ extension BoardFactory : BoardFactoryInterface {
     func getBoardCellsFromWall(newWall : Wall) -> WallWrapper {
         let wall = newWall
         var cb = currentBoard
+        let mode = currentBoard.drawMode
         
         let topRightIndex = wall.topRightCell
         let topRightRow = topRightIndex/10
         let topRightColumn = topRightIndex%10
         if wall.orientation == .horizontal {
-            cb.cells[topRightRow][topRightColumn].bottomBorder = .wall
+            if mode == .normal {
+                cb.cells[topRightRow][topRightColumn].bottomBorder = .wall
+            } else {
+                cb.cells[topRightRow][topRightColumn].topBorder = .wall
+            }
         } else {
-            cb.cells[topRightRow][topRightColumn].leftBorder = .wall
+            if mode == .normal {
+                cb.cells[topRightRow][topRightColumn].leftBorder = .wall
+            } else {
+                cb.cells[topRightRow][topRightColumn].rightBorder = .wall
+            }
         }
         let topRightCell = cb.cells[topRightRow][topRightColumn]
         
@@ -222,9 +231,17 @@ extension BoardFactory : BoardFactoryInterface {
         let bottomRightRow = bottomRightIndex/10
         let bottomRightColumn = bottomRightIndex%10
         if wall.orientation == .horizontal {
-            cb.cells[bottomRightRow][bottomRightColumn].topBorder = .wall
+            if mode == .normal {
+                cb.cells[bottomRightRow][bottomRightColumn].topBorder = .wall
+            } else {
+                cb.cells[bottomRightRow][bottomRightColumn].bottomBorder = .wall
+            }
         } else {
-            cb.cells[bottomRightRow][bottomRightColumn].leftBorder = .wall
+            if mode == .normal {
+                cb.cells[bottomRightRow][bottomRightColumn].leftBorder = .wall
+            } else {
+                cb.cells[bottomRightRow][bottomRightColumn].rightBorder = .wall
+            }
         }
         let bottomRightCell = cb.cells[bottomRightRow][bottomRightColumn]
         
@@ -232,9 +249,17 @@ extension BoardFactory : BoardFactoryInterface {
         let topLeftRow = topLeftIndex/10
         let topLeftColumn = topLeftIndex%10
         if wall.orientation == .horizontal {
-            cb.cells[topLeftRow][topLeftColumn].bottomBorder = .wall
+            if mode == .normal {
+                cb.cells[topLeftRow][topLeftColumn].bottomBorder = .wall
+            } else {
+                cb.cells[topLeftRow][topLeftColumn].topBorder = .wall
+            }
         } else {
-            cb.cells[topLeftRow][topLeftColumn].rightBorder = .wall
+            if mode == .normal {
+                cb.cells[topLeftRow][topLeftColumn].rightBorder = .wall
+            } else {
+                cb.cells[topLeftRow][topLeftColumn].leftBorder = .wall
+            }
         }
         let topLeftCell = cb.cells[topLeftRow][topLeftColumn]
         
@@ -242,9 +267,17 @@ extension BoardFactory : BoardFactoryInterface {
         let bottomLeftRow = bottomLeftIndex/10
         let bottomLeftColumn = bottomLeftIndex%10
         if wall.orientation == .horizontal {
-            cb.cells[bottomLeftRow][bottomLeftColumn].topBorder = .wall
+            if mode == .normal {
+                cb.cells[bottomLeftRow][bottomLeftColumn].topBorder = .wall
+            } else {
+                cb.cells[bottomLeftRow][bottomLeftColumn].bottomBorder = .wall
+            }
         } else {
-            cb.cells[bottomLeftRow][bottomLeftColumn].rightBorder = .wall
+            if mode == .normal {
+                cb.cells[bottomLeftRow][bottomLeftColumn].rightBorder = .wall
+            } else {
+                cb.cells[bottomLeftRow][bottomLeftColumn].leftBorder = .wall
+            }
         }
         let bottomLeftCell = cb.cells[bottomLeftRow][bottomLeftColumn]
         
