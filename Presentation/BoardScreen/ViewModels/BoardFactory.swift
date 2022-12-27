@@ -32,7 +32,7 @@ protocol BoardFactoryInterface {
     func updateBoard(game : Game) -> Board
     func resolveWall(cellIndex: Int, side: BoardCellSide) -> Wall
     func resolvePawn(cellIndex: Int) -> Pawn
-    func getBoardCellsFromPawn(newMove : Pawn) -> PawnWrapper
+    func getBoardCellsFromPawn(newMove : Pawn, contentType : BoardContentType) -> PawnWrapper
     func getBoardCellsFromWall(newWall : Wall) -> WallWrapper
     func gameState(game : Game) -> GameStage
 }
@@ -182,21 +182,35 @@ extension BoardFactory : BoardFactoryInterface {
         return currentBoard
     }
     
-    func getBoardCellsFromPawn(newMove: Pawn) -> PawnWrapper {
-        let newPosition = newMove.position
-        let newRow = newPosition/10
-        let newColumn = newPosition%10
-        var cb = currentBoard
+    func getBoardCellsFromPawn(newMove: Pawn, contentType : BoardContentType) -> PawnWrapper {
+    
         let defaultCell = BoardCell(index: -1, topBorder: .empty, leftBorder: .empty, rightBorder: .empty, bottomBorder: .empty, contentType: .empty)
+       
+        let newPosition = newMove.position
+        var newBoardCell : BoardCell?
+        
+        let currentPosition = contentType == .playerPawn ? currentBoard.player.pawnPosition : currentBoard.opponent.pawnPosition
+        var currentBoardCell : BoardCell?
+        
+        var cb = currentBoard
 
         for (rowId,_) in cb.cells.enumerated() {
             for (columnId,_) in currentBoard.cells.enumerated() {
-                let cell = currentBoard.cells[rowId][columnId]
-                if cell.contentType == .opponentPawn {
+                let cell = cb.cells[rowId][columnId]
+                
+                if cell.index == newMove.position {
+                    cb.cells[rowId][columnId].contentType = contentType
+                    newBoardCell = cb.cells[rowId][columnId]
+                }
+                
+                if cell.index == currentPosition.position {
                     cb.cells[rowId][columnId].contentType = .empty
-                    cb.cells[newRow][newColumn].contentType = .playerPawn
+                    currentBoardCell = cb.cells[rowId][columnId]
+                }
+                
+                if let nbc = newBoardCell, let cbc = currentBoardCell {
                     currentBoard = cb
-                    return PawnWrapper(updatedBoard: cb, startPosition: cb.cells[rowId][columnId], endPosition: cb.cells[newRow][newColumn])
+                    return PawnWrapper(updatedBoard: cb, startPosition: cbc, endPosition: nbc)
                 }
             }
         }

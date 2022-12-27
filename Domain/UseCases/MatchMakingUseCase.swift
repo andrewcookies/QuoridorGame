@@ -33,6 +33,7 @@ extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
         do {
             let newGame = gameFactory.createGame()
             let game = try await gameInputInterface.createMatch(game: newGame)
+            gameFactory.updateGame(game: game)
             return .success(game)
         } catch {
             return .failure(.APIError)
@@ -43,6 +44,7 @@ extension MatchMakingUseCase : MatchMakingUseCaseProtocol {
         do {
             let player = gameFactory.getPlayerToJoinGame()
             let game = try await gameInputInterface.joinMatch(player: player, gameId: gameId)
+            gameFactory.updateGame(game: game)
             return .success(game)
         } catch {
             return .failure(.APIError)

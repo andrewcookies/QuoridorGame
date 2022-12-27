@@ -34,7 +34,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
     
     func opponentWonMatch(game: Game) {
         let newPosition = game.lastMove.pawnMove
-        let wrapper = boardFactory.getBoardCellsFromPawn(newMove: newPosition)
+        let wrapper = boardFactory.getBoardCellsFromPawn(newMove: newPosition, contentType : .opponentPawn)
         currentBoard = wrapper.updatedBoard
         viewControllerProtocol?.updateOpponentPawn(start: wrapper.startPosition, destination: wrapper.endPosition)
         viewControllerProtocol?.handelEvent(gameEvent: .matchLost)
@@ -50,7 +50,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
             
         case .opponentMovePawn:
             let newPosition = game.lastMove.pawnMove
-            let wrapper = boardFactory.getBoardCellsFromPawn(newMove: newPosition)
+            let wrapper = boardFactory.getBoardCellsFromPawn(newMove: newPosition, contentType : .opponentPawn)
             currentBoard = wrapper.updatedBoard
             viewControllerProtocol?.updateOpponentPawn(start: wrapper.startPosition, destination: wrapper.endPosition)
             

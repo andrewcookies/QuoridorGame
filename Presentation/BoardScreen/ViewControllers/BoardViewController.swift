@@ -20,7 +20,7 @@ class BoardViewController: UIViewController {
     @IBOutlet private var boardView : UIView!
     
     private var viewModel : BoardViewModelProtocol?
-    private var board : Board = Board(cells: [[]], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
+    private var currentPosition : Pawn = Pawn.startValue
     private var allowedCells : [Pawn] = []
     
     private var subscribers: [AnyCancellable] = []
@@ -89,9 +89,7 @@ extension BoardViewController : BoardViewControllerProtocol {
         let width = Int(boardView.frame.width)
         let cellWidth = Int(width/numberOfCellPerRow)
 
-        
-      //  let rowSequence = (0..<numberOfCellPerRow)
-      //  let columnSequence = (0..<numberOfCellPerRow)
+        currentPosition = board.player.pawnPosition
         
         for (rowId,cellsRow) in board.cells.enumerated() {
             //let cellRow = board.cells[rowIndex]
@@ -100,6 +98,7 @@ extension BoardViewController : BoardViewControllerProtocol {
                 if let v = BoardCellView.getView() as? BoardCellView {
                     v.frame = CGRect(x: columnId*cellWidth, y: rowId*cellWidth, width: cellWidth, height: cellWidth)
                     v.setup(cell: cell)
+                    v.delegate = self
                     boardView.addSubview(v)
                 }
             }
@@ -107,11 +106,10 @@ extension BoardViewController : BoardViewControllerProtocol {
     }
     
     func updateOpponentPawn(start: BoardCell, destination: BoardCell) {
-        if let opponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == start.index  }).first as? BoardCellView {
+        if let opponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == start.index  }).first as? BoardCellView,  let newOpponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == destination.index }).first as? BoardCellView {
             opponentCell.setup(cell: start)
-        }
-        if let newOpponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == destination.index }).first as? BoardCellView {
             newOpponentCell.setup(cell: destination)
+            currentPosition = Pawn(position: destination.index)
         }
     }
     
@@ -134,17 +132,18 @@ extension BoardViewController : BoardViewControllerProtocol {
 
 extension BoardViewController : BoardCellDelegate {
     func tapCell(index: Int) {
-        if index == board.player.pawnPosition.position {
+        if index == currentPosition.position {
             if allowedCells.count > 0 {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
             } else {
                 allowedCells = viewModel?.allowedPawnMoves() ?? []
-                updateBoardAllowedPawnCells(allowed: false)
+                updateBoardAllowedPawnCells(allowed: true)
             }
             
         } else {
             if allowedCells.contains(where: { $0.position == index}){
+                updateBoardAllowedPawnCells(allowed: false)
                 viewModel?.movePawn(cellIndex: index)
             }
         }

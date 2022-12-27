@@ -32,7 +32,7 @@ class DemoGameOutputRepository : GameRepositoryOutputInterface {
                            lastMove: demoMove,
                            gameMoves: moves)
         demoGame = newGame
-
+        NotificationCenter.default.post(name: Notification.Name("update"), object: nil)
     }
     
   

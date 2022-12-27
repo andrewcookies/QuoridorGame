@@ -45,7 +45,9 @@ extension BoardViewModel : BoardViewModelProtocol {
     func quitMatch() {
         Task {
             let res = await useCases.quitMatch()
-            viewControllerInterface?.handelEvent(gameEvent: res)
+            DispatchQueue.main.async {
+                self.viewControllerInterface?.handelEvent(gameEvent: res)
+            }
         }
     }
     
@@ -55,10 +57,12 @@ extension BoardViewModel : BoardViewModelProtocol {
         Task {
             viewControllerInterface?.handelEvent(gameEvent: .waiting)
             let res = await useCases.movePawn(newPawn: pawn)
-            viewControllerInterface?.handelEvent(gameEvent: res)
-            if res == .waitingOpponentMove {
-                let wrapper = boardFactory.getBoardCellsFromPawn(newMove: pawn)
-                viewControllerInterface?.updateOpponentPawn(start: wrapper.startPosition, destination: wrapper.endPosition)
+            DispatchQueue.main.async {
+                self.viewControllerInterface?.handelEvent(gameEvent: res)
+                if res == .waitingOpponentMove {
+                    let wrapper = self.boardFactory.getBoardCellsFromPawn(newMove: pawn, contentType: .playerPawn)
+                    self.viewControllerInterface?.updateOpponentPawn(start: wrapper.startPosition, destination: wrapper.endPosition)
+                }
             }
         }
         
@@ -69,10 +73,12 @@ extension BoardViewModel : BoardViewModelProtocol {
         Task {
             viewControllerInterface?.handelEvent(gameEvent: .waiting)
             let res = await useCases.insertWall(wall: wall)
-            viewControllerInterface?.handelEvent(gameEvent: res )
-            if res == .waitingOpponentMove {
-                let wrapper = boardFactory.getBoardCellsFromWall(newWall: wall)
-                viewControllerInterface?.updateWall(topRight: wrapper.topRight, topLeft: wrapper.bottomLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
+            DispatchQueue.main.async {
+                self.viewControllerInterface?.handelEvent(gameEvent: res )
+                if res == .waitingOpponentMove {
+                    let wrapper = self.boardFactory.getBoardCellsFromWall(newWall: wall)
+                    self.viewControllerInterface?.updateWall(topRight: wrapper.topRight, topLeft: wrapper.bottomLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
+                }
             }
         }
     }

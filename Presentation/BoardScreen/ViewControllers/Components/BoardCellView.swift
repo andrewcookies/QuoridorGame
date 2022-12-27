@@ -29,7 +29,8 @@ class BoardCellView: UIView {
     
     private var cellIndex : Int = -1
     private var contentType : BoardContentType = .empty
-    private weak var delegate : BoardCellDelegate?
+    
+    weak var delegate : BoardCellDelegate?
     
     
     static func getView() -> UIView? {
@@ -78,7 +79,6 @@ class BoardCellView: UIView {
         leftWallView.backgroundColor = getColor(type: cell.leftBorder)
 
         
-        cellView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapCell)))
         topWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTopWall)))
         bottomWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapBottomWall)))
         rightWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapRightWall)))
@@ -99,7 +99,7 @@ class BoardCellView: UIView {
         }
     }
     
-    @objc func tapCell(){
+    @IBAction func tapCell(){
         delegate?.tapCell(index: cellIndex)
     }
     

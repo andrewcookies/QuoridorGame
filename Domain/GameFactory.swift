@@ -145,13 +145,13 @@ extension GameFactory : GameFactoryProtocol {
         
         let southPosition = currentPosition - bufferTopDownCell
         if totalWall.contains(where: { ($0.bottomLeftCell == southPosition || $0.bottomRightCell == southPosition) && $0.orientation == .horizontal }) == false {
-            if northPosition > 0 && northPosition < 89 {
+            if southPosition > 0 && southPosition < 89 {
                 res.append(southPosition)
             }
         }
         
         let eastPosition = currentPosition - bufferLeftRightCell
-        if totalWall.contains(where: { ($0.bottomLeftCell == eastPosition || $0.topLeftCell == southPosition) && $0.orientation == .vertical }) == false {
+        if totalWall.contains(where: { ($0.bottomLeftCell == eastPosition || $0.topLeftCell == eastPosition) && $0.orientation == .vertical }) == false {
             if leftRightBorder.contains(eastPosition) == false {
                 res.append(eastPosition)
             }
@@ -160,7 +160,7 @@ extension GameFactory : GameFactoryProtocol {
         let westPosition = currentPosition + bufferLeftRightCell
         if totalWall.contains(where: { ($0.bottomRightCell == westPosition || $0.topRightCell == westPosition) && $0.orientation == .vertical }) == false {
             if leftRightBorder.contains(westPosition) == false {
-                res.append(eastPosition)
+                res.append(westPosition)
             }
         }
         
