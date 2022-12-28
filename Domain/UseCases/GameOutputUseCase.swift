@@ -42,6 +42,7 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
             case .success(let game):
                 GameLog.shared.debug(message: "update Pawn", className: "GameOutputUseCase")
                 try await gameInterface.updateGame(game: game)
+                gameFactory.updateGame(game: game)
                 return .waitingOpponentMove
             case .failure(let event):
                 if event == .matchWon {
@@ -62,6 +63,7 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
             case .success(let game):
                 GameLog.shared.debug(message: "update wall", className: "GameOutputUseCase")
                 try await gameInterface.updateGame(game: game)
+                gameFactory.updateGame(game: game)
                 return .waitingOpponentMove
             case .failure(let event):
                 GameLog.shared.debug(message: "insert wall conflict found \(event)", className: "GameOutputUseCase")

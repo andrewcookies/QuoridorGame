@@ -7,7 +7,7 @@
 
 import Foundation
 struct Pawn : Codable {
-    let position : Int
+    var position : Int
     
   
     static var defaultValue : Pawn {

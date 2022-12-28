@@ -94,7 +94,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                     
                 case .success(let game):
                     DispatchQueue.main.async {
-                        let board = self.boardFactory.updateBoard(game: game)
+                        let board = self.boardFactory.getBoardFromGame(game: game)
                         self.viewControllerInterface?.initBoard(board: board)
                     }
                     
@@ -110,7 +110,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                     switch createResult {
                     case .success(let game):
                         DispatchQueue.main.async {
-                            let board = self.boardFactory.updateBoard(game: game)
+                            let board = self.boardFactory.getBoardFromGame(game: game)
                             self.viewControllerInterface?.initBoard(board: board)
                         }
                         

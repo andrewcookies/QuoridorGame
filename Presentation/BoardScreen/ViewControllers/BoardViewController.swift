@@ -144,6 +144,7 @@ extension BoardViewController : BoardCellDelegate {
         } else {
             if allowedCells.contains(where: { $0.position == index}){
                 updateBoardAllowedPawnCells(allowed: false)
+                allowedCells.removeAll()
                 viewModel?.movePawn(cellIndex: index)
             }
         }

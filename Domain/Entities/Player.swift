@@ -10,7 +10,7 @@ import Foundation
 struct Player : Codable {
     let name : String
     let playerId : String
-    let pawnPosition : Pawn
+    var pawnPosition : Pawn
     let walls : [Wall]
     
     static var startPlayerValue : Player {

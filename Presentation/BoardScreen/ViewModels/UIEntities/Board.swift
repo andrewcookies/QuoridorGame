@@ -13,7 +13,7 @@ enum DrawMode {
 
 struct Board {
     var cells : [[BoardCell]]
-    let player : Player
-    let opponent : Player
+    var player : Player
+    var opponent : Player
     let drawMode : DrawMode
 }

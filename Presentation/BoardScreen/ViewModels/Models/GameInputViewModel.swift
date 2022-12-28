@@ -44,7 +44,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
         let stage = boardFactory.gameState(game: game)
         switch stage {
         case .gameAlreadyStarted:
-            currentBoard = boardFactory.updateBoard(game: game)
+            currentBoard = boardFactory.getBoardFromGame(game: game)
             viewControllerProtocol?.initBoard(board: currentBoard)
             
             
