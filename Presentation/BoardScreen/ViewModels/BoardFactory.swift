@@ -47,6 +47,14 @@ final class BoardFactory {
         self.userInfo = userInfo
     }
     
+    
+    private func rowColumnWall(drawMode : DrawMode, row : Int, column : Int) -> (Int,Int) {
+        if drawMode == .normal {
+            return (row, column)
+        }
+        
+        return ((numberOfCellPerRow - 1 - row),(numberOfCellPerRow - 1 - column))
+    }
 }
 
 extension BoardFactory : BoardFactoryInterface {
@@ -59,34 +67,34 @@ extension BoardFactory : BoardFactoryInterface {
         var wall = Wall.initValue
         
         if side == .topSide {
-            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
-            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex + bufferTopDownCell - bufferLeftRightCell
-            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
-            let bottomLeftIndex =  cellIndex
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex - bufferLeftRightCell
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell - bufferLeftRightCell : cellIndex
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex + bufferTopDownCell
+            let bottomLeftIndex =  drawMode == .normal ? cellIndex : cellIndex + bufferTopDownCell - bufferLeftRightCell
             wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
         }
         
         if side == .bottomSide {
-            let topLeftIndex = cellIndex
-            let topRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
-            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferTopDownCell + bufferLeftRightCell : cellIndex - bufferTopDownCell - bufferLeftRightCell
-            let bottomLeftIndex =  drawMode == .normal ? cellIndex + bufferTopDownCell : cellIndex - bufferTopDownCell
+            let topLeftIndex = drawMode == .normal ? cellIndex : cellIndex + bufferTopDownCell + bufferLeftRightCell
+            let topRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex + bufferTopDownCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferTopDownCell + bufferLeftRightCell : cellIndex
+            let bottomLeftIndex =  drawMode == .normal ? cellIndex + bufferTopDownCell : cellIndex + bufferLeftRightCell
             wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
         }
         
         if side == .rightSide {
-            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
-            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex + bufferTopDownCell - bufferLeftRightCell
-            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferLeftRightCell
-            let bottomLeftIndex = cellIndex
+            let topLeftIndex = drawMode == .normal ? cellIndex + bufferTopDownCell + bufferLeftRightCell : cellIndex - bufferLeftRightCell
+            let topRigthIndex = drawMode == .normal ? cellIndex + bufferTopDownCell : cellIndex
+            let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex + bufferTopDownCell
+            let bottomLeftIndex = drawMode == .normal ? cellIndex : cellIndex + bufferTopDownCell - bufferLeftRightCell
             wall = Wall(orientation: .vertical, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
         }
         
         if side == .leftSide {
-            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell - bufferLeftRightCell : cellIndex + bufferTopDownCell + bufferLeftRightCell
-            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex + bufferTopDownCell
-            let bottomRigthIndex = cellIndex
-            let bottomLeftIndex = drawMode == .normal ? cellIndex - bufferLeftRightCell : cellIndex + bufferLeftRightCell
+            let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell - bufferLeftRightCell: cellIndex
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex + bufferLeftRightCell
+            let bottomRigthIndex = drawMode == .normal ? cellIndex : cellIndex + bufferTopDownCell + bufferLeftRightCell
+            let bottomLeftIndex = drawMode == .normal ? cellIndex - bufferLeftRightCell : cellIndex + bufferTopDownCell
             wall = Wall(orientation: .vertical, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
         }
         return wall
@@ -231,74 +239,90 @@ extension BoardFactory : BoardFactoryInterface {
         let topRightIndex = wall.topRightCell
         let topRightRow = topRightIndex/10
         let topRightColumn = topRightIndex%10
+        
+        
+        let (topRightNewRow,topRightNewColumn) = rowColumnWall(drawMode: mode, row: topRightRow, column: topRightColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[topRightRow][topRightColumn].bottomBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].bottomBorder = .wall
             } else {
-                cb.cells[topRightRow][topRightColumn].topBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].topBorder = .wall
             }
         } else {
             if mode == .normal {
-                cb.cells[topRightRow][topRightColumn].leftBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].leftBorder = .wall
             } else {
-                cb.cells[topRightRow][topRightColumn].rightBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].rightBorder = .wall
             }
         }
-        let topRightCell = cb.cells[topRightRow][topRightColumn]
+        let topRightCell = cb.cells[topRightNewRow][topRightNewColumn]
+        
+        
         
         let bottomRightIndex = wall.bottomRightCell
         let bottomRightRow = bottomRightIndex/10
         let bottomRightColumn = bottomRightIndex%10
+        
+        let (bottomRightNewRow,bottomRightNewColumn) = rowColumnWall(drawMode: mode, row: bottomRightRow, column: bottomRightColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[bottomRightRow][bottomRightColumn].topBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].topBorder = .wall
             } else {
-                cb.cells[bottomRightRow][bottomRightColumn].bottomBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].bottomBorder = .wall
             }
         } else {
             if mode == .normal {
-                cb.cells[bottomRightRow][bottomRightColumn].leftBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].leftBorder = .wall
             } else {
-                cb.cells[bottomRightRow][bottomRightColumn].rightBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].rightBorder = .wall
             }
         }
-        let bottomRightCell = cb.cells[bottomRightRow][bottomRightColumn]
+        let bottomRightCell = cb.cells[bottomRightNewRow][bottomRightNewColumn]
+        
+        
         
         let topLeftIndex = wall.topLeftCell
         let topLeftRow = topLeftIndex/10
         let topLeftColumn = topLeftIndex%10
+        
+        let (topLeftNewRow,topLeftNewColumn) = rowColumnWall(drawMode: mode, row: topLeftRow, column: topLeftColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[topLeftRow][topLeftColumn].bottomBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].bottomBorder = .wall
             } else {
-                cb.cells[topLeftRow][topLeftColumn].topBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].topBorder = .wall
             }
         } else {
             if mode == .normal {
-                cb.cells[topLeftRow][topLeftColumn].rightBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].rightBorder = .wall
             } else {
-                cb.cells[topLeftRow][topLeftColumn].leftBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].leftBorder = .wall
             }
         }
-        let topLeftCell = cb.cells[topLeftRow][topLeftColumn]
+        let topLeftCell = cb.cells[topLeftNewRow][topLeftNewColumn]
+        
+        
         
         let bottomLeftIndex = wall.bottomLeftCell
         let bottomLeftRow = bottomLeftIndex/10
         let bottomLeftColumn = bottomLeftIndex%10
+        
+        
+        let (bottomLeftNewRow,bottomLeftNewColumn) = rowColumnWall(drawMode: mode, row: bottomLeftRow, column: bottomLeftColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[bottomLeftRow][bottomLeftColumn].topBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].topBorder = .wall
             } else {
-                cb.cells[bottomLeftRow][bottomLeftColumn].bottomBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].bottomBorder = .wall
             }
         } else {
             if mode == .normal {
-                cb.cells[bottomLeftRow][bottomLeftColumn].rightBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].rightBorder = .wall
             } else {
-                cb.cells[bottomLeftRow][bottomLeftColumn].leftBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].leftBorder = .wall
             }
         }
-        let bottomLeftCell = cb.cells[bottomLeftRow][bottomLeftColumn]
+        let bottomLeftCell = cb.cells[bottomLeftNewRow][bottomLeftNewColumn]
         
         currentBoard = cb
         return WallWrapper(updatedBoard: cb, topLeft: topLeftCell, topRight: topRightCell, bottomLeft: bottomLeftCell, bottomRight: bottomRightCell)
