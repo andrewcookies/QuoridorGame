@@ -74,9 +74,34 @@ class BoardCellView: UIView {
         }
         
         topWallView.backgroundColor = getColor(type: cell.topBorder)
+        
+        if cell.topBorder == .wall {
+            topWallView.layer.zPosition = 1
+        } else if cell.topBorder == .boardBorder {
+            topWallView.layer.zPosition = 2
+        }
+        
         bottomWallView.backgroundColor = getColor(type: cell.bottomBorder)
+        if cell.bottomBorder == .wall  {
+            bottomWallView.layer.zPosition = 1
+        } else if cell.bottomBorder == .boardBorder {
+            bottomWallView.layer.zPosition = 2
+        }
+        
         rightWallView.backgroundColor = getColor(type: cell.rightBorder)
+        if cell.rightBorder == .wall  {
+            rightWallView.layer.zPosition = 1
+        } else if  cell.rightBorder == .boardBorder {
+            rightWallView.layer.zPosition = 2
+        }
+        
+        
         leftWallView.backgroundColor = getColor(type: cell.leftBorder)
+        if cell.leftBorder == .wall  {
+            leftWallView.layer.zPosition = 1
+        } else if cell.leftBorder == .boardBorder {
+            leftWallView.layer.zPosition = 2
+        }
 
         
         topWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTopWall)))

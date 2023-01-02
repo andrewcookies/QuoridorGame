@@ -77,7 +77,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                 self.viewControllerInterface?.handelEvent(gameEvent: res )
                 if res == .waitingOpponentMove {
                     let wrapper = self.boardFactory.getBoardCellsFromWall(newWall: wall)
-                    self.viewControllerInterface?.updateWall(topRight: wrapper.topRight, topLeft: wrapper.bottomLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
+                    self.viewControllerInterface?.updateWall(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
                 }
             }
         }
