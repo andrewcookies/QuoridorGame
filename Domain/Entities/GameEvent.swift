@@ -7,13 +7,15 @@
 
 import Foundation
 enum GameEvent : Error {
+    case invalidWall
+
+    
     case waiting
     case waitingOpponentMove
     case matchWon
     case matchLost
     case updateBoard
     case error
-    case invalidWall
     case noWall
     case invalidPawn
     case noEvent

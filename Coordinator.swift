@@ -40,7 +40,7 @@ final class Coordinator {
         
         let multiplayerDataBaseRepository = resolveMultiplayerLocalDataRepository()
         let boardFactory = BoardFactory(userInfo: userInfo)
-        let gameFactory = GameFactory(userInfo: userInfo)
+        let gameFactory = GameFactory(gameValidator: boardFactory, userInfo: userInfo)
         
         let outputDataLayer = DemoGameOutputRepository()//resolveBoardOutpuDataLayer(localDataRepository: multiplayerDataBaseRepository)
         

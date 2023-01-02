@@ -330,3 +330,18 @@ extension BoardFactory : BoardFactoryInterface {
     
     
 }
+
+extension BoardFactory : GameValidatorProtocol {
+    var startPlayerPosition: Pawn {
+        return Pawn(position: startPlayer1PawnPosition)
+    }
+    
+    var startOppositePosition: Pawn {
+        return Pawn(position: startPlayer2PawnPosition)
+    }
+    
+    var winningCells: [Pawn] {
+        return currentBoard.drawMode == .normal ? topCellsBorder.map({ Pawn(position: $0 )}) : bottomCellsBorder.map({ Pawn(position: $0 )})
+    }
+    
+}

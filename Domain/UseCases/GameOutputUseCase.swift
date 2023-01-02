@@ -23,7 +23,7 @@ final class GameOutputUseCase {
 
 extension GameOutputUseCase : GameOutputUseCaseProtocol {
     func allowedPawnMoves() -> [Pawn] {
-        return gameFactory.fetchAllowedPawn()
+        return gameFactory.fetchAllowedCurrentPawn()
     }
     
     func quitMatch() async -> GameEvent {
