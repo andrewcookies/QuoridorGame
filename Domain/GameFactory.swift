@@ -14,6 +14,11 @@ protocol GameSettingsProtocol {
     var startWall : Wall { get }
     var winningCells : [Pawn] { get }
     
+    func nextNorthPosition(position : Int) -> Int
+    func nextSouthPosition(position : Int) -> Int
+    func nextEastPosition(position : Int) -> Int
+    func nextWestPosition(position : Int) -> Int
+
     func outOfBoard(pawn : Pawn) -> Bool
     func outOfBoard(wall : Wall) -> Bool
 }
@@ -116,28 +121,28 @@ final class GameFactory {
         let currentPosition = pawn.position
         
         if totalWall.contains(where: { ($0.topLeftCell == currentPosition || $0.topRightCell == currentPosition) && $0.orientation == .horizontal }) == false {
-            let northPosition = currentPosition + bufferTopDownCell
+            let northPosition = gameValidator.nextNorthPosition(position: currentPosition)
             if gameValidator.outOfBoard(pawn: Pawn(position: northPosition)) == false {
                 res.append(northPosition)
             }
         }
         
         if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.bottomRightCell == currentPosition) && $0.orientation == .horizontal }) == false {
-            let southPosition = currentPosition - bufferTopDownCell
+            let southPosition = gameValidator.nextSouthPosition(position: currentPosition)
             if gameValidator.outOfBoard(pawn: Pawn(position: southPosition)) == false {
                 res.append(southPosition)
             }
         }
         
         if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.topLeftCell == currentPosition) && $0.orientation == .vertical }) == false {
-            let eastPosition = currentPosition - bufferLeftRightCell
+            let eastPosition = gameValidator.nextEastPosition(position: currentPosition)
             if gameValidator.outOfBoard(pawn: Pawn(position: eastPosition)) == false {
                 res.append(eastPosition)
             }
         }
         
         if totalWall.contains(where: { ($0.bottomRightCell == currentPosition || $0.topRightCell == currentPosition) && $0.orientation == .vertical }) == false {
-            let westPosition = currentPosition + bufferLeftRightCell
+            let westPosition = gameValidator.nextWestPosition(position: currentPosition)
             if gameValidator.outOfBoard(pawn: Pawn(position: westPosition)) == false {
                 res.append(westPosition)
             }

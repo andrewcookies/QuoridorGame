@@ -336,11 +336,28 @@ extension BoardFactory : BoardFactoryInterface {
 }
 
 extension BoardFactory : GameSettingsProtocol {
+    func nextNorthPosition(position: Int) -> Int {
+        return currentBoard.drawMode == .normal ? position - bufferTopDownCell : position + bufferTopDownCell
+    }
+    
+    func nextSouthPosition(position: Int) -> Int {
+        return currentBoard.drawMode == .normal ? position + bufferTopDownCell : position - bufferTopDownCell
+    }
+    
+    func nextEastPosition(position: Int) -> Int {
+        return currentBoard.drawMode == .normal ? position - bufferLeftRightCell : position + bufferLeftRightCell
+    }
+    
+    func nextWestPosition(position: Int) -> Int {
+        return currentBoard.drawMode == .normal ? position + bufferLeftRightCell : position - bufferLeftRightCell
+    }
+    
+
+    
     var startWall: Wall {
         return Wall(orientation: .horizontal, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
 
     }
-    
     
     var defaultGame: Game {
         let defaultPlayer1 = Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: startPlayer1PawnPosition), walls: [])
