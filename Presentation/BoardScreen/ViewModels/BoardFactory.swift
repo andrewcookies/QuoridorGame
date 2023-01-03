@@ -332,9 +332,16 @@ extension BoardFactory : BoardFactoryInterface {
 }
 
 extension BoardFactory : GameSettingsProtocol {
+    func outOfBoard(wall: Wall) -> Bool {
+        
+        return wall.topLeftCell < 0 || wall.topLeftCell > 89 || wall.topRightCell < 0 || wall.topRightCell > 89 ||
+        wall.bottomLeftCell < 0 || wall.bottomLeftCell > 89 || wall.bottomRightCell < 0 || wall.bottomRightCell > 89 ||
+        leftRightBorder.contains(wall.topLeftCell) || leftRightBorder.contains(wall.topRightCell) || leftRightBorder.contains(wall.bottomLeftCell) || leftRightBorder.contains(wall.bottomRightCell)
+    }
+    
     func outOfBoard(pawn: Pawn) -> Bool {
         let position = pawn.position
-        return position < 0 || position > 89 || leftCellsBorder.contains(position) || rightCellsBorder.contains(position)
+        return position < 0 || position > 89 || leftRightBorder.contains(position)
     }
     
     var startPlayerPosition: Pawn {

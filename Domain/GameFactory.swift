@@ -14,6 +14,7 @@ protocol GameSettingsProtocol {
     var winningCells : [Pawn] { get }
     
     func outOfBoard(pawn : Pawn) -> Bool
+    func outOfBoard(wall : Wall) -> Bool
 }
 
 protocol GameFactoryProtocol {
@@ -32,11 +33,15 @@ final class GameFactory {
     private var userInfo : UserInfoInterface
     private var currentGame : Game
     
+    private var analyzedPawnForWallValidation : [Pawn]
+    
     init(gameValidator : GameSettingsProtocol,
          userInfo: UserInfoInterface) {
         self.userInfo = userInfo
         self.gameValidator = gameValidator
+        
         currentGame = Game.defaultValue
+        analyzedPawnForWallValidation = []
     }
     
     private func validatePawnMove(pawn : Pawn) -> GameEvent {
@@ -49,7 +54,12 @@ final class GameFactory {
         let orientation = wall.orientation
         let totalWalls = currentGame.getTotalWalls()
         
-        //1.check overlapped
+        //1.check out of bound
+        if gameValidator.outOfBoard(wall: wall) {
+            return .invalidWall
+        }
+        
+        //2.check overlapped
         let wallsOverlapped = totalWalls.filter({ $0.orientation == orientation &&
             ($0.topLeftCell == wall.topLeftCell
              || $0.topLeftCell == wall.topRightCell
@@ -60,23 +70,22 @@ final class GameFactory {
             return .invalidWall
         }
         
-        //2.check crossing
+        //3.check crossing
         let wallsCrossed = totalWalls.filter({ $0.orientation != orientation && $0.topLeftCell == wall.topLeftCell })
         if wallsCrossed.count > 0 {
             return .invalidWall
         }
         
-        //3.check ring
-        /*
+        //4.check ring
+        analyzedPawnForWallValidation.removeAll()
         let completeWalls = currentGame.getTotalWalls() + [wall]
         let player = currentGame.player1.playerId == userInfo.getUserInfo().userId ? currentGame.player1 : currentGame.player2
+        
         if checkRing(pawn: player.pawnPosition, walls: completeWalls) == false {
             return .noEvent
         }
-
+        
         return .invalidWall
-         */
-        return .noEvent
     }
     
     func checkRing(pawn : Pawn, walls : [Wall]) -> Bool {
@@ -85,10 +94,14 @@ final class GameFactory {
             return false
         }
         
+        analyzedPawnForWallValidation.append(pawn)
         let allowedPawn = fetchAllowedPawn(pawn: pawn, walls: walls)
-        for pawn in allowedPawn {
-            if checkRing(pawn: pawn, walls: walls) == false {
-                return false
+        
+        for currentPawn in allowedPawn {
+            if analyzedPawnForWallValidation.filter({ $0.position == currentPawn.position }).count == 0 {
+                if checkRing(pawn: currentPawn, walls: walls) == false {
+                    return false
+                }
             }
         }
         
@@ -108,20 +121,13 @@ final class GameFactory {
             }
         }
         
-        /*
-        let northPosition = currentPosition + bufferTopDownCell
-        if totalWall.contains(where: { ($0.topLeftCell == northPosition || $0.topRightCell == northPosition) && $0.orientation == .horizontal }) == false {
-            if gameValidator.outOfBoard(pawn: Pawn(position: northPosition)) == false {
-                res.append(northPosition)
-            }
-        }
-         */
         if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.bottomRightCell == currentPosition) && $0.orientation == .horizontal }) == false {
             let southPosition = currentPosition - bufferTopDownCell
             if gameValidator.outOfBoard(pawn: Pawn(position: southPosition)) == false {
                 res.append(southPosition)
             }
         }
+        
         if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.topLeftCell == currentPosition) && $0.orientation == .vertical }) == false {
             let eastPosition = currentPosition - bufferLeftRightCell
             if gameValidator.outOfBoard(pawn: Pawn(position: eastPosition)) == false {
