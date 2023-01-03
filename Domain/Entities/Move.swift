@@ -17,14 +17,6 @@ struct Move : Codable {
     let wallMove : Wall
     let moveType : MoveType
     
-    static var defaultValue : Move {
-        return Move(playerId: "- -", pawnMove: Pawn.defaultValue, wallMove: Wall.initValue, moveType: .movePawn)
-    }
-    
-    static var startValue : Move {
-        return Move(playerId: "start", pawnMove: Pawn.startValue, wallMove: Wall.initValue, moveType: .movePawn)
-    }
-    
     enum CodingKeys: String, CodingKey {
         case playerId
         case pawnMove

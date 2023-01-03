@@ -16,6 +16,8 @@ final class MultiplayerInputGameRepository {
     
     private let db : Firestore?
     
+    private let defaultWall = Wall(orientation: .horizontal, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
+
     
     init(gameInputUseCase: GameInputUseCaseProtocol,
          localRepoWriter : MultiplayerLocalRepositoryInterface?) {
@@ -44,7 +46,7 @@ final class MultiplayerInputGameRepository {
                            game : Game,
                            gameId : String) async throws -> Game {
         let collection = db?.collection("games")
-        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
+        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? defaultWall, moveType: .movePawn)
         var moves = game.gameMoves
         moves.append(move)
         let newGame = Game(created: game.created,

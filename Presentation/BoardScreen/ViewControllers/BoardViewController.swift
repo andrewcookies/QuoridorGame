@@ -20,7 +20,7 @@ class BoardViewController: UIViewController {
     @IBOutlet private var boardView : UIView!
     
     private var viewModel : BoardViewModelProtocol?
-    private var currentPosition : Pawn = Pawn.startValue
+    private var currentPosition : Pawn = Pawn(position: startPlayer1PawnPosition)
     private var allowedCells : [Pawn] = []
     
     private var subscribers: [AnyCancellable] = []

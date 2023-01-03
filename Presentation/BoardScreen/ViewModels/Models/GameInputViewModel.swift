@@ -14,7 +14,10 @@ final class GameInputViewModel {
     private var boardFactory : BoardFactoryInterface
     
     var viewControllerProtocol : BoardViewControllerProtocol?
-    let defaultBoard = Board(cells: [[]], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
+    let defaultBoard = Board(cells: [[]],
+                             player: Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: pawnNilMove), walls: []),
+                             opponent: Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: pawnNilMove), walls: []),
+                             drawMode: .normal)
     
     init(boardFactory : BoardFactoryInterface){
         self.boardFactory = boardFactory

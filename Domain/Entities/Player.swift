@@ -13,16 +13,6 @@ struct Player : Codable {
     var pawnPosition : Pawn
     let walls : [Wall]
     
-    static var startPlayerValue : Player {
-        return Player(name: "-", playerId: "-1", pawnPosition: Pawn.startValue, walls: [])
-    }
-    
-    static var startOpponentValue : Player {
-        return Player(name: "-", playerId: "-1", pawnPosition: Pawn.startOppositePlayer, walls: [])
-    }
-    
-        
-    
     enum CodingKeys: String, CodingKey {
         case name
         case playerId

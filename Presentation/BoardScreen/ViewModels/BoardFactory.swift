@@ -41,7 +41,10 @@ protocol BoardFactoryInterface {
 final class BoardFactory {
     
     private var userInfo : UserInfoInterface?
-    private var currentBoard = Board(cells: [], player: Player.startPlayerValue, opponent: Player.startOpponentValue, drawMode: .normal)
+    private var currentBoard = Board(cells: [],
+                                     player: Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: pawnNilMove), walls: []),
+                                     opponent: Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: pawnNilMove), walls: []),
+                                     drawMode: .normal)
     
     init(userInfo : UserInfoInterface?) {
         self.userInfo = userInfo
@@ -64,7 +67,8 @@ extension BoardFactory : BoardFactoryInterface {
     
     func resolveWall(cellIndex: Int, side: BoardCellSide) -> Wall {
         let drawMode = currentBoard.drawMode
-        var wall = Wall.initValue
+        var wall = Wall(orientation: .horizontal, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
+
         
         if side == .topSide {
             let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex - bufferLeftRightCell
@@ -332,6 +336,21 @@ extension BoardFactory : BoardFactoryInterface {
 }
 
 extension BoardFactory : GameSettingsProtocol {
+    var startWall: Wall {
+        return Wall(orientation: .horizontal, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
+
+    }
+    
+    
+    var defaultGame: Game {
+        let defaultPlayer1 = Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: startPlayer1PawnPosition), walls: [])
+        let defaultPlayer2 = Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: startPlayer2PawnPosition), walls: [])
+        let defaultWall = Wall(orientation: .horizontal, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
+        let defaultMove = Move(playerId: defaultPlayerId, pawnMove: Pawn(position: pawnNilMove), wallMove: defaultWall, moveType: .movePawn)
+
+        return Game(created: 0, state: .waiting, player1: defaultPlayer1, player2: defaultPlayer2, lastMove: defaultMove, gameMoves: [defaultMove])
+    }
+    
     func outOfBoard(wall: Wall) -> Bool {
         
         return wall.topLeftCell < 0 || wall.topLeftCell > 89 || wall.topRightCell < 0 || wall.topRightCell > 89 ||

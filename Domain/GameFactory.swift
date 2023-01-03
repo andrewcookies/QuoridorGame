@@ -8,9 +8,10 @@
 import Foundation
 
 protocol GameSettingsProtocol {
-    
+    var defaultGame : Game { get }
     var startPlayerPosition : Pawn { get }
     var startOppositePosition : Pawn { get }
+    var startWall : Wall { get }
     var winningCells : [Pawn] { get }
     
     func outOfBoard(pawn : Pawn) -> Bool
@@ -40,7 +41,7 @@ final class GameFactory {
         self.userInfo = userInfo
         self.gameValidator = gameValidator
         
-        currentGame = Game.defaultValue
+        currentGame = gameValidator.defaultGame
         analyzedPawnForWallValidation = []
     }
     
@@ -158,14 +159,12 @@ extension GameFactory : GameFactoryProtocol {
         
         let currentUser = userInfo.getUserInfo()
         var playerType = PlayerType.player1
-        var player : Player = Player.startPlayerValue
+        var player : Player = Player(name: currentGame.player1.name,
+                                     playerId: currentGame.player1.playerId,
+                                     pawnPosition: pawn,
+                                     walls: currentGame.player1.walls)
         
-        if currentGame.player1.playerId == currentUser.userId {
-            player = Player(name: currentGame.player1.name,
-                            playerId: currentGame.player1.playerId,
-                            pawnPosition: pawn,
-                            walls: currentGame.player1.walls)
-        } else {
+        if currentGame.player1.playerId != currentUser.userId {
             playerType = .player2
             player = Player(name: currentGame.player2.name,
                             playerId: currentGame.player2.playerId,
@@ -173,7 +172,7 @@ extension GameFactory : GameFactoryProtocol {
                             walls: currentGame.player2.walls)
         }
         
-        let move = Move(playerId: player.playerId, pawnMove: pawn, wallMove: Wall.initValue, moveType: .movePawn)
+        let move = Move(playerId: player.playerId, pawnMove: pawn, wallMove: gameValidator.startWall, moveType: .movePawn)
         var currentMoves = currentGame.gameMoves
         currentMoves.append(move)
         
@@ -196,28 +195,21 @@ extension GameFactory : GameFactoryProtocol {
         
         let currentUser = userInfo.getUserInfo()
         var playerType = PlayerType.player1
-        var player : Player = Player.startPlayerValue
+        var player : Player = Player(name: currentGame.player1.name,
+                                     playerId: currentGame.player1.playerId,
+                                     pawnPosition: currentGame.player1.pawnPosition,
+                                     walls: currentGame.player1.walls + [wall])
         
-        if currentGame.player1.playerId == currentUser.userId {
-            var currentWalls = currentGame.player1.walls
-            currentWalls.append(wall)
-            
-            player = Player(name: currentGame.player1.name,
-                            playerId: currentGame.player1.playerId,
-                            pawnPosition: currentGame.player1.pawnPosition,
-                            walls: currentWalls)
-        } else {
+        
+        if currentGame.player1.playerId != currentUser.userId {
             playerType = .player2
-            var currentWalls = currentGame.player2.walls
-            currentWalls.append(wall)
-            
             player = Player(name: currentGame.player2.name,
                             playerId: currentGame.player2.playerId,
                             pawnPosition: currentGame.player2.pawnPosition,
-                            walls: currentWalls)
+                            walls: currentGame.player2.walls + [wall])
         }
         
-        let move = Move(playerId: player.playerId, pawnMove: Pawn.defaultValue, wallMove: wall, moveType: .insertWall)
+        let move = Move(playerId: player.playerId, pawnMove: Pawn(position: pawnNilMove), wallMove: wall, moveType: .insertWall)
         var currentMoves = currentGame.gameMoves
         currentMoves.append(move)
         
@@ -249,14 +241,16 @@ extension GameFactory : GameFactoryProtocol {
     func createGame() -> Game {
         let player = Player(name: userInfo.getUserInfo().name,
                             playerId: userInfo.getUserInfo().userId,
-                            pawnPosition: Pawn.startValue,
+                            pawnPosition: gameValidator.startPlayerPosition,
                             walls: [])
-        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? Wall.initValue, moveType: .movePawn)
+        let defaultOpponentPlayer = Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: pawnNilMove), walls: [])
+        
+        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? gameValidator.startWall, moveType: .movePawn)
         let timestamp = Double((Date().timeIntervalSince1970 * 1000.0).rounded())
         let game = Game(created: timestamp,
                         state: .waiting,
                         player1: player,
-                        player2: Player.startOpponentValue,
+                        player2: defaultOpponentPlayer,
                         lastMove: move,
                         gameMoves: [move])
         return game
@@ -266,7 +260,7 @@ extension GameFactory : GameFactoryProtocol {
     func getPlayerToJoinGame() -> Player {
         let player = Player(name: userInfo.getUserInfo().name,
                             playerId: userInfo.getUserInfo().userId,
-                            pawnPosition: Pawn.startOppositePlayer,
+                            pawnPosition: gameValidator.startOppositePosition,
                             walls: [])
         return player
         

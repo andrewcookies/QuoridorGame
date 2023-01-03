@@ -23,15 +23,6 @@ struct Game : Codable {
     let lastMove : Move
     let gameMoves : [Move]
     
-    static var defaultValue : Game {
-        return Game(created: 0,
-                    state: .waiting,
-                    player1: Player.startPlayerValue,
-                    player2: Player.startOpponentValue,
-                    lastMove: Move.defaultValue,
-                    gameMoves: [])
-    }
-    
     enum CodingKeys: String, CodingKey {
         case created
         case state

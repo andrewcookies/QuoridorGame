@@ -26,9 +26,5 @@ struct Wall : Codable {
         case bottomLeftCell
         case bottomRightCell
     }
-    
-    static var initValue : Wall {
-        return Wall(orientation: .null, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
-    }
-    
+
 }
