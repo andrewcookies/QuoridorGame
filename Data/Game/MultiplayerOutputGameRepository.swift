@@ -15,7 +15,7 @@ enum APIError : Error {
     
 }
 
-final class MultiplayerOutputGameRepository : EntityMapperInterface {
+final class MultiplayerOutputGameRepository {
     
     
     private let db : Firestore?

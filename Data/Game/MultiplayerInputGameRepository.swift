@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirebaseCore
 
-final class MultiplayerInputGameRepository : EntityMapperInterface {
+final class MultiplayerInputGameRepository {
     
     private var gameInputUseCase : GameInputUseCaseProtocol?
     private var localRepoWriter : MultiplayerLocalRepositoryInterface?
@@ -67,15 +67,26 @@ final class MultiplayerInputGameRepository : EntityMapperInterface {
         collection?.document(id).addSnapshotListener({ [weak self] (documentSnapshot,error) in
             if let document = documentSnapshot,
                 let data = document.data(),
-                let game = self?.gameMapper(from: data) {
+                let game = self?.gameMapper(dictionary: data) {
                 let lastMove = game.lastMove
                 
                 //avoid game update from my last move
-                GameLog.shared.debug(message: "updated received from \(game.lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
+                GameLog.shared.debug(message: "updated received from \(lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
                 self?.gameInputUseCase?.updateGameFromOpponent(game: game)
             }
         })
         
+    }
+    
+    private func gameMapper(dictionary: [String:Any]) -> Game? {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dictionary, options: [])
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            return try decoder.decode(Game.self, from: data)
+        } catch {
+            return nil
+        }
     }
     
 }
@@ -100,12 +111,11 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
         } else {
             GameLog.shared.debug(message: "found gameId", className: "MultiplayerInputGameRepository")
             let gameDocument = waitingGames.first
-            let gameDictionary = gameDocument?.data() ?? [:]
-            let gameId = gameDocument?.documentID ?? ""
-            let game = gameMapper(from: gameDictionary)
+            guard let gameDictionary = gameDocument?.data(), let gameId = gameDocument?.documentID, let game = gameMapper(dictionary: gameDictionary) else { throw APIError.currentInfoNIL }
+            
             localRepoWriter?.setCurrentGameId(gameId: gameId)
-            try await joinMatch(player: player, game: game, gameId: gameId)
-            return game
+            let res = try await joinMatch(player: player, game: game, gameId: gameId)
+            return res
         }
     }
     
@@ -121,9 +131,7 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
         } else {
             GameLog.shared.debug(message: "join existing game", className: "MultiplayerInputGameRepository")
             let gameDocument = waitingGames.first
-            let gameDictionary = gameDocument?.data() ?? [:]
             let gameId = gameDocument?.documentID ?? ""
-            let game = gameMapper(from: gameDictionary)
             localRepoWriter?.setCurrentGameId(gameId: gameId)
             return gameId
         }
