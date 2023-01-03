@@ -60,25 +60,42 @@ final class GameFactory {
         let orientation = wall.orientation
         let totalWalls = currentGame.getTotalWalls()
         
+        //0.check if player used all its walls
+        let playerWalls = currentGame.player1.playerId == userInfo.getUserInfo().userId ? currentGame.player1.walls : currentGame.player2.walls
+        if playerWalls.count > numberWallPerPlayer {
+            GameLog.shared.debug(message: "validateWall \(playerWalls.count) walls", className: "GameFactory")
+            return .invalidWall
+        }
+        
         //1.check out of bound
         if gameValidator.outOfBoard(wall: wall) {
+            GameLog.shared.debug(message: "validateWall outOfBound walls", className: "GameFactory")
             return .invalidWall
         }
         
         //2.check overlapped
-        let wallsOverlapped = totalWalls.filter({ $0.orientation == orientation &&
-            ($0.topLeftCell == wall.topLeftCell
-             || $0.topLeftCell == wall.topRightCell
-             || $0.topRightCell == wall.topLeftCell
-             || $0.topLeftCell == wall.bottomLeftCell
-             || $0.bottomLeftCell == wall.topLeftCell) })
-        if wallsOverlapped.count > 0 {
-            return .invalidWall
+        var wallsOverlapped : [Wall]?
+        if orientation == .horizontal {
+            wallsOverlapped = totalWalls.filter({ $0.orientation == orientation &&
+                ($0.topLeftCell == wall.topLeftCell
+                 || $0.topLeftCell == wall.topRightCell
+                 || $0.topRightCell == wall.topLeftCell) })
+        } else {
+            wallsOverlapped = totalWalls.filter({ $0.orientation == orientation &&
+                ($0.topLeftCell == wall.topLeftCell
+                 || $0.topLeftCell == wall.bottomLeftCell
+                 || $0.bottomLeftCell == wall.topLeftCell) })
         }
         
+        if wallsOverlapped?.count ?? 1 > 0  {
+            GameLog.shared.debug(message: "validateWall overlapped walls", className: "GameFactory")
+            return .invalidWall
+        }
+       
         //3.check crossing
         let wallsCrossed = totalWalls.filter({ $0.orientation != orientation && $0.topLeftCell == wall.topLeftCell })
         if wallsCrossed.count > 0 {
+            GameLog.shared.debug(message: "validateWall crossing walls", className: "GameFactory")
             return .invalidWall
         }
         
@@ -91,11 +108,11 @@ final class GameFactory {
             return .noEvent
         }
         
+        GameLog.shared.debug(message: "validateWall ring found walls", className: "GameFactory")
         return .invalidWall
     }
     
     func checkRing(pawn : Pawn, walls : [Wall]) -> Bool {
-        GameLog.shared.debug(message: "checkRing \(pawn.position)", className: "GameFactory")
         if validatePawnMove(pawn: pawn) == .matchWon {
             return false
         }
