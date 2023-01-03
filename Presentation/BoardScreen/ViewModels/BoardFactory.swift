@@ -331,7 +331,12 @@ extension BoardFactory : BoardFactoryInterface {
     
 }
 
-extension BoardFactory : GameValidatorProtocol {
+extension BoardFactory : GameSettingsProtocol {
+    func outOfBoard(pawn: Pawn) -> Bool {
+        let position = pawn.position
+        return position < 0 || position > 89 || leftCellsBorder.contains(position) || rightCellsBorder.contains(position)
+    }
+    
     var startPlayerPosition: Pawn {
         return Pawn(position: startPlayer1PawnPosition)
     }

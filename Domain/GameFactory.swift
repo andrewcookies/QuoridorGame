@@ -7,12 +7,13 @@
 
 import Foundation
 
-protocol GameValidatorProtocol {
+protocol GameSettingsProtocol {
     
     var startPlayerPosition : Pawn { get }
     var startOppositePosition : Pawn { get }
-    
     var winningCells : [Pawn] { get }
+    
+    func outOfBoard(pawn : Pawn) -> Bool
 }
 
 protocol GameFactoryProtocol {
@@ -27,11 +28,11 @@ protocol GameFactoryProtocol {
 
 final class GameFactory {
     
-    private var gameValidator : GameValidatorProtocol
+    private var gameValidator : GameSettingsProtocol
     private var userInfo : UserInfoInterface
     private var currentGame : Game
     
-    init(gameValidator : GameValidatorProtocol,
+    init(gameValidator : GameSettingsProtocol,
          userInfo: UserInfoInterface) {
         self.userInfo = userInfo
         self.gameValidator = gameValidator
@@ -66,63 +67,71 @@ final class GameFactory {
         }
         
         //3.check ring
+        /*
+        let completeWalls = currentGame.getTotalWalls() + [wall]
         let player = currentGame.player1.playerId == userInfo.getUserInfo().userId ? currentGame.player1 : currentGame.player2
-        if checkRing(pawn: player.pawnPosition) == .matchWon {
+        if checkRing(pawn: player.pawnPosition, walls: completeWalls) == false {
             return .noEvent
         }
 
-        
-        
-        
         return .invalidWall
+         */
+        return .noEvent
     }
     
-    func checkRing(pawn : Pawn) -> GameEvent {
+    func checkRing(pawn : Pawn, walls : [Wall]) -> Bool {
         GameLog.shared.debug(message: "checkRing \(pawn.position)", className: "GameFactory")
         if validatePawnMove(pawn: pawn) == .matchWon {
-            return .matchWon
+            return false
         }
         
-        let allowedPawn = fetchAllowedPawn(pawn: pawn)
+        let allowedPawn = fetchAllowedPawn(pawn: pawn, walls: walls)
         for pawn in allowedPawn {
-            if checkRing(pawn: pawn) == .matchWon {
-                return .matchWon
+            if checkRing(pawn: pawn, walls: walls) == false {
+                return false
             }
         }
         
-        return .invalidWall
+        return true
     }
     
-    private func fetchAllowedPawn(pawn : Pawn) -> [Pawn] {
+    private func fetchAllowedPawn(pawn : Pawn, walls : [Wall]) -> [Pawn] {
         var res = [Int]()
         
-        let totalWall = currentGame.getTotalWalls()
+        let totalWall = walls
         let currentPosition = pawn.position
         
-        let northPosition = currentPosition + bufferTopDownCell
-        if totalWall.contains(where: { ($0.topLeftCell == northPosition || $0.topRightCell == northPosition) && $0.orientation == .horizontal }) == false {
-            if northPosition > 0 && northPosition < 89 {
+        if totalWall.contains(where: { ($0.topLeftCell == currentPosition || $0.topRightCell == currentPosition) && $0.orientation == .horizontal }) == false {
+            let northPosition = currentPosition + bufferTopDownCell
+            if gameValidator.outOfBoard(pawn: Pawn(position: northPosition)) == false {
                 res.append(northPosition)
             }
         }
         
-        let southPosition = currentPosition - bufferTopDownCell
-        if totalWall.contains(where: { ($0.bottomLeftCell == southPosition || $0.bottomRightCell == southPosition) && $0.orientation == .horizontal }) == false {
-            if southPosition > 0 && southPosition < 89 {
+        /*
+        let northPosition = currentPosition + bufferTopDownCell
+        if totalWall.contains(where: { ($0.topLeftCell == northPosition || $0.topRightCell == northPosition) && $0.orientation == .horizontal }) == false {
+            if gameValidator.outOfBoard(pawn: Pawn(position: northPosition)) == false {
+                res.append(northPosition)
+            }
+        }
+         */
+        if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.bottomRightCell == currentPosition) && $0.orientation == .horizontal }) == false {
+            let southPosition = currentPosition - bufferTopDownCell
+            if gameValidator.outOfBoard(pawn: Pawn(position: southPosition)) == false {
                 res.append(southPosition)
             }
         }
-        
-        let eastPosition = currentPosition - bufferLeftRightCell
-        if totalWall.contains(where: { ($0.bottomLeftCell == eastPosition || $0.topLeftCell == eastPosition) && $0.orientation == .vertical }) == false {
-            if leftRightBorder.contains(eastPosition) == false {
+        if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.topLeftCell == currentPosition) && $0.orientation == .vertical }) == false {
+            let eastPosition = currentPosition - bufferLeftRightCell
+            if gameValidator.outOfBoard(pawn: Pawn(position: eastPosition)) == false {
                 res.append(eastPosition)
             }
         }
         
-        let westPosition = currentPosition + bufferLeftRightCell
-        if totalWall.contains(where: { ($0.bottomRightCell == westPosition || $0.topRightCell == westPosition) && $0.orientation == .vertical }) == false {
-            if leftRightBorder.contains(westPosition) == false {
+        if totalWall.contains(where: { ($0.bottomRightCell == currentPosition || $0.topRightCell == currentPosition) && $0.orientation == .vertical }) == false {
+            let westPosition = currentPosition + bufferLeftRightCell
+            if gameValidator.outOfBoard(pawn: Pawn(position: westPosition)) == false {
                 res.append(westPosition)
             }
         }
@@ -227,8 +236,8 @@ extension GameFactory : GameFactoryProtocol {
     func fetchAllowedCurrentPawn() -> [Pawn] {
         let player = currentGame.player1.playerId == userInfo.getUserInfo().userId ? currentGame.player1 : currentGame.player2
         
-        let pawn = fetchAllowedPawn(pawn: player.pawnPosition)
-        return pawn
+        let pawns = fetchAllowedPawn(pawn: player.pawnPosition, walls: currentGame.getTotalWalls())
+        return pawns
     }
     
     func createGame() -> Game {
