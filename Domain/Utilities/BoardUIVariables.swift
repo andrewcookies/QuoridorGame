@@ -10,12 +10,12 @@ import UIKit
 /*
  Colors
  */
-let colorBorder = UIColor.systemYellow
-let colorCell = UIColor.systemOrange
-let colorWall = UIColor.systemBrown
-let colorEmptyWall = UIColor.darkGray
-let colorPlayerPawn = UIColor.systemRed
-let colorOpponentPawn = UIColor.systemCyan
+let colorBorder = UIColor.black
+let colorCell = UIColor.brown
+let colorWall = UIColor.yellow
+let colorEmptyWall = UIColor.red
+let colorPlayerPawn = UIColor.green
+let colorOpponentPawn = UIColor.blue
 let colorAllowedCell = UIColor.systemGray
 
 /*

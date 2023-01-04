@@ -22,6 +22,12 @@ class BoardCellView: UIView {
     
     @IBOutlet weak var tmpLabel: UILabel!
     @IBOutlet weak var cellView: UIView!
+    
+    @IBOutlet weak var topLeftCornerView: UIView!
+    @IBOutlet weak var topRightCornerView: UIView!
+    @IBOutlet weak var bottomRightCornerView: UIView!
+    @IBOutlet weak var bottomLeftCornerView: UIView!
+    
     @IBOutlet weak var topWallView: UIView!
     @IBOutlet weak var leftWallView: UIView!
     @IBOutlet weak var bottomWallView: UIView!
@@ -73,36 +79,70 @@ class BoardCellView: UIView {
             cellView.backgroundColor = colorCell
         }
         
-        topWallView.backgroundColor = getColor(type: cell.topBorder)
-        
-        if cell.topBorder == .wall {
-            topWallView.layer.zPosition = 1
-        } else if cell.topBorder == .boardBorder {
-            topWallView.layer.zPosition = 2
+        //top side
+        if cell.topRightBorder != .empty {
+            topWallView.backgroundColor = getColor(type: cell.topRightBorder)
+            topRightCornerView.backgroundColor = getColor(type: cell.topRightBorder)
         }
         
-        bottomWallView.backgroundColor = getColor(type: cell.bottomBorder)
-        if cell.bottomBorder == .wall  {
-            bottomWallView.layer.zPosition = 1
-        } else if cell.bottomBorder == .boardBorder {
-            bottomWallView.layer.zPosition = 2
+        if cell.topLeftBorder != .empty {
+            topLeftCornerView.backgroundColor = getColor(type: cell.topLeftBorder)
+            topWallView.backgroundColor = getColor(type: cell.topLeftBorder)
         }
         
-        rightWallView.backgroundColor = getColor(type: cell.rightBorder)
-        if cell.rightBorder == .wall  {
-            rightWallView.layer.zPosition = 1
-        } else if  cell.rightBorder == .boardBorder {
-            rightWallView.layer.zPosition = 2
+        if cell.topRightBorder == .empty && cell.topLeftBorder == .empty {
+            topLeftCornerView.backgroundColor = getColor(type: .empty)
+            topWallView.backgroundColor = getColor(type: .empty)
+            topRightCornerView.backgroundColor = getColor(type: .empty)
         }
         
         
-        leftWallView.backgroundColor = getColor(type: cell.leftBorder)
-        if cell.leftBorder == .wall  {
-            leftWallView.layer.zPosition = 1
-        } else if cell.leftBorder == .boardBorder {
-            leftWallView.layer.zPosition = 2
+        //bottom side
+        if cell.bottomRightBorder != .empty {
+            bottomRightCornerView.backgroundColor = getColor(type: cell.bottomRightBorder)
+            bottomWallView.backgroundColor = getColor(type: cell.bottomRightBorder)
         }
-
+        
+        if cell.bottomLeftBorder != .empty {
+            bottomLeftCornerView.backgroundColor = getColor(type: cell.bottomLeftBorder)
+            bottomWallView.backgroundColor = getColor(type: cell.bottomLeftBorder)
+        }
+        
+        if cell.bottomRightBorder == .empty && cell.bottomLeftBorder == .empty {
+            bottomRightCornerView.backgroundColor = getColor(type: .empty)
+            bottomLeftCornerView.backgroundColor = getColor(type: .empty)
+            bottomWallView.backgroundColor = getColor(type: .empty)
+        }
+        
+        //right side
+        if cell.rightTopBorder != .empty {
+            rightWallView.backgroundColor =  getColor(type: cell.rightTopBorder)
+            topRightCornerView.backgroundColor = getColor(type: cell.rightTopBorder)
+        }
+        
+        if cell.rightBottomBorder != .empty {
+            rightWallView.backgroundColor =  getColor(type: cell.rightBottomBorder)
+            bottomRightCornerView.backgroundColor = getColor(type: cell.rightBottomBorder)
+        }
+        
+        if cell.rightTopBorder == .empty && cell.rightBottomBorder == .empty {
+            rightWallView.backgroundColor =  getColor(type: .empty)
+        }
+        
+        //left side
+        if cell.leftTopBorder != .empty {
+            leftWallView.backgroundColor =  getColor(type: cell.leftTopBorder)
+            topLeftCornerView.backgroundColor = getColor(type: cell.leftTopBorder)
+        }
+        
+        if cell.leftBottomBorder != .empty {
+            leftWallView.backgroundColor =  getColor(type: cell.leftBottomBorder)
+            bottomLeftCornerView.backgroundColor = getColor(type: cell.leftBottomBorder)
+        }
+        
+        if cell.leftTopBorder == .empty &&  cell.leftBottomBorder == .empty {
+            leftWallView.backgroundColor =  getColor(type: .empty)
+        }
         
         topWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapTopWall)))
         bottomWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapBottomWall)))

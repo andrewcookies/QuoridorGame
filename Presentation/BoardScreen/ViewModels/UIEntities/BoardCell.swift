@@ -20,9 +20,60 @@ enum BoardContentType {
 }
 struct BoardCell {
     var index : Int
-    var topBorder : BorderType
-    var leftBorder : BorderType
-    var rightBorder : BorderType
-    var bottomBorder : BorderType
+    
+    var topRightBorder : BorderType
+    var topLeftBorder : BorderType
+
+    var bottomLeftBorder : BorderType
+    var bottomRightBorder : BorderType
+
+    var rightTopBorder : BorderType
+    var rightBottomBorder : BorderType
+    
+    var leftTopBorder : BorderType
+    var leftBottomBorder : BorderType
+    
     var contentType : BoardContentType
+    
+    
+    init(){
+        index = -1
+        
+        topRightBorder = .empty
+        topLeftBorder = .empty
+
+        bottomLeftBorder = .empty
+        bottomRightBorder = .empty
+
+        rightTopBorder = .empty
+        rightBottomBorder = .empty
+        
+        leftTopBorder = .empty
+        leftBottomBorder = .empty
+        
+        contentType = .empty
+    }
+     
+    
+    init(index: Int,
+         topRightBorder: BorderType,
+         topLeftBorder: BorderType,
+         bottomLeftBorder: BorderType,
+         bottomRightBorder: BorderType,
+         rightTopBorder: BorderType,
+         rightBottomBorder: BorderType,
+         leftTopBorder: BorderType,
+         leftBottomBorder: BorderType,
+         contentType: BoardContentType) {
+        self.index = index
+        self.topRightBorder = topRightBorder
+        self.topLeftBorder = topLeftBorder
+        self.bottomLeftBorder = bottomLeftBorder
+        self.bottomRightBorder = bottomRightBorder
+        self.rightTopBorder = rightTopBorder
+        self.rightBottomBorder = rightBottomBorder
+        self.leftTopBorder = leftTopBorder
+        self.leftBottomBorder = leftBottomBorder
+        self.contentType = contentType
+    }
 }
