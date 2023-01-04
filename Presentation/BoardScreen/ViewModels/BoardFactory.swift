@@ -79,10 +79,10 @@ extension BoardFactory : BoardFactoryInterface {
         }
         
         if side == .bottomSide {
-            let topLeftIndex = drawMode == .normal ? cellIndex : cellIndex + bufferTopDownCell + bufferLeftRightCell
-            let topRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex + bufferTopDownCell
+            let topLeftIndex = drawMode == .normal ? cellIndex : cellIndex - bufferTopDownCell - bufferLeftRightCell
+            let topRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex - bufferTopDownCell
             let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferTopDownCell + bufferLeftRightCell : cellIndex
-            let bottomLeftIndex =  drawMode == .normal ? cellIndex + bufferTopDownCell : cellIndex + bufferLeftRightCell
+            let bottomLeftIndex =  drawMode == .normal ? cellIndex + bufferTopDownCell : cellIndex - bufferLeftRightCell
             wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)
         }
         
@@ -248,15 +248,15 @@ extension BoardFactory : BoardFactoryInterface {
         let (topRightNewRow,topRightNewColumn) = rowColumnWall(drawMode: mode, row: topRightRow, column: topRightColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[topRightNewRow][topRightNewColumn].bottomBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].bottomBorder = .wall //bottomLeft
             } else {
-                cb.cells[topRightNewRow][topRightNewColumn].topBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].topBorder = .wall //topRight
             }
         } else {
             if mode == .normal {
-                cb.cells[topRightNewRow][topRightNewColumn].leftBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].leftBorder = .wall //leftBottom
             } else {
-                cb.cells[topRightNewRow][topRightNewColumn].rightBorder = .wall
+                cb.cells[topRightNewRow][topRightNewColumn].rightBorder = .wall //rigthTop
             }
         }
         let topRightCell = cb.cells[topRightNewRow][topRightNewColumn]
@@ -270,15 +270,15 @@ extension BoardFactory : BoardFactoryInterface {
         let (bottomRightNewRow,bottomRightNewColumn) = rowColumnWall(drawMode: mode, row: bottomRightRow, column: bottomRightColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[bottomRightNewRow][bottomRightNewColumn].topBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].topBorder = .wall //TopLeft
             } else {
-                cb.cells[bottomRightNewRow][bottomRightNewColumn].bottomBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].bottomBorder = .wall //bottomRigth
             }
         } else {
             if mode == .normal {
-                cb.cells[bottomRightNewRow][bottomRightNewColumn].leftBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].leftBorder = .wall //leftTop
             } else {
-                cb.cells[bottomRightNewRow][bottomRightNewColumn].rightBorder = .wall
+                cb.cells[bottomRightNewRow][bottomRightNewColumn].rightBorder = .wall //RightBottom
             }
         }
         let bottomRightCell = cb.cells[bottomRightNewRow][bottomRightNewColumn]
@@ -292,15 +292,15 @@ extension BoardFactory : BoardFactoryInterface {
         let (topLeftNewRow,topLeftNewColumn) = rowColumnWall(drawMode: mode, row: topLeftRow, column: topLeftColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[topLeftNewRow][topLeftNewColumn].bottomBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].bottomBorder = .wall //bottomRigth
             } else {
-                cb.cells[topLeftNewRow][topLeftNewColumn].topBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].topBorder = .wall //topLeft
             }
         } else {
             if mode == .normal {
-                cb.cells[topLeftNewRow][topLeftNewColumn].rightBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].rightBorder = .wall //rigthBottom
             } else {
-                cb.cells[topLeftNewRow][topLeftNewColumn].leftBorder = .wall
+                cb.cells[topLeftNewRow][topLeftNewColumn].leftBorder = .wall //LeftTop
             }
         }
         let topLeftCell = cb.cells[topLeftNewRow][topLeftNewColumn]
@@ -315,15 +315,15 @@ extension BoardFactory : BoardFactoryInterface {
         let (bottomLeftNewRow,bottomLeftNewColumn) = rowColumnWall(drawMode: mode, row: bottomLeftRow, column: bottomLeftColumn)
         if wall.orientation == .horizontal {
             if mode == .normal {
-                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].topBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].topBorder = .wall //TopRigth
             } else {
-                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].bottomBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].bottomBorder = .wall //BottomLeft
             }
         } else {
             if mode == .normal {
-                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].rightBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].rightBorder = .wall //RigthTop
             } else {
-                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].leftBorder = .wall
+                cb.cells[bottomLeftNewRow][bottomLeftNewColumn].leftBorder = .wall //LeftBottom
             }
         }
         let bottomLeftCell = cb.cells[bottomLeftNewRow][bottomLeftNewColumn]
