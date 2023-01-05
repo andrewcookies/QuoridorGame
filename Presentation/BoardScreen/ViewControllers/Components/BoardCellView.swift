@@ -23,6 +23,8 @@ class BoardCellView: UIView {
     @IBOutlet weak var tmpLabel: UILabel!
     @IBOutlet weak var cellView: UIView!
     
+    @IBOutlet weak var pawnView: UIView!
+
     @IBOutlet weak var topLeftCornerView: UIView!
     @IBOutlet weak var topRightCornerView: UIView!
     @IBOutlet weak var bottomRightCornerView: UIView!
@@ -55,8 +57,19 @@ class BoardCellView: UIView {
         return cellIndex
     }
     
+    
+    override func layoutSubviews() {
+        pawnView.layer.cornerRadius = pawnView.frame.size.width / 2
+        pawnView.clipsToBounds = true
+    }
+    
     func updateColor(allowed : Bool){
-        cellView.backgroundColor = allowed ? colorAllowedCell : colorCell
+        if allowed {
+            pawnView.isHidden = false
+            pawnView.backgroundColor = colorAllowedCell
+        } else {
+            pawnView.isHidden = true
+        }
     }
     
     func setup(cell : BoardCell){
@@ -67,17 +80,23 @@ class BoardCellView: UIView {
         
         switch contentType {
         case .playerPawn:
-            cellView.backgroundColor = colorPlayerPawn
+            pawnView.backgroundColor = colorPlayerPawn
+            pawnView.isHidden = false
             
         case .opponentPawn:
-            cellView.backgroundColor = colorOpponentPawn
+            pawnView.backgroundColor = colorOpponentPawn
+            pawnView.isHidden = false
             
         case .allowed:
-            cellView.backgroundColor = colorAllowedCell
+            pawnView.backgroundColor = colorAllowedCell
+            pawnView.isHidden = false
             
         case .empty:
-            cellView.backgroundColor = colorCell
+            pawnView.isHidden = true
         }
+        
+        cellView.backgroundColor = colorCell
+
         
         //top side
         if cell.topRightBorder != .empty {
