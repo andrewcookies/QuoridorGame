@@ -345,20 +345,63 @@ extension BoardFactory : BoardFactoryInterface {
 }
 
 extension BoardFactory : GameSettingsProtocol {
-    func nextNorthPosition(position: Int) -> Int {
-        return currentBoard.drawMode == .normal ? position - bufferTopDownCell : position + bufferTopDownCell
+    func getWinningCells(mode: DrawMode) -> [Pawn] {
+        return mode == .normal ? topCellsBorder.map({ Pawn(position: $0 )}) : bottomCellsBorder.map({ Pawn(position: $0 )})
     }
     
-    func nextSouthPosition(position: Int) -> Int {
-        return currentBoard.drawMode == .normal ? position + bufferTopDownCell : position - bufferTopDownCell
+    func nextTopPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
+        if mode == .normal {
+            if walls.contains(where: { ($0.bottomLeftCell == position || $0.bottomRightCell == position) && $0.orientation == .horizontal }) == false {
+                return position - bufferTopDownCell
+            }
+        } else {
+            if walls.contains(where: { ($0.topLeftCell == position || $0.topRightCell == position) && $0.orientation == .horizontal }) == false {
+                return position + bufferTopDownCell
+            }
+        }
+        return nil
     }
     
-    func nextEastPosition(position: Int) -> Int {
-        return currentBoard.drawMode == .normal ? position - bufferLeftRightCell : position + bufferLeftRightCell
+    func nextBottomPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
+        if mode == .normal {
+            if walls.contains(where: { ($0.topLeftCell == position || $0.topRightCell == position) && $0.orientation == .horizontal }) == false {
+                return position + bufferTopDownCell
+            }
+        } else {
+            if walls.contains(where: { ($0.bottomLeftCell == position || $0.bottomRightCell == position) && $0.orientation == .horizontal }) == false {
+                return position - bufferTopDownCell
+            }
+        }
+        
+        return nil
     }
     
-    func nextWestPosition(position: Int) -> Int {
-        return currentBoard.drawMode == .normal ? position + bufferLeftRightCell : position - bufferLeftRightCell
+    func nextRightPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
+        if mode == .normal {
+            if walls.contains(where: { ($0.topLeftCell == position || $0.bottomLeftCell == position) && $0.orientation == .vertical }) == false {
+                return position + bufferLeftRightCell
+            }
+        } else {
+            if walls.contains(where: { ($0.topRightCell == position || $0.bottomRightCell == position) && $0.orientation == .vertical }) == false {
+                return position - bufferLeftRightCell
+            }
+        }
+        
+        return nil
+    }
+    
+    func nextLeftPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
+        if mode == .normal {
+            if walls.contains(where: { ($0.topRightCell == position || $0.bottomRightCell == position) && $0.orientation == .vertical }) == false {
+                return position - bufferLeftRightCell
+            }
+        } else {
+            if walls.contains(where: { ($0.topLeftCell == position || $0.bottomLeftCell == position) && $0.orientation == .vertical }) == false {
+                return position + bufferLeftRightCell
+            }
+        }
+        
+        return nil
     }
     
 
@@ -393,12 +436,7 @@ extension BoardFactory : GameSettingsProtocol {
         return Pawn(position: startPlayer1PawnPosition)
     }
     
-    var startOppositePosition: Pawn {
+    var startOpponentPosition: Pawn {
         return Pawn(position: startPlayer2PawnPosition)
     }
-    
-    var winningCells: [Pawn] {
-        return currentBoard.drawMode == .normal ? topCellsBorder.map({ Pawn(position: $0 )}) : bottomCellsBorder.map({ Pawn(position: $0 )})
-    }
-    
 }

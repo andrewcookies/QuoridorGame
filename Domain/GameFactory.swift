@@ -10,14 +10,14 @@ import Foundation
 protocol GameSettingsProtocol {
     var defaultGame : Game { get }
     var startPlayerPosition : Pawn { get }
-    var startOppositePosition : Pawn { get }
+    var startOpponentPosition : Pawn { get }
     var startWall : Wall { get }
-    var winningCells : [Pawn] { get }
     
-    func nextNorthPosition(position : Int) -> Int
-    func nextSouthPosition(position : Int) -> Int
-    func nextEastPosition(position : Int) -> Int
-    func nextWestPosition(position : Int) -> Int
+    func getWinningCells(mode : DrawMode) -> [Pawn]
+    func nextTopPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
+    func nextBottomPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
+    func nextRightPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
+    func nextLeftPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
 
     func outOfBoard(pawn : Pawn) -> Bool
     func outOfBoard(wall : Wall) -> Bool
@@ -50,8 +50,8 @@ final class GameFactory {
         analyzedPawnForWallValidation = []
     }
     
-    private func validatePawnMove(pawn : Pawn) -> GameEvent {
-        if gameValidator.winningCells.filter({ $0.position == pawn.position }).count > 0 {
+    private func validatePawnMove(pawn : Pawn, mode : DrawMode) -> GameEvent {
+        if gameValidator.getWinningCells(mode: mode).filter({ $0.position == pawn.position }).count > 0 {
             return .matchWon
         }
         return .noEvent
@@ -99,12 +99,19 @@ final class GameFactory {
             return .invalidWall
         }
         
-        //4.check ring
+        //4.check ring (if opponent can reach the side of the board)
         analyzedPawnForWallValidation.removeAll()
         let completeWalls = currentGame.getTotalWalls() + [wall]
-        let player = currentGame.player1.playerId == userInfo.getUserInfo().userId ? currentGame.player1 : currentGame.player2
+        var mode = DrawMode.normal
+        var opponentPlayer = currentGame.player1
         
-        if checkRing(pawn: player.pawnPosition, walls: completeWalls) == false {
+        if currentGame.player1.playerId == userInfo.getUserInfo().userId {
+            opponentPlayer = currentGame.player2
+            mode = .reverse
+        }
+        
+        
+        if checkRing(pawn: opponentPlayer.pawnPosition, walls: completeWalls, mode: mode) == false {
             return .noEvent
         }
         
@@ -112,17 +119,18 @@ final class GameFactory {
         return .invalidWall
     }
     
-    func checkRing(pawn : Pawn, walls : [Wall]) -> Bool {
-        if validatePawnMove(pawn: pawn) == .matchWon {
+    func checkRing(pawn : Pawn, walls : [Wall], mode : DrawMode) -> Bool {
+        GameLog.shared.debug(message: "checkRing \(pawn.position)", className: "GameFactory")
+        if validatePawnMove(pawn: pawn, mode: mode) == .matchWon {
             return false
         }
         
         analyzedPawnForWallValidation.append(pawn)
-        let allowedPawn = fetchAllowedPawn(pawn: pawn, walls: walls)
+        let allowedPawn = fetchAllowedPawn(pawn: pawn, walls: walls, mode: mode)
         
         for currentPawn in allowedPawn {
             if analyzedPawnForWallValidation.filter({ $0.position == currentPawn.position }).count == 0 {
-                if checkRing(pawn: currentPawn, walls: walls) == false {
+                if checkRing(pawn: currentPawn, walls: walls, mode: mode) == false {
                     return false
                 }
             }
@@ -131,40 +139,35 @@ final class GameFactory {
         return true
     }
     
-    private func fetchAllowedPawn(pawn : Pawn, walls : [Wall]) -> [Pawn] {
+    private func fetchAllowedPawn(pawn : Pawn, walls : [Wall], mode : DrawMode) -> [Pawn] {
         var res = [Int]()
         
         let totalWall = walls
         let currentPosition = pawn.position
         
-        if totalWall.contains(where: { ($0.topLeftCell == currentPosition || $0.topRightCell == currentPosition) && $0.orientation == .horizontal }) == false {
-            let northPosition = gameValidator.nextNorthPosition(position: currentPosition)
-            if gameValidator.outOfBoard(pawn: Pawn(position: northPosition)) == false {
-                res.append(northPosition)
+        if let position = gameValidator.nextTopPosition(position: currentPosition, mode: mode, walls: totalWall){
+            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                res.append(position)
             }
         }
         
-        if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.bottomRightCell == currentPosition) && $0.orientation == .horizontal }) == false {
-            let southPosition = gameValidator.nextSouthPosition(position: currentPosition)
-            if gameValidator.outOfBoard(pawn: Pawn(position: southPosition)) == false {
-                res.append(southPosition)
+        if let position = gameValidator.nextBottomPosition(position: currentPosition, mode: mode, walls: totalWall){
+            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                res.append(position)
             }
         }
         
-        if totalWall.contains(where: { ($0.bottomLeftCell == currentPosition || $0.topLeftCell == currentPosition) && $0.orientation == .vertical }) == false {
-            let eastPosition = gameValidator.nextEastPosition(position: currentPosition)
-            if gameValidator.outOfBoard(pawn: Pawn(position: eastPosition)) == false {
-                res.append(eastPosition)
+        if let position = gameValidator.nextRightPosition(position: currentPosition, mode: mode, walls: totalWall){
+            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                res.append(position)
             }
         }
         
-        if totalWall.contains(where: { ($0.bottomRightCell == currentPosition || $0.topRightCell == currentPosition) && $0.orientation == .vertical }) == false {
-            let westPosition = gameValidator.nextWestPosition(position: currentPosition)
-            if gameValidator.outOfBoard(pawn: Pawn(position: westPosition)) == false {
-                res.append(westPosition)
+        if let position = gameValidator.nextLeftPosition(position: currentPosition, mode: mode, walls: totalWall){
+            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                res.append(position)
             }
         }
-        
         
         return res.map({ return Pawn(position: $0)})
     }
@@ -173,13 +176,9 @@ final class GameFactory {
 extension GameFactory : GameFactoryProtocol {
     func updatePawn(pawn: Pawn) -> Result<Game, GameEvent> {
         
-        let validation = validatePawnMove(pawn: pawn)
-        if validation != .noEvent {
-            return .failure(validation)
-        }
-        
-        
+
         let currentUser = userInfo.getUserInfo()
+        var drawMode = DrawMode.normal
         var playerType = PlayerType.player1
         var player : Player = Player(name: currentGame.player1.name,
                                      playerId: currentGame.player1.playerId,
@@ -187,12 +186,19 @@ extension GameFactory : GameFactoryProtocol {
                                      walls: currentGame.player1.walls)
         
         if currentGame.player1.playerId != currentUser.userId {
+            drawMode = .reverse
             playerType = .player2
             player = Player(name: currentGame.player2.name,
                             playerId: currentGame.player2.playerId,
                             pawnPosition: pawn,
                             walls: currentGame.player2.walls)
         }
+        
+        let validation = validatePawnMove(pawn: pawn, mode: drawMode)
+        if validation != .noEvent {
+            return .failure(validation)
+        }
+        
         
         let move = Move(playerId: player.playerId, pawnMove: pawn, wallMove: gameValidator.startWall, moveType: .movePawn)
         var currentMoves = currentGame.gameMoves
@@ -254,9 +260,16 @@ extension GameFactory : GameFactoryProtocol {
     }
     
     func fetchAllowedCurrentPawn() -> [Pawn] {
-        let player = currentGame.player1.playerId == userInfo.getUserInfo().userId ? currentGame.player1 : currentGame.player2
+        var mode = DrawMode.normal
+        var player = currentGame.player1
         
-        let pawns = fetchAllowedPawn(pawn: player.pawnPosition, walls: currentGame.getTotalWalls())
+        
+        if currentGame.player2.playerId == userInfo.getUserInfo().userId {
+            player = currentGame.player2
+            mode = .reverse
+        }
+        
+        let pawns = fetchAllowedPawn(pawn: player.pawnPosition, walls: currentGame.getTotalWalls(), mode: mode)
         return pawns
     }
     
@@ -282,7 +295,7 @@ extension GameFactory : GameFactoryProtocol {
     func getPlayerToJoinGame() -> Player {
         let player = Player(name: userInfo.getUserInfo().name,
                             playerId: userInfo.getUserInfo().userId,
-                            pawnPosition: gameValidator.startOppositePosition,
+                            pawnPosition: gameValidator.startOpponentPosition,
                             walls: [])
         return player
         
