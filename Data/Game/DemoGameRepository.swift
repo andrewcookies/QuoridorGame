@@ -11,9 +11,10 @@ class DemoGameOutputRepository : GameRepositoryOutputInterface {
     
     var demoGame : Game?
     let defaultWall = Wall(orientation: .horizontal, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
+    let demoPlayerStartPawn = Pawn(position: 34)
 
     init() {
-        let defaultPlayer1 = Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: startPlayer1PawnPosition), walls: [])
+        let defaultPlayer1 = Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: demoPlayerStartPawn, walls: [])
         let defaultPlayer2 = Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: startPlayer2PawnPosition), walls: [])
         let defaultWall = Wall(orientation: .horizontal, topLeftCell: -1, topRightCell: -1, bottomLeftCell: -1, bottomRightCell: -1)
         let defaultMove = Move(playerId: defaultPlayerId, pawnMove: Pawn(position: pawnNilMove), wallMove: defaultWall, moveType: .movePawn)
@@ -37,7 +38,7 @@ class DemoGameOutputRepository : GameRepositoryOutputInterface {
     
     func updateGame(game: Game) async throws {
         if let g = demoGame {
-            let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: Pawn(position: startPlayer1PawnPosition), wallMove:  defaultWall, moveType: .movePawn)
+            let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: demoPlayerStartPawn, wallMove:  defaultWall, moveType: .movePawn)
             var moves = g.gameMoves
             moves.append(demoMove)
             let newGame = Game(created: g.created,
@@ -77,7 +78,7 @@ class DemoGameInputRepository : DemoGameOutputRepository, GameRepositoryInputInt
     
     func joinMatch(player: Player, gameId: String) async throws -> Game {
         guard let g = demoGame else { throw APIError.currentInfoNIL }
-        let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: Pawn(position: startPlayer1PawnPosition), wallMove:  defaultWall, moveType: .movePawn)
+        let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: demoPlayerStartPawn, wallMove:  defaultWall, moveType: .movePawn)
         let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: player.walls.last ?? defaultWall, moveType: .movePawn)
         var moves = g.gameMoves
         moves.append(demoMove)

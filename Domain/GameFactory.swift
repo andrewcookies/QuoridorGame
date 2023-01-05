@@ -133,28 +133,124 @@ final class GameFactory {
         
         let totalWall = walls
         let currentPosition = pawn.position
+        let opponentPosition = mode == .player1 ? currentGame.player2.pawnPosition.position : currentGame.player1.pawnPosition.position
         
         if let position = gameValidator.nextTopPosition(position: currentPosition, mode: mode, walls: totalWall){
-            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
-                res.append(position)
+            if position == opponentPosition {
+                if let overTopPosition = gameValidator.nextTopPosition(position: position, mode: mode, walls: totalWall){
+                    if gameValidator.outOfBoard(pawn: Pawn(position: overTopPosition)) == false {
+                        res.append(overTopPosition)
+                    }
+                    
+                } else {
+                    
+                    if let overRightPosition = gameValidator.nextRightPosition(position: position, mode: mode, walls: totalWall) {
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overRightPosition)) == false {
+                            res.append(overRightPosition)
+                        }
+                        
+                    }
+                    
+                    if let overLeftPosition = gameValidator.nextLeftPosition(position: position, mode: mode, walls: totalWall) {
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overLeftPosition)) == false {
+                            res.append(overLeftPosition)
+                        }
+                    }
+                }
+                
+            } else {
+                if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                    res.append(position)
+                }
             }
         }
         
         if let position = gameValidator.nextBottomPosition(position: currentPosition, mode: mode, walls: totalWall){
-            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
-                res.append(position)
+            if position == opponentPosition {
+                
+                if let overBottomPosition = gameValidator.nextBottomPosition(position: position, mode: mode, walls: totalWall){
+                    if gameValidator.outOfBoard(pawn: Pawn(position: overBottomPosition)) == false {
+                        res.append(overBottomPosition)
+                    }
+                } else {
+                    
+                    if let overRightPosition = gameValidator.nextRightPosition(position: position, mode: mode, walls: totalWall) {
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overRightPosition)) == false {
+                            res.append(overRightPosition)
+                        }
+                    }
+                    
+                    if let overLeftPosition = gameValidator.nextLeftPosition(position: position, mode: mode, walls: totalWall) {
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overLeftPosition)) == false {
+                            res.append(overLeftPosition)
+                        }
+                    }
+                }
+                
+            } else {
+                if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                    res.append(position)
+                }
             }
         }
         
         if let position = gameValidator.nextRightPosition(position: currentPosition, mode: mode, walls: totalWall){
-            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
-                res.append(position)
+            if position == opponentPosition {
+                
+                if let overRightPosition = gameValidator.nextRightPosition(position: position, mode: mode, walls: totalWall) {
+                    if gameValidator.outOfBoard(pawn: Pawn(position: overRightPosition)) == false {
+                        res.append(overRightPosition)
+                    }
+                    
+                } else {
+                    
+                    if let overTopPosition = gameValidator.nextTopPosition(position: position, mode: mode, walls: totalWall){
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overTopPosition)) == false {
+                            res.append(overTopPosition)
+                        }
+                        
+                    }
+                    
+                    if let overBottomPosition = gameValidator.nextBottomPosition(position: position, mode: mode, walls: totalWall){
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overBottomPosition)) == false {
+                            res.append(overBottomPosition)
+                        }
+                    }
+                }
+            } else {
+                if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                    res.append(position)
+                }
             }
         }
         
         if let position = gameValidator.nextLeftPosition(position: currentPosition, mode: mode, walls: totalWall){
-            if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
-                res.append(position)
+            if position == opponentPosition {
+                if let overLeftPosition = gameValidator.nextLeftPosition(position: position, mode: mode, walls: totalWall) {
+                    if gameValidator.outOfBoard(pawn: Pawn(position: overLeftPosition)) == false {
+                        res.append(overLeftPosition)
+                    }
+                    
+                } else {
+                    
+                    if let overTopPosition = gameValidator.nextTopPosition(position: position, mode: mode, walls: totalWall){
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overTopPosition)) == false {
+                            res.append(overTopPosition)
+                        }
+                        
+                    }
+                    
+                    if let overBottomPosition = gameValidator.nextBottomPosition(position: position, mode: mode, walls: totalWall){
+                        if gameValidator.outOfBoard(pawn: Pawn(position: overBottomPosition)) == false {
+                            res.append(overBottomPosition)
+                        }
+                    }
+                }
+                
+            } else {
+                if gameValidator.outOfBoard(pawn: Pawn(position: position)) == false {
+                    res.append(position)
+                }
             }
         }
         
