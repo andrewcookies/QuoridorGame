@@ -6,10 +6,6 @@
 //
 
 import Foundation
-enum PlayerType {
-    case player1
-    case player2
-}
 
 protocol GameRepositoryOutputInterface {
     func updateState(state : GameState) async throws

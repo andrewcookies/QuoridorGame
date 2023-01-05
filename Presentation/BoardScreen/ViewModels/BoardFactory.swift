@@ -345,12 +345,12 @@ extension BoardFactory : BoardFactoryInterface {
 }
 
 extension BoardFactory : GameSettingsProtocol {
-    func getWinningCells(mode: DrawMode) -> [Pawn] {
-        return mode == .normal ? topCellsBorder.map({ Pawn(position: $0 )}) : bottomCellsBorder.map({ Pawn(position: $0 )})
+    func getWinningCells(mode: PlayerType) -> [Pawn] {
+        return mode == .player1 ? topCellsBorder.map({ Pawn(position: $0 )}) : bottomCellsBorder.map({ Pawn(position: $0 )})
     }
     
-    func nextTopPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
-        if mode == .normal {
+    func nextTopPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int? {
+        if mode == .player1 {
             if walls.contains(where: { ($0.bottomLeftCell == position || $0.bottomRightCell == position) && $0.orientation == .horizontal }) == false {
                 return position - bufferTopDownCell
             }
@@ -362,8 +362,8 @@ extension BoardFactory : GameSettingsProtocol {
         return nil
     }
     
-    func nextBottomPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
-        if mode == .normal {
+    func nextBottomPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int? {
+        if mode == .player1 {
             if walls.contains(where: { ($0.topLeftCell == position || $0.topRightCell == position) && $0.orientation == .horizontal }) == false {
                 return position + bufferTopDownCell
             }
@@ -376,8 +376,8 @@ extension BoardFactory : GameSettingsProtocol {
         return nil
     }
     
-    func nextRightPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
-        if mode == .normal {
+    func nextRightPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int? {
+        if mode == .player1 {
             if walls.contains(where: { ($0.topLeftCell == position || $0.bottomLeftCell == position) && $0.orientation == .vertical }) == false {
                 return position + bufferLeftRightCell
             }
@@ -390,8 +390,8 @@ extension BoardFactory : GameSettingsProtocol {
         return nil
     }
     
-    func nextLeftPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int? {
-        if mode == .normal {
+    func nextLeftPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int? {
+        if mode == .player1 {
             if walls.contains(where: { ($0.topRightCell == position || $0.bottomRightCell == position) && $0.orientation == .vertical }) == false {
                 return position - bufferLeftRightCell
             }

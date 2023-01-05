@@ -7,17 +7,22 @@
 
 import Foundation
 
+enum PlayerType {
+    case player1
+    case player2
+}
+
 protocol GameSettingsProtocol {
     var defaultGame : Game { get }
     var startPlayerPosition : Pawn { get }
     var startOpponentPosition : Pawn { get }
     var startWall : Wall { get }
     
-    func getWinningCells(mode : DrawMode) -> [Pawn]
-    func nextTopPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
-    func nextBottomPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
-    func nextRightPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
-    func nextLeftPosition(position: Int, mode : DrawMode, walls : [Wall]) -> Int?
+    func getWinningCells(mode : PlayerType) -> [Pawn]
+    func nextTopPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int?
+    func nextBottomPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int?
+    func nextRightPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int?
+    func nextLeftPosition(position: Int, mode : PlayerType, walls : [Wall]) -> Int?
 
     func outOfBoard(pawn : Pawn) -> Bool
     func outOfBoard(wall : Wall) -> Bool
@@ -50,7 +55,7 @@ final class GameFactory {
         analyzedPawnForWallValidation = []
     }
     
-    private func validatePawnMove(pawn : Pawn, mode : DrawMode) -> GameEvent {
+    private func validatePawnMove(pawn : Pawn, mode : PlayerType) -> GameEvent {
         if gameValidator.getWinningCells(mode: mode).filter({ $0.position == pawn.position }).count > 0 {
             return .matchWon
         }
@@ -102,12 +107,12 @@ final class GameFactory {
         //4.check ring (if opponent can reach the side of the board)
         analyzedPawnForWallValidation.removeAll()
         let completeWalls = currentGame.getTotalWalls() + [wall]
-        var mode = DrawMode.normal
+        var mode = PlayerType.player1
         var opponentPlayer = currentGame.player1
         
         if currentGame.player1.playerId == userInfo.getUserInfo().userId {
             opponentPlayer = currentGame.player2
-            mode = .reverse
+            mode = .player2
         }
         
         
@@ -119,7 +124,7 @@ final class GameFactory {
         return .invalidWall
     }
     
-    func checkRing(pawn : Pawn, walls : [Wall], mode : DrawMode) -> Bool {
+    func checkRing(pawn : Pawn, walls : [Wall], mode : PlayerType) -> Bool {
         GameLog.shared.debug(message: "checkRing \(pawn.position)", className: "GameFactory")
         if validatePawnMove(pawn: pawn, mode: mode) == .matchWon {
             return false
@@ -139,7 +144,7 @@ final class GameFactory {
         return true
     }
     
-    private func fetchAllowedPawn(pawn : Pawn, walls : [Wall], mode : DrawMode) -> [Pawn] {
+    private func fetchAllowedPawn(pawn : Pawn, walls : [Wall], mode : PlayerType) -> [Pawn] {
         var res = [Int]()
         
         let totalWall = walls
@@ -178,7 +183,6 @@ extension GameFactory : GameFactoryProtocol {
         
 
         let currentUser = userInfo.getUserInfo()
-        var drawMode = DrawMode.normal
         var playerType = PlayerType.player1
         var player : Player = Player(name: currentGame.player1.name,
                                      playerId: currentGame.player1.playerId,
@@ -186,7 +190,6 @@ extension GameFactory : GameFactoryProtocol {
                                      walls: currentGame.player1.walls)
         
         if currentGame.player1.playerId != currentUser.userId {
-            drawMode = .reverse
             playerType = .player2
             player = Player(name: currentGame.player2.name,
                             playerId: currentGame.player2.playerId,
@@ -194,7 +197,7 @@ extension GameFactory : GameFactoryProtocol {
                             walls: currentGame.player2.walls)
         }
         
-        let validation = validatePawnMove(pawn: pawn, mode: drawMode)
+        let validation = validatePawnMove(pawn: pawn, mode: playerType)
         if validation != .noEvent {
             return .failure(validation)
         }
@@ -260,13 +263,13 @@ extension GameFactory : GameFactoryProtocol {
     }
     
     func fetchAllowedCurrentPawn() -> [Pawn] {
-        var mode = DrawMode.normal
+        var mode = PlayerType.player1
         var player = currentGame.player1
         
         
         if currentGame.player2.playerId == userInfo.getUserInfo().userId {
             player = currentGame.player2
-            mode = .reverse
+            mode = .player2
         }
         
         let pawns = fetchAllowedPawn(pawn: player.pawnPosition, walls: currentGame.getTotalWalls(), mode: mode)
