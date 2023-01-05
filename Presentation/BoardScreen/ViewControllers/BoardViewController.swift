@@ -151,7 +151,9 @@ extension BoardViewController : BoardCellDelegate {
     }
     
     func tapWall(index: Int, side: BoardCellSide) {
-        viewModel?.insertWall(cellIndex: index, side: side)
+        if allowedCells.count == 0 {
+            viewModel?.insertWall(cellIndex: index, side: side)
+        }
     }
 
 }
