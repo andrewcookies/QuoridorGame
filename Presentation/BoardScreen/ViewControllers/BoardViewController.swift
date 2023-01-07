@@ -15,8 +15,19 @@ protocol BoardViewControllerProtocol {
     func handelEvent(gameEvent : GameEvent)
 }
 
+enum GameAction {
+    case wallSelected
+    case pawnSelected
+    case noAction
+}
+
 class BoardViewController: UIViewController {
 
+    
+    @IBOutlet weak var boardContainer: UIView!
+    @IBOutlet weak var opponentWallContainer: UIView!
+    @IBOutlet weak var playerWallContaier: UIView!
+    
     @IBOutlet private var boardView : UIView!
     
     private var viewModel : BoardViewModelProtocol?
@@ -27,6 +38,13 @@ class BoardViewController: UIViewController {
 
     private var indexPawn = 0
     private var indexWall = 0
+    
+    private var opponentAvailableWalls : [WallView] = []
+    private var playerAvailableWalls : [WallView] = []
+    
+    
+    
+    private var gameAction : GameAction = .noAction
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,6 +121,39 @@ extension BoardViewController : BoardViewControllerProtocol {
                 }
             }
         }
+        
+        let wallWidth = Int(Double(cellWidth) * 0.10 * 2)
+        let wallHeight = Int(cellWidth*2 - wallWidth*2)
+        let sectionHeight = Int(opponentWallContainer.frame.height)
+        for rowId in 0...numberWallPerPlayer {
+            let x = (rowId*cellWidth) + 15 - (wallWidth/2)
+            let v = UIView(frame: CGRect(x: x, y: 0, width: wallWidth, height: sectionHeight))
+            v.backgroundColor = .systemBlue
+            
+            let wall = WallView(frame: CGRect(x: 0, y: 10, width: wallWidth, height: wallHeight))
+            wall.setup(state: .normal)
+            wall.wallIndex = rowId
+            
+            v.addSubview(wall)
+            opponentAvailableWalls.append(wall)
+            opponentWallContainer.addSubview(v)
+        }
+        
+        for rowId in 0...numberWallPerPlayer {
+            let v = UIView(frame: CGRect(x: ((rowId*cellWidth) + 15 - (wallWidth/2)), y: 0, width: wallWidth, height: sectionHeight))
+            v.backgroundColor = .systemBlue
+            
+            
+            let wall = WallView(frame: CGRect(x: 0, y: 10, width: wallWidth, height: wallHeight))
+            wall.setup(state: .normal)
+            wall.wallIndex = rowId+wallViiewConst
+            wall.delegate = self
+            
+            v.addSubview(wall)
+            playerAvailableWalls.append(wall)
+            playerWallContaier.addSubview(v)
+        }
+        
     }
     
     func updateOpponentPawn(start: BoardCell, destination: BoardCell) {
@@ -127,6 +178,21 @@ extension BoardViewController : BoardViewControllerProtocol {
             cell.setup(cell: bottomLeft)
         }
         
+        if gameAction == .wallSelected {
+            //I just put the wall
+            if let wall = playerAvailableWalls.filter({ $0.currentState == .normal }).first {
+                wall.removeFromSuperview()
+                for w in playerAvailableWalls {
+                    w.setup(state: .normal)
+                }
+                gameAction = .noAction
+            }
+        } else {
+            if let wall = opponentAvailableWalls.randomElement() {
+                wall.removeFromSuperview()
+            }
+        }
+        
     }
 }
 
@@ -136,9 +202,11 @@ extension BoardViewController : BoardCellDelegate {
             if allowedCells.count > 0 {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
+                gameAction = .noAction
             } else {
                 allowedCells = viewModel?.allowedPawnMoves() ?? []
                 updateBoardAllowedPawnCells(allowed: true)
+                gameAction = .pawnSelected
             }
             
         } else {
@@ -146,14 +214,39 @@ extension BoardViewController : BoardCellDelegate {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
                 viewModel?.movePawn(cellIndex: index)
+                gameAction = .noAction
             }
         }
     }
     
     func tapWall(index: Int, side: BoardCellSide) {
-        if allowedCells.count == 0 {
+        if gameAction == .wallSelected {
             viewModel?.insertWall(cellIndex: index, side: side)
         }
     }
 
+}
+
+
+extension BoardViewController : WallViewDelegate {
+    func tapWallView(wallIndex: Int) {
+        if gameAction == .noAction {
+            for w in playerAvailableWalls {
+                if w.wallIndex != wallIndex {
+                    w.setup(state: .disabled)
+                }
+            }
+            gameAction = .wallSelected
+            
+        } else if gameAction == .wallSelected {
+            if let wall = playerAvailableWalls.filter({ $0.wallIndex == wallIndex}).first {
+                if wall.currentState == .normal {
+                    for w in playerAvailableWalls {
+                        w.setup(state: .normal)
+                    }
+                    gameAction = .noAction
+                }
+            }
+        }
+    }
 }
