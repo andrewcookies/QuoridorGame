@@ -182,9 +182,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             //I just put the wall
             if let wall = playerAvailableWalls.filter({ $0.currentState == .normal }).first {
                 wall.removeFromSuperview()
-                for w in playerAvailableWalls {
-                    w.setup(state: .normal)
-                }
+                playerAvailableWalls.forEach({ $0.setup(state: .normal)})
                 gameAction = .noAction
             }
         } else {
@@ -199,7 +197,7 @@ extension BoardViewController : BoardViewControllerProtocol {
 extension BoardViewController : BoardCellDelegate {
     func tapCell(index: Int) {
         if index == currentPosition.position {
-            if allowedCells.count > 0 {
+            if gameAction == .pawnSelected {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
                 gameAction = .noAction
@@ -241,9 +239,7 @@ extension BoardViewController : WallViewDelegate {
         } else if gameAction == .wallSelected {
             if let wall = playerAvailableWalls.filter({ $0.wallIndex == wallIndex}).first {
                 if wall.currentState == .normal {
-                    for w in playerAvailableWalls {
-                        w.setup(state: .normal)
-                    }
+                    playerAvailableWalls.forEach({ $0.setup(state: .normal)})
                     gameAction = .noAction
                 }
             }
