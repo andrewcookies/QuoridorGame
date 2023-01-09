@@ -51,13 +51,21 @@
                                 <constraint firstItem="4BY-B1-Mzp" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="top" id="uqq-9H-Hdz"/>
                             </constraints>
                         </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-JG-9fs" userLabel="PlayerDashBoard">
+                            <rect key="frame" x="0.0" y="659" width="393" height="100"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="width" secondItem="NVo-dM-xlz" secondAttribute="width" id="6Ey-eg-0Be"/>
+                        <constraint firstItem="JYp-JG-9fs" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="bottom" id="DRq-4V-6b2"/>
+                        <constraint firstAttribute="trailing" secondItem="JYp-JG-9fs" secondAttribute="trailing" id="MkL-9G-ZmF"/>
+                        <constraint firstAttribute="bottom" secondItem="JYp-JG-9fs" secondAttribute="bottom" id="UXx-wb-0c8"/>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" constant="80" id="dbc-3z-cjK"/>
                         <constraint firstAttribute="bottom" secondItem="b4R-0R-Ysr" secondAttribute="bottom" constant="100" id="e6m-Yn-PuL"/>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="centerX" secondItem="NVo-dM-xlz" secondAttribute="centerX" id="ikh-jm-3On"/>
+                        <constraint firstItem="JYp-JG-9fs" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" id="oWP-E0-gaH"/>
                     </constraints>
                 </view>
             </subviews>
