@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="boardContainer" destination="b4R-0R-Ysr" id="mxv-cx-Oqb"/>
                 <outlet property="boardView" destination="4BY-B1-Mzp" id="wqt-dX-zJ3"/>
+                <outlet property="opponentInfoView" destination="Zw2-Lp-H3H" id="FX5-9I-AxO"/>
                 <outlet property="playerInfoView" destination="JYp-JG-9fs" id="c3D-7h-E6F"/>
                 <outlet property="playerWallContaier" destination="XiH-cl-RXc" id="j2d-mQ-uGb"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -25,8 +26,15 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NVo-dM-xlz" userLabel="root">
                     <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                     <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zw2-Lp-H3H" userLabel="Opponent dashboard">
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="80"/>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="80" id="xS7-tM-sU0"/>
+                            </constraints>
+                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4R-0R-Ysr" userLabel="BoardContainer">
-                            <rect key="frame" x="0.0" y="80" width="393" height="579"/>
+                            <rect key="frame" x="0.0" y="80" width="393" height="599"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4BY-B1-Mzp" userLabel="boardView">
                                     <rect key="frame" x="15" y="0.0" width="363" height="363"/>
@@ -36,7 +44,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XiH-cl-RXc" userLabel="PlayerWallsContainer">
-                                    <rect key="frame" x="0.0" y="363" width="393" height="216"/>
+                                    <rect key="frame" x="0.0" y="363" width="393" height="236"/>
                                     <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 </view>
                             </subviews>
@@ -53,20 +61,25 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-JG-9fs" userLabel="PlayerDashBoard">
-                            <rect key="frame" x="0.0" y="659" width="393" height="100"/>
+                            <rect key="frame" x="0.0" y="679" width="393" height="80"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="80" id="aE7-Rn-shc"/>
+                            </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="width" secondItem="NVo-dM-xlz" secondAttribute="width" id="6Ey-eg-0Be"/>
-                        <constraint firstItem="JYp-JG-9fs" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="bottom" id="DRq-4V-6b2"/>
+                        <constraint firstItem="Zw2-Lp-H3H" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" id="7kq-wT-KpP"/>
+                        <constraint firstItem="Zw2-Lp-H3H" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" id="Cdt-Oe-xYJ"/>
+                        <constraint firstItem="JYp-JG-9fs" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="bottom" id="HNf-vJ-mDu"/>
                         <constraint firstAttribute="trailing" secondItem="JYp-JG-9fs" secondAttribute="trailing" id="MkL-9G-ZmF"/>
                         <constraint firstAttribute="bottom" secondItem="JYp-JG-9fs" secondAttribute="bottom" id="UXx-wb-0c8"/>
-                        <constraint firstItem="b4R-0R-Ysr" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" constant="80" id="dbc-3z-cjK"/>
-                        <constraint firstAttribute="bottom" secondItem="b4R-0R-Ysr" secondAttribute="bottom" constant="100" id="e6m-Yn-PuL"/>
+                        <constraint firstAttribute="trailing" secondItem="Zw2-Lp-H3H" secondAttribute="trailing" id="dNA-R1-zXU"/>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="centerX" secondItem="NVo-dM-xlz" secondAttribute="centerX" id="ikh-jm-3On"/>
                         <constraint firstItem="JYp-JG-9fs" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" id="oWP-E0-gaH"/>
+                        <constraint firstItem="b4R-0R-Ysr" firstAttribute="top" secondItem="Zw2-Lp-H3H" secondAttribute="bottom" id="txb-6w-tpC"/>
                     </constraints>
                 </view>
             </subviews>

@@ -12,6 +12,8 @@ protocol PlayerInfoViewDelegate : AnyObject {
 }
 
 class PlayerInfoView: UIView {
+    
+    private var type : PlayerType = .player1
 
     @IBOutlet weak var playerInfoLabel: QLabel!
     @IBOutlet weak var playerNameLabel: QLabel!
@@ -21,8 +23,11 @@ class PlayerInfoView: UIView {
     @IBOutlet weak var timerImageView: UIImageView!
     
     weak var delegate : PlayerInfoViewDelegate?
-    
-    var actionState : GameAction = .noAction
+    var actionState : GameAction = .noAction {
+        didSet {
+            setupInfo(state: actionState)
+        }
+    }
         
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,20 +40,25 @@ class PlayerInfoView: UIView {
         return view
     }
     
-    func setup(name : String, state : GameAction){
+    func setup(name : String, player : PlayerType){
         playerNameLabel.text = name
         profileImageView.tintColor = colorPlayerPawn
-        setupInfo(state: state)
+        profileImageView.tintColor = player == .player1 ? colorPlayerPawn : colorOpponentPawn
+        type = player
     }
     
     private func setupInfo(state : GameAction){
-        switch state {
-        case .wallSelected:
-            playerInfoLabel.text = "*Tap one cell to move the pawn"
-        case .pawnSelected:
-            playerInfoLabel.text = "*Tap between cells to insert the wall"
-        case .noAction:
-            playerInfoLabel.text = "*Select a wall to put on the board or tap the pawn to move it"
+        if type == .player2 {
+            playerInfoLabel.text = "*Waiting for your move"
+        } else {
+            switch state {
+            case .wallSelected:
+                playerInfoLabel.text = "*Tap one cell to move the pawn"
+            case .pawnSelected:
+                playerInfoLabel.text = "*Tap between cells to insert the wall"
+            case .noAction:
+                playerInfoLabel.text = "*Select a wall or tap the pawn to move it"
+            }
         }
     }
 }

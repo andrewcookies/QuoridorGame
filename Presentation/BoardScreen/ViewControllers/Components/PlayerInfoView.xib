@@ -21,7 +21,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="569" height="106"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DiD-AE-ecF" userLabel="ProfileImageContainer">
-                                    <rect key="frame" x="0.0" y="0.0" width="142.33333333333334" height="106"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="113.66666666666667" height="106"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="l7w-vc-aZs">
                                             <rect key="frame" x="10" y="28.666666666666671" width="53" height="49.666666666666671"/>
@@ -38,19 +38,19 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YBc-Gc-kwd" userLabel="InfoContainer">
-                                    <rect key="frame" x="142.33333333333334" y="0.0" width="284.33333333333326" height="106"/>
+                                    <rect key="frame" x="113.66666666666666" y="0.0" width="341.66666666666674" height="106"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="o4T-l0-297">
-                                            <rect key="frame" x="0.0" y="0.0" width="284.33333333333331" height="106"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="341.66666666666669" height="106"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ecS-Zt-JE7" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="0.0" width="284.33333333333331" height="53"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="341.66666666666669" height="53"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mxW-ro-Z8D" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="53" width="284.33333333333331" height="53"/>
+                                                    <rect key="frame" x="0.0" y="53" width="341.66666666666669" height="53"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -73,16 +73,16 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r58-Ar-r4y" userLabel="TimerContainer">
-                                    <rect key="frame" x="426.66666666666669" y="0.0" width="142.33333333333331" height="106"/>
+                                    <rect key="frame" x="455.33333333333331" y="0.0" width="113.66666666666669" height="106"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVb-Bq-Egv">
-                                            <rect key="frame" x="0.0" y="43" width="111" height="20.333333333333329"/>
+                                            <rect key="frame" x="0.0" y="43" width="82.333333333333329" height="20.333333333333329"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timer" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jjk-E4-ivj">
-                                            <rect key="frame" x="110.99999999999994" y="43.333333333333329" width="21.333333333333343" height="20"/>
+                                            <rect key="frame" x="82.333333333333314" y="43.333333333333329" width="21.333333333333329" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Jjk-E4-ivj" secondAttribute="height" multiplier="1:1" id="fpj-ez-Ai4"/>
                                             </constraints>
@@ -100,9 +100,9 @@
                                 </view>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="YBc-Gc-kwd" firstAttribute="width" secondItem="gG3-Sa-8fE" secondAttribute="width" multiplier="0.5" id="9hK-ld-rf2"/>
-                                <constraint firstItem="DiD-AE-ecF" firstAttribute="width" secondItem="gG3-Sa-8fE" secondAttribute="width" multiplier="0.25" id="Vl6-by-6rC"/>
-                                <constraint firstItem="r58-Ar-r4y" firstAttribute="width" secondItem="gG3-Sa-8fE" secondAttribute="width" multiplier="0.25" id="ids-Qy-yvG"/>
+                                <constraint firstItem="YBc-Gc-kwd" firstAttribute="width" secondItem="gG3-Sa-8fE" secondAttribute="width" multiplier="0.6" id="9hK-ld-rf2"/>
+                                <constraint firstItem="DiD-AE-ecF" firstAttribute="width" secondItem="gG3-Sa-8fE" secondAttribute="width" multiplier="0.2" id="Vl6-by-6rC"/>
+                                <constraint firstItem="r58-Ar-r4y" firstAttribute="width" secondItem="gG3-Sa-8fE" secondAttribute="width" multiplier="0.2" id="ids-Qy-yvG"/>
                             </constraints>
                         </stackView>
                     </subviews>
