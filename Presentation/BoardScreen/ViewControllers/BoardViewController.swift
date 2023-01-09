@@ -26,6 +26,8 @@ class BoardViewController: UIViewController {
     
     @IBOutlet weak var boardContainer: UIView!
     @IBOutlet weak var playerWallContaier: UIView!
+    @IBOutlet weak var playerInfoView: PlayerInfoView!
+    
     
     @IBOutlet private var boardView : UIView!
     
@@ -139,6 +141,13 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerWallContaier.addSubview(v)
         }
         
+        if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
+            playerView.frame = CGRect(x: 0, y: 0, width: playerInfoView.frame.width, height: playerInfoView.frame.height)
+            playerView.setup(name: board.player.name, state: gameAction)
+            playerView.delegate = self
+            playerInfoView.addSubview(playerView)
+        }
+        
     }
     
     func updateOpponentPawn(start: BoardCell, destination: BoardCell) {
@@ -226,4 +235,8 @@ extension BoardViewController : WallViewDelegate {
             }
         }
     }
+}
+
+extension BoardViewController : PlayerInfoViewDelegate {
+    
 }

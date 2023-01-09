@@ -22,16 +22,19 @@ class PlayerInfoView: UIView {
     
     weak var delegate : PlayerInfoViewDelegate?
     
-    var actionState : GameAction = .noAction {
-        didSet {
-            setupInfo(state: actionState)
-        }
-    }
-    
+    var actionState : GameAction = .noAction
+        
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
+    
+    static func getView() -> UIView? {
+        guard let _view = Bundle.main.loadNibNamed("PlayerInfoView", owner: self, options: nil)?.first,
+              let view = _view as? PlayerInfoView
+        else { return nil }
+        return view
+    }
+    
     func setup(name : String, state : GameAction){
         playerNameLabel.text = name
         profileImageView.tintColor = colorPlayerPawn

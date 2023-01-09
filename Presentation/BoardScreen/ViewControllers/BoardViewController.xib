@@ -12,6 +12,7 @@
             <connections>
                 <outlet property="boardContainer" destination="b4R-0R-Ysr" id="mxv-cx-Oqb"/>
                 <outlet property="boardView" destination="4BY-B1-Mzp" id="wqt-dX-zJ3"/>
+                <outlet property="playerInfoView" destination="JYp-JG-9fs" id="c3D-7h-E6F"/>
                 <outlet property="playerWallContaier" destination="XiH-cl-RXc" id="j2d-mQ-uGb"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

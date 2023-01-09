@@ -24,7 +24,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="142.33333333333334" height="106"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="l7w-vc-aZs">
-                                            <rect key="frame" x="10" y="12" width="84.666666666666671" height="81.333333333333343"/>
+                                            <rect key="frame" x="10" y="28.666666666666671" width="53" height="49.666666666666671"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="l7w-vc-aZs" secondAttribute="height" multiplier="1:1" id="Rp5-RR-MCX"/>
                                             </constraints>
@@ -33,8 +33,8 @@
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstItem="l7w-vc-aZs" firstAttribute="leading" secondItem="DiD-AE-ecF" secondAttribute="leading" constant="10" id="XaQ-28-xxC"/>
-                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="height" secondItem="DiD-AE-ecF" secondAttribute="height" multiplier="0.8" id="d4B-6g-GtE"/>
-                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="top" secondItem="DiD-AE-ecF" secondAttribute="top" constant="10" id="wVl-Ak-c82"/>
+                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="height" secondItem="DiD-AE-ecF" secondAttribute="height" multiplier="0.5" id="d4B-6g-GtE"/>
+                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="centerY" secondItem="DiD-AE-ecF" secondAttribute="centerY" id="fjb-X7-RV4"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YBc-Gc-kwd" userLabel="InfoContainer">
@@ -43,13 +43,13 @@
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="o4T-l0-297">
                                             <rect key="frame" x="0.0" y="0.0" width="284.33333333333331" height="106"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ecS-Zt-JE7" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ecS-Zt-JE7" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="0.0" width="284.33333333333331" height="53"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mxW-ro-Z8D" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mxW-ro-Z8D" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
                                                     <rect key="frame" x="0.0" y="53" width="284.33333333333331" height="53"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
@@ -76,13 +76,13 @@
                                     <rect key="frame" x="426.66666666666669" y="0.0" width="142.33333333333331" height="106"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVb-Bq-Egv">
-                                            <rect key="frame" x="0.0" y="43" width="79.333333333333329" height="20.333333333333329"/>
+                                            <rect key="frame" x="0.0" y="43" width="111" height="20.333333333333329"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timer" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jjk-E4-ivj">
-                                            <rect key="frame" x="79.333333333333314" y="27.666666666666671" width="53" height="51.666666666666671"/>
+                                            <rect key="frame" x="110.99999999999994" y="43.333333333333329" width="21.333333333333343" height="20"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Jjk-E4-ivj" secondAttribute="height" multiplier="1:1" id="fpj-ez-Ai4"/>
                                             </constraints>
@@ -91,7 +91,7 @@
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstItem="vVb-Bq-Egv" firstAttribute="leading" secondItem="r58-Ar-r4y" secondAttribute="leading" id="HWN-IE-gmp"/>
-                                        <constraint firstItem="Jjk-E4-ivj" firstAttribute="height" secondItem="r58-Ar-r4y" secondAttribute="height" multiplier="0.5" id="bH7-kU-YP0"/>
+                                        <constraint firstItem="Jjk-E4-ivj" firstAttribute="height" secondItem="r58-Ar-r4y" secondAttribute="height" multiplier="0.2" id="bH7-kU-YP0"/>
                                         <constraint firstItem="Jjk-E4-ivj" firstAttribute="leading" secondItem="vVb-Bq-Egv" secondAttribute="trailing" id="cHx-BA-uEt"/>
                                         <constraint firstItem="Jjk-E4-ivj" firstAttribute="centerY" secondItem="r58-Ar-r4y" secondAttribute="centerY" id="eUO-So-bh1"/>
                                         <constraint firstItem="vVb-Bq-Egv" firstAttribute="centerY" secondItem="r58-Ar-r4y" secondAttribute="centerY" id="qGh-tg-9PR"/>
