@@ -7,6 +7,11 @@
 
 import Foundation
 import UIKit
+
+
+extension UIColor {
+    static var colorWall : UIColor { return UIColor.init(red: CGFloat(249/255), green: CGFloat(226/255), blue: CGFloat(149.0/255), alpha: CGFloat(1.0)) }
+}
 /*
  Colors
  */
@@ -20,6 +25,16 @@ let colorAllowedCell = UIColor.systemGray
 
 /*
  Const
+ 
+ 
+ let colorBorder = UIColor.init(red: 90, green: 48, blue: 52, alpha: 1.0) //90 48 52
+ let colorCell = UIColor.init(red: 44, green: 44, blue: 44, alpha: 1.0) //44 44 44
+ let colorWall = UIColor.init(red: 249, green: 226, blue: 149, alpha: 1.0) //249 226 149
+ let colorWallDeselected = UIColor.init(red: 249, green: 226, blue: 149, alpha: 0.8) //249 226 149
+ let colorEmptyWall = UIColor.init(red: 90, green: 48, blue: 52, alpha: 1.0) //90 48 52
+ let colorPlayerPawn = UIColor.init(red: 245, green: 217, blue: 154, alpha: 1.0) //245 217 154
+ let colorOpponentPawn = UIColor.init(red: 85, green: 44, blue: 40, alpha: 1.0) // 85 44 40
+ let colorAllowedCell = UIColor.init(red: 245, green: 217, blue: 154, alpha: 0.8)
  */
 
 let numberOfCellPerRow = 9

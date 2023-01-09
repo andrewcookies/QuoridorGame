@@ -12,7 +12,6 @@
             <connections>
                 <outlet property="boardContainer" destination="b4R-0R-Ysr" id="mxv-cx-Oqb"/>
                 <outlet property="boardView" destination="4BY-B1-Mzp" id="wqt-dX-zJ3"/>
-                <outlet property="opponentWallContainer" destination="CCS-LK-9Zz" id="Cno-hO-bFj"/>
                 <outlet property="playerWallContaier" destination="XiH-cl-RXc" id="j2d-mQ-uGb"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -26,21 +25,17 @@
                     <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4R-0R-Ysr" userLabel="BoardContainer">
-                            <rect key="frame" x="0.0" y="100" width="393" height="559"/>
+                            <rect key="frame" x="0.0" y="80" width="393" height="579"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CCS-LK-9Zz" userLabel="OpponentWallsContainer">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="98"/>
-                                    <color key="backgroundColor" systemColor="systemBrownColor"/>
-                                </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4BY-B1-Mzp" userLabel="boardView">
-                                    <rect key="frame" x="15" y="98" width="363" height="363"/>
+                                    <rect key="frame" x="15" y="0.0" width="363" height="363"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="4BY-B1-Mzp" secondAttribute="height" multiplier="1:1" id="KeZ-bo-MTc"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XiH-cl-RXc" userLabel="PlayerWallsContainer">
-                                    <rect key="frame" x="0.0" y="461" width="393" height="98"/>
+                                    <rect key="frame" x="0.0" y="363" width="393" height="216"/>
                                     <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 </view>
                             </subviews>
@@ -48,24 +43,19 @@
                             <constraints>
                                 <constraint firstItem="4BY-B1-Mzp" firstAttribute="centerX" secondItem="b4R-0R-Ysr" secondAttribute="centerX" id="9yI-Qe-UwO"/>
                                 <constraint firstAttribute="trailing" secondItem="XiH-cl-RXc" secondAttribute="trailing" id="Dw8-mO-y5S"/>
-                                <constraint firstItem="4BY-B1-Mzp" firstAttribute="centerY" secondItem="b4R-0R-Ysr" secondAttribute="centerY" id="Ga3-MI-LYi"/>
                                 <constraint firstAttribute="trailing" secondItem="4BY-B1-Mzp" secondAttribute="trailing" constant="15" id="KGa-jL-Ykl"/>
                                 <constraint firstItem="XiH-cl-RXc" firstAttribute="top" secondItem="4BY-B1-Mzp" secondAttribute="bottom" id="QfV-84-GK4"/>
                                 <constraint firstAttribute="bottom" secondItem="XiH-cl-RXc" secondAttribute="bottom" id="SCe-7h-FNh"/>
-                                <constraint firstItem="CCS-LK-9Zz" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="top" id="Tof-At-4xZ"/>
                                 <constraint firstItem="4BY-B1-Mzp" firstAttribute="leading" secondItem="b4R-0R-Ysr" secondAttribute="leading" constant="15" id="a09-9M-sbd"/>
                                 <constraint firstItem="XiH-cl-RXc" firstAttribute="leading" secondItem="b4R-0R-Ysr" secondAttribute="leading" id="hdf-2H-4Eg"/>
-                                <constraint firstAttribute="trailing" secondItem="CCS-LK-9Zz" secondAttribute="trailing" id="npT-Kw-ZIz"/>
-                                <constraint firstItem="CCS-LK-9Zz" firstAttribute="leading" secondItem="b4R-0R-Ysr" secondAttribute="leading" id="pAO-Aq-3TT"/>
-                                <constraint firstItem="4BY-B1-Mzp" firstAttribute="top" secondItem="CCS-LK-9Zz" secondAttribute="bottom" id="wPI-Qc-3m0"/>
+                                <constraint firstItem="4BY-B1-Mzp" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="top" id="uqq-9H-Hdz"/>
                             </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="width" secondItem="NVo-dM-xlz" secondAttribute="width" id="6Ey-eg-0Be"/>
-                        <constraint firstItem="b4R-0R-Ysr" firstAttribute="centerY" secondItem="NVo-dM-xlz" secondAttribute="centerY" id="WRb-th-z7b"/>
-                        <constraint firstItem="b4R-0R-Ysr" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" constant="100" id="dbc-3z-cjK"/>
+                        <constraint firstItem="b4R-0R-Ysr" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" constant="80" id="dbc-3z-cjK"/>
                         <constraint firstAttribute="bottom" secondItem="b4R-0R-Ysr" secondAttribute="bottom" constant="100" id="e6m-Yn-PuL"/>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="centerX" secondItem="NVo-dM-xlz" secondAttribute="centerX" id="ikh-jm-3On"/>
                     </constraints>
@@ -88,9 +78,6 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemBrownColor">
-            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

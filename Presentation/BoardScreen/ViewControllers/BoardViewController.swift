@@ -25,7 +25,6 @@ class BoardViewController: UIViewController {
 
     
     @IBOutlet weak var boardContainer: UIView!
-    @IBOutlet weak var opponentWallContainer: UIView!
     @IBOutlet weak var playerWallContaier: UIView!
     
     @IBOutlet private var boardView : UIView!
@@ -39,7 +38,6 @@ class BoardViewController: UIViewController {
     private var indexPawn = 0
     private var indexWall = 0
     
-    private var opponentAvailableWalls : [WallView] = []
     private var playerAvailableWalls : [WallView] = []
     
     
@@ -124,21 +122,8 @@ extension BoardViewController : BoardViewControllerProtocol {
         
         let wallWidth = Int(Double(cellWidth) * 0.10 * 2)
         let wallHeight = Int(cellWidth*2 - wallWidth*2)
-        let sectionHeight = Int(opponentWallContainer.frame.height)
-        for rowId in 0...numberWallPerPlayer {
-            let x = (rowId*cellWidth) + 15 - (wallWidth/2)
-            let v = UIView(frame: CGRect(x: x, y: 0, width: wallWidth, height: sectionHeight))
-            v.backgroundColor = .systemBlue
-            
-            let wall = WallView(frame: CGRect(x: 0, y: 10, width: wallWidth, height: wallHeight))
-            wall.setup(state: .normal)
-            wall.wallIndex = rowId
-            
-            v.addSubview(wall)
-            opponentAvailableWalls.append(wall)
-            opponentWallContainer.addSubview(v)
-        }
-        
+        let sectionHeight = Int(playerWallContaier.frame.height)
+    
         for rowId in 0...numberWallPerPlayer {
             let v = UIView(frame: CGRect(x: ((rowId*cellWidth) + 15 - (wallWidth/2)), y: 0, width: wallWidth, height: sectionHeight))
             v.backgroundColor = .systemBlue
@@ -184,10 +169,6 @@ extension BoardViewController : BoardViewControllerProtocol {
                 wall.removeFromSuperview()
                 playerAvailableWalls.forEach({ $0.setup(state: .normal)})
                 gameAction = .noAction
-            }
-        } else {
-            if let wall = opponentAvailableWalls.randomElement() {
-                wall.removeFromSuperview()
             }
         }
         
