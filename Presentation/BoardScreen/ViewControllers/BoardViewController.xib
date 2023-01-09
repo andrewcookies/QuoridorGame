@@ -27,24 +27,24 @@
                     <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zw2-Lp-H3H" userLabel="Opponent dashboard">
-                            <rect key="frame" x="0.0" y="0.0" width="393" height="80"/>
+                            <rect key="frame" x="0.0" y="0.0" width="393" height="100"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="80" id="xS7-tM-sU0"/>
+                                <constraint firstAttribute="height" constant="100" id="xS7-tM-sU0"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4R-0R-Ysr" userLabel="BoardContainer">
-                            <rect key="frame" x="0.0" y="80" width="393" height="599"/>
+                            <rect key="frame" x="0.0" y="100" width="393" height="559"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4BY-B1-Mzp" userLabel="boardView">
-                                    <rect key="frame" x="15" y="0.0" width="363" height="363"/>
+                                    <rect key="frame" x="10" y="0.0" width="373" height="373"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     <constraints>
                                         <constraint firstAttribute="width" secondItem="4BY-B1-Mzp" secondAttribute="height" multiplier="1:1" id="KeZ-bo-MTc"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XiH-cl-RXc" userLabel="PlayerWallsContainer">
-                                    <rect key="frame" x="0.0" y="363" width="393" height="236"/>
+                                    <rect key="frame" x="0.0" y="373" width="393" height="186"/>
                                     <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 </view>
                             </subviews>
@@ -52,19 +52,19 @@
                             <constraints>
                                 <constraint firstItem="4BY-B1-Mzp" firstAttribute="centerX" secondItem="b4R-0R-Ysr" secondAttribute="centerX" id="9yI-Qe-UwO"/>
                                 <constraint firstAttribute="trailing" secondItem="XiH-cl-RXc" secondAttribute="trailing" id="Dw8-mO-y5S"/>
-                                <constraint firstAttribute="trailing" secondItem="4BY-B1-Mzp" secondAttribute="trailing" constant="15" id="KGa-jL-Ykl"/>
+                                <constraint firstAttribute="trailing" secondItem="4BY-B1-Mzp" secondAttribute="trailing" constant="10" id="KGa-jL-Ykl"/>
                                 <constraint firstItem="XiH-cl-RXc" firstAttribute="top" secondItem="4BY-B1-Mzp" secondAttribute="bottom" id="QfV-84-GK4"/>
                                 <constraint firstAttribute="bottom" secondItem="XiH-cl-RXc" secondAttribute="bottom" id="SCe-7h-FNh"/>
-                                <constraint firstItem="4BY-B1-Mzp" firstAttribute="leading" secondItem="b4R-0R-Ysr" secondAttribute="leading" constant="15" id="a09-9M-sbd"/>
+                                <constraint firstItem="4BY-B1-Mzp" firstAttribute="leading" secondItem="b4R-0R-Ysr" secondAttribute="leading" constant="10" id="a09-9M-sbd"/>
                                 <constraint firstItem="XiH-cl-RXc" firstAttribute="leading" secondItem="b4R-0R-Ysr" secondAttribute="leading" id="hdf-2H-4Eg"/>
                                 <constraint firstItem="4BY-B1-Mzp" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="top" id="uqq-9H-Hdz"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-JG-9fs" userLabel="PlayerDashBoard">
-                            <rect key="frame" x="0.0" y="679" width="393" height="80"/>
+                            <rect key="frame" x="0.0" y="659" width="393" height="100"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="80" id="aE7-Rn-shc"/>
+                                <constraint firstAttribute="height" constant="100" id="aE7-Rn-shc"/>
                             </constraints>
                         </view>
                     </subviews>

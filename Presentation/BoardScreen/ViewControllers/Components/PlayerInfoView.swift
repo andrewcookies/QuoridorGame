@@ -44,6 +44,7 @@ class PlayerInfoView: UIView {
         playerNameLabel.text = name
         profileImageView.tintColor = colorPlayerPawn
         profileImageView.tintColor = player == .player1 ? colorPlayerPawn : colorOpponentPawn
+        
         type = player
     }
     

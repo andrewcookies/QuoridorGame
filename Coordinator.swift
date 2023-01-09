@@ -89,6 +89,7 @@ final class Coordinator {
     //MARK: Navigation Actions
     private func startGame(userInfo : UserInfoInterface) {
         let vc = getBoardViewController(userInfo: userInfo)
+        navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.popViewController(animated: false)
         navigationController?.pushViewController(vc, animated: false)
     }

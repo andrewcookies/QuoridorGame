@@ -122,14 +122,15 @@ extension BoardViewController : BoardViewControllerProtocol {
                 }
             }
         }
+        boardView.backgroundColor = colorBorder
         
         let wallWidth = Int(Double(cellWidth) * 0.10 * 2)
         let wallHeight = Int(cellWidth*2 - wallWidth*2)
         let sectionHeight = Int(playerWallContaier.frame.height)
     
         for rowId in 0...numberWallPerPlayer {
-            let v = UIView(frame: CGRect(x: ((rowId*cellWidth) + 15 - (wallWidth/2)), y: 0, width: wallWidth, height: sectionHeight))
-            v.backgroundColor = .systemBlue
+            let v = UIView(frame: CGRect(x: ((rowId*cellWidth) + 10 - (wallWidth/2)), y: 0, width: wallWidth, height: sectionHeight))
+            v.backgroundColor = colorEmptyWall
             
             
             let wall = WallView(frame: CGRect(x: 0, y: 10, width: wallWidth, height: wallHeight))
@@ -140,7 +141,9 @@ extension BoardViewController : BoardViewControllerProtocol {
             v.addSubview(wall)
             playerAvailableWalls.append(wall)
             playerWallContaier.addSubview(v)
+            playerWallContaier.backgroundColor = colorCell
         }
+        boardContainer.backgroundColor = colorEmptyWall
         
         if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
             playerView.frame = CGRect(x: 0, y: 0, width: playerInfoView.frame.width, height: playerInfoView.frame.height)

@@ -43,7 +43,7 @@ class WallView: UIView {
         currentState = state
         switch state {
         case .normal:
-            backgroundColor = UIColor.colorWall
+            backgroundColor = colorWall
         case .removed:
             backgroundColor = colorEmptyWall
         case .disabled:
