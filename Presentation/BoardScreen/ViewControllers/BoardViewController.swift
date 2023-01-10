@@ -49,7 +49,11 @@ class BoardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        
         viewModel?.startMatch()
+        
+        
     }
 
     
@@ -62,6 +66,19 @@ class BoardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setupUI(){
+        opponentInfoView.layer.cornerRadius = 4
+        opponentInfoView.clipsToBounds = true
+
+        playerInfoView.layer.cornerRadius = 4
+        playerInfoView.clipsToBounds = true
+
+        boardContainer.layer.cornerRadius = 4
+        boardContainer.clipsToBounds = true
+
+        
+    }
+    
     private func updateBoardAllowedPawnCells(allowed : Bool){
         for c in allowedCells {
             if let pawnCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == c.position  }).first as? BoardCellView {
@@ -71,6 +88,10 @@ class BoardViewController: UIViewController {
     }
 
 }
+
+
+
+
 
 extension BoardViewController : BoardViewControllerProtocol {
     func handelEvent(gameEvent: GameEvent) {
