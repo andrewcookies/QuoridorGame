@@ -47,13 +47,11 @@ class PlayerInfoView: UIView {
         rootView.clipsToBounds = true
     }
     
+    
     func setup(name : String, player : PlayerType){
         playerNameLabel.text = name
-        profileImageView.tintColor = colorPlayerPawn
-        profileImageView.tintColor = player == .player1 ? colorPlayerPawn : colorOpponentPawn
-        rootView.backgroundColor = colorCell
-        outerRootView.backgroundColor =  player == .player1 ? colorPlayerPawn : colorOpponentPawn
         type = player
+        setupUI(type: player)
     }
     
     private func setupInfo(state : GameAction){
@@ -69,5 +67,13 @@ class PlayerInfoView: UIView {
                 playerInfoLabel.text = "*Select a wall or tap the pawn to move it"
             }
         }
+    }
+    
+    private func setupUI(type : PlayerType){
+        profileImageView.tintColor = colorPlayerPawn
+        profileImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
+        timerImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
+        rootView.backgroundColor = colorCell
+        outerRootView.backgroundColor =  type == .player1 ? colorPlayerPawn : colorOpponentPawn
     }
 }
