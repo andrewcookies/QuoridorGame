@@ -11,10 +11,16 @@ class LoginViewController: UIViewController {
 
     private var viewModel : LoginViewModelProtocol?
     
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var playerNameTextField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         playerNameTextField.delegate = self
+        playerNameTextField.backgroundColor = mainColor
+        
+        titleLabel.text = "Quoridor"
+        titleLabel.textColor = colorEmptyWall
     }
 
     init(viewModel: LoginViewModelProtocol?) {
