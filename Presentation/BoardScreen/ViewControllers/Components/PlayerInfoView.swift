@@ -14,7 +14,9 @@ protocol PlayerInfoViewDelegate : AnyObject {
 class PlayerInfoView: UIView {
     
     private var type : PlayerType = .player1
-
+    @IBOutlet weak var rootView: UIView!
+    @IBOutlet weak var outerRootView: UIView!
+    
     @IBOutlet weak var playerInfoLabel: QLabel!
     @IBOutlet weak var playerNameLabel: QLabel!
     @IBOutlet weak var profileImageView: UIImageView!
@@ -40,11 +42,17 @@ class PlayerInfoView: UIView {
         return view
     }
     
+    override func layoutSubviews() {
+        rootView.layer.cornerRadius = 4
+        rootView.clipsToBounds = true
+    }
+    
     func setup(name : String, player : PlayerType){
         playerNameLabel.text = name
         profileImageView.tintColor = colorPlayerPawn
         profileImageView.tintColor = player == .player1 ? colorPlayerPawn : colorOpponentPawn
-        
+        rootView.backgroundColor = colorCell
+        outerRootView.backgroundColor =  player == .player1 ? colorPlayerPawn : colorOpponentPawn
         type = player
     }
     

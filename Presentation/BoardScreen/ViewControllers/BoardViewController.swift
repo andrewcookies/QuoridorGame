@@ -73,8 +73,11 @@ class BoardViewController: UIViewController {
         playerInfoView.layer.cornerRadius = 4
         playerInfoView.clipsToBounds = true
 
+        boardContainer.backgroundColor = colorCell
         boardContainer.layer.cornerRadius = 4
         boardContainer.clipsToBounds = true
+        
+        boardView.backgroundColor = colorBorder
 
         
     }
@@ -143,7 +146,7 @@ extension BoardViewController : BoardViewControllerProtocol {
                 }
             }
         }
-        boardView.backgroundColor = colorBorder
+        
         
         let wallWidth = Int(Double(cellWidth) * 0.10 * 2)
         let wallHeight = Int(cellWidth*2 - wallWidth*2)
@@ -164,7 +167,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerWallContaier.addSubview(v)
             playerWallContaier.backgroundColor = colorCell
         }
-        boardContainer.backgroundColor = colorEmptyWall
+        
         
         if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
             playerView.frame = CGRect(x: 0, y: 0, width: playerInfoView.frame.width, height: playerInfoView.frame.height)

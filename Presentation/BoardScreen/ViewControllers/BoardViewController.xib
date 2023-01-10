@@ -27,14 +27,14 @@
                     <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zw2-Lp-H3H" userLabel="Opponent dashboard">
-                            <rect key="frame" x="5" y="0.0" width="383" height="100"/>
+                            <rect key="frame" x="5" y="5" width="383" height="100"/>
                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="100" id="xS7-tM-sU0"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b4R-0R-Ysr" userLabel="BoardContainer">
-                            <rect key="frame" x="5" y="105" width="383" height="544"/>
+                            <rect key="frame" x="5" y="110" width="383" height="539"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4BY-B1-Mzp" userLabel="boardView">
                                     <rect key="frame" x="10" y="0.0" width="363" height="363"/>
@@ -44,7 +44,7 @@
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XiH-cl-RXc" userLabel="PlayerWallsContainer">
-                                    <rect key="frame" x="0.0" y="363" width="383" height="181"/>
+                                    <rect key="frame" x="0.0" y="363" width="383" height="176"/>
                                     <color key="backgroundColor" systemColor="systemGreenColor"/>
                                 </view>
                             </subviews>
@@ -68,12 +68,12 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <color key="backgroundColor" red="0.32156862745098036" green="0.31372549019607843" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" constant="5" id="3HD-3O-fNa"/>
                         <constraint firstAttribute="trailing" secondItem="b4R-0R-Ysr" secondAttribute="trailing" constant="5" id="5BN-zO-Co9"/>
                         <constraint firstItem="Zw2-Lp-H3H" firstAttribute="leading" secondItem="NVo-dM-xlz" secondAttribute="leading" constant="5" id="7kq-wT-KpP"/>
-                        <constraint firstItem="Zw2-Lp-H3H" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" id="Cdt-Oe-xYJ"/>
+                        <constraint firstItem="Zw2-Lp-H3H" firstAttribute="top" secondItem="NVo-dM-xlz" secondAttribute="top" constant="5" id="Cdt-Oe-xYJ"/>
                         <constraint firstItem="JYp-JG-9fs" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="bottom" constant="5" id="HNf-vJ-mDu"/>
                         <constraint firstAttribute="trailing" secondItem="JYp-JG-9fs" secondAttribute="trailing" constant="5" id="MkL-9G-ZmF"/>
                         <constraint firstAttribute="bottom" secondItem="JYp-JG-9fs" secondAttribute="bottom" constant="5" id="UXx-wb-0c8"/>

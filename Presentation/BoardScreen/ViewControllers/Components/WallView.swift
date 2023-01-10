@@ -47,7 +47,7 @@ class WallView: UIView {
         case .removed:
             backgroundColor = colorEmptyWall
         case .disabled:
-            backgroundColor = colorWall.withAlphaComponent(0.7)
+            backgroundColor = colorWall.withAlphaComponent(0.4)
         }
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapView)))
 

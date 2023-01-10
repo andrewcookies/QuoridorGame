@@ -15,13 +15,13 @@ extension UIColor {
 /*
  Colors
  */
-let colorBorder = UIColor.init(red: 44/255, green: 44/255, blue: 44/255, alpha: 1.0)//UIColor.init(red: 90/255, green: 48/255, blue: 52/255, alpha: 1.0)
+let colorBorder = UIColor.init(red: 44/255, green: 44/255, blue: 44/255, alpha: 1.0)//UIColor.init(red: 249/255, green: 226/255, blue: 149/255, alpha: 1.0)//UIColor.init(red: 44/255, green: 44/255, blue: 44/255, alpha: 1.0)//UIColor.init(red: 90/255, green: 48/255, blue: 52/255, alpha: 1.0)
 let colorCell = UIColor.init(red: 44/255, green: 44/255, blue: 44/255, alpha: 1.0)
 let colorWall = UIColor.init(red: 249/255, green: 226/255, blue: 149/255, alpha: 1.0)
 let colorEmptyWall = UIColor.init(red: 90/255, green: 48/255, blue: 52/255, alpha: 1.0)
-let colorPlayerPawn = UIColor.init(red: 244/255, green: 208/255, blue: 147/255, alpha: 1.0)
+let colorPlayerPawn = UIColor.init(red: 227/255, green: 150/255, blue: 60/255, alpha: 1.0)
 let colorOpponentPawn = UIColor.init(red: 186/255, green: 66/255, blue: 89/255, alpha: 1.0)
-let colorAllowedCell = UIColor.init(red: 244/255, green: 208/255, blue: 147/255, alpha: 0.6)
+let colorAllowedCell = UIColor.init(red: 244/255, green: 208/255, blue: 147/255, alpha: 0.4)
 
 /*
  Const
