@@ -24,6 +24,11 @@ enum GameAction {
 class BoardViewController: UIViewController {
 
     
+    @IBOutlet weak var rootView: UIView!
+    @IBOutlet weak var optionScreenHeight: NSLayoutConstraint!
+    @IBOutlet weak var upperScreenHeight: NSLayoutConstraint!
+    @IBOutlet weak var middleScreenHeight: NSLayoutConstraint!
+    
     @IBOutlet weak var boardContainer: UIView!
     @IBOutlet weak var playerWallContaier: UIView!
     @IBOutlet weak var playerInfoView: PlayerInfoView!
@@ -66,7 +71,27 @@ class BoardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func setDimensions(){
+        
+        let screenHeight = rootView.frame.height
+
+        let boardWidth = boardView.frame.width//screenWidth
+        let wallHeight = (boardWidth / CGFloat(numberOfCellPerRow))*2
+        let boardHeight = boardWidth + wallHeight
+        
+        let optionHeight = CGFloat(20)
+        
+        let infoHeight = screenHeight*0.10
+        
+        optionScreenHeight.constant = optionHeight
+        upperScreenHeight.constant = infoHeight
+        middleScreenHeight.constant = boardHeight
+    }
+    
     private func setupUI(){
+        
+        setDimensions()
+        
         opponentInfoView.layer.cornerRadius = 4
         opponentInfoView.clipsToBounds = true
 
