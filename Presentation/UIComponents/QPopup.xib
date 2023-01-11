@@ -8,7 +8,17 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QPopupViewController" customModule="QuoridorGame" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="QPopupViewController" customModule="QuoridorGame" customModuleProvider="target">
+            <connections>
+                <outlet property="contentPopupLabel" destination="a1D-EW-tny" id="2ia-LH-bY0"/>
+                <outlet property="innerRoot" destination="0HT-SC-NZk" id="Xnx-ce-YgG"/>
+                <outlet property="leftButtonLabel" destination="Tpr-Ob-QzA" id="qyT-GJ-BZF"/>
+                <outlet property="rightButtonLabel" destination="utg-tt-BRD" id="7xM-Bo-vLl"/>
+                <outlet property="root" destination="ioy-Zd-GwB" id="HhW-in-dmf"/>
+                <outlet property="titlePopupLabel" destination="qAf-56-bov" id="aMI-To-zvJ"/>
+                <outlet property="view" destination="iN0-l3-epB" id="mqn-0V-Dzv"/>
+            </connections>
+        </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
             <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
@@ -20,13 +30,13 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0HT-SC-NZk" userLabel="root">
                             <rect key="frame" x="5" y="5" width="225.66666666666666" height="170.66666666666666"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAf-56-bov" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAf-56-bov" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
                                     <rect key="frame" x="10" y="9.9999999999999982" width="205.66666666666666" height="20.333333333333329"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1D-EW-tny" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1D-EW-tny" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
                                     <rect key="frame" x="10" y="60.333333333333378" width="205.66666666666666" height="20.333333333333336"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -35,18 +45,69 @@
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="MlE-Kv-x7c">
                                     <rect key="frame" x="10" y="130.66666666666669" width="205.66666666666666" height="30"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tpr-Ob-QzA" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fq8-6D-GkZ">
                                             <rect key="frame" x="0.0" y="0.0" width="103" height="30"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="utg-tt-BRD" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tpr-Ob-QzA" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="103" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fl1-JV-ajW">
+                                                    <rect key="frame" x="0.0" y="0.0" width="103" height="30"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain"/>
+                                                    <connections>
+                                                        <action selector="leftButtonTapped:" destination="-1" eventType="touchUpInside" id="tbX-EO-RMV"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="Tpr-Ob-QzA" secondAttribute="bottom" id="5qX-HB-ELD"/>
+                                                <constraint firstAttribute="bottom" secondItem="Fl1-JV-ajW" secondAttribute="bottom" id="F8d-DC-qpW"/>
+                                                <constraint firstAttribute="trailing" secondItem="Tpr-Ob-QzA" secondAttribute="trailing" id="Imq-MG-TWc"/>
+                                                <constraint firstItem="Tpr-Ob-QzA" firstAttribute="top" secondItem="fq8-6D-GkZ" secondAttribute="top" id="UDH-i6-x2p"/>
+                                                <constraint firstItem="Fl1-JV-ajW" firstAttribute="leading" secondItem="fq8-6D-GkZ" secondAttribute="leading" id="XBI-uy-bCL"/>
+                                                <constraint firstItem="Fl1-JV-ajW" firstAttribute="top" secondItem="fq8-6D-GkZ" secondAttribute="top" id="cKj-aM-ebc"/>
+                                                <constraint firstItem="Tpr-Ob-QzA" firstAttribute="leading" secondItem="fq8-6D-GkZ" secondAttribute="leading" id="j2W-LF-47j"/>
+                                                <constraint firstAttribute="trailing" secondItem="Fl1-JV-ajW" secondAttribute="trailing" id="syJ-qZ-sVz"/>
+                                            </constraints>
+                                        </view>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KsJ-qC-bUn">
                                             <rect key="frame" x="102.99999999999997" y="0.0" width="102.66666666666666" height="30"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="utg-tt-BRD" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IVv-q1-qdG">
+                                                    <rect key="frame" x="0.0" y="0.0" width="102.66666666666667" height="30"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain"/>
+                                                    <connections>
+                                                        <action selector="rightButtonTapped:" destination="-1" eventType="touchUpInside" id="TB6-b3-ez3"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstItem="utg-tt-BRD" firstAttribute="leading" secondItem="KsJ-qC-bUn" secondAttribute="leading" id="5Rv-E4-H8r"/>
+                                                <constraint firstItem="IVv-q1-qdG" firstAttribute="leading" secondItem="KsJ-qC-bUn" secondAttribute="leading" id="HyX-si-AhT"/>
+                                                <constraint firstItem="utg-tt-BRD" firstAttribute="top" secondItem="KsJ-qC-bUn" secondAttribute="top" id="R5B-i2-JkB"/>
+                                                <constraint firstAttribute="trailing" secondItem="utg-tt-BRD" secondAttribute="trailing" id="hkO-Kc-0wQ"/>
+                                                <constraint firstAttribute="trailing" secondItem="IVv-q1-qdG" secondAttribute="trailing" id="lyX-xR-KbL"/>
+                                                <constraint firstItem="IVv-q1-qdG" firstAttribute="top" secondItem="KsJ-qC-bUn" secondAttribute="top" id="saI-cX-jMQ"/>
+                                                <constraint firstAttribute="bottom" secondItem="IVv-q1-qdG" secondAttribute="bottom" id="vsV-hK-jCk"/>
+                                                <constraint firstAttribute="bottom" secondItem="utg-tt-BRD" secondAttribute="bottom" id="xXe-Xp-cZj"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="2iF-Zu-0rT"/>
@@ -78,7 +139,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="ioy-Zd-GwB" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="J8x-8g-B5r"/>
@@ -86,14 +147,6 @@
                 <constraint firstItem="ioy-Zd-GwB" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" multiplier="0.6" id="g9c-iW-dyg"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <connections>
-                <outlet property="contentPopupLabel" destination="a1D-EW-tny" id="LXT-Et-6kr"/>
-                <outlet property="innerRoot" destination="0HT-SC-NZk" id="P5X-At-0z0"/>
-                <outlet property="leftButtonLabel" destination="Tpr-Ob-QzA" id="y6A-Lr-qAW"/>
-                <outlet property="rightButtonLabel" destination="utg-tt-BRD" id="7fm-xS-ZGg"/>
-                <outlet property="root" destination="ioy-Zd-GwB" id="x1l-S3-dFE"/>
-                <outlet property="titlePopupLabel" destination="qAf-56-bov" id="qvP-PK-Itb"/>
-            </connections>
             <point key="canvasLocation" x="-34" y="20"/>
         </view>
     </objects>

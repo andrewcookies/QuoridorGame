@@ -79,7 +79,7 @@ class BoardViewController: UIViewController {
         let wallHeight = (boardWidth / CGFloat(numberOfCellPerRow))*2
         let boardHeight = boardWidth + wallHeight
         
-        let optionHeight = CGFloat(20)
+        let optionHeight = CGFloat(25)
         
         let infoHeight = screenHeight*0.10
         
@@ -114,7 +114,43 @@ class BoardViewController: UIViewController {
             }
         }
     }
+    
+    private func getPopup(type : PopupType) -> QPopupViewController {
+        let vc = QPopupViewController()
+        vc.type = type
+        vc.delegate = self
+        vc.modalTransitionStyle = .crossDissolve
+        vc.modalPresentationStyle = .overFullScreen
+        return vc
+    }
+    
+    //MARK: Actions
+    
+    @IBAction func infoTapped(_ sender: UIButton) {
+        let vc = getPopup(type : .rules)
+        self.present(vc, animated: true)
+    }
+    
+    @IBAction func closeTapped(_ sender: UIButton) {
+        let vc = getPopup(type : .quitMatch)
+        self.present(vc, animated: true)
+    }
 
+}
+
+extension BoardViewController : PopupDelegate {
+    func acceptQuitMatch() {
+        viewModel?.quitMatch()
+    }
+    
+    func acceptLostMatch() {
+        viewModel?.close()
+    }
+    
+    func acceptWonMatch() {
+        viewModel?.close()
+    }
+    
 }
 
 
@@ -129,9 +165,13 @@ extension BoardViewController : BoardViewControllerProtocol {
         case .waitingOpponentMove:
             break
         case .matchWon:
-            break
+            let popup = getPopup(type: .wonMatch)
+            self.present(popup, animated: true)
+            
         case .matchLost:
-            break
+            let popup = getPopup(type: .lostMatch)
+            self.present(popup, animated: true)
+            
         case .updateBoard:
             break
         case .error:
@@ -143,11 +183,13 @@ extension BoardViewController : BoardViewControllerProtocol {
         case .invalidPawn:
             break
         case .noEvent:
+            //Everything is all right, no error
             break
         case .searchingOpponents:
             break
         case .endGame:
-            break
+            //When I quit the match
+            viewModel?.close()
         case .joiningMatch:
             break
         }

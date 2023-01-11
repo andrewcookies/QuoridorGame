@@ -35,9 +35,60 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ilL-sa-S3z" userLabel="optionScreen">
                                     <rect key="frame" x="0.0" y="0.0" width="393" height="20"/>
+                                    <subviews>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="info" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="4Ve-HL-PCM">
+                                            <rect key="frame" x="10" y="2.3333333333333321" width="20" height="14.666666666666668"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="4Ve-HL-PCM" secondAttribute="height" multiplier="1:1" id="40d-Pn-AQG"/>
+                                            </constraints>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BvC-2K-Vma">
+                                            <rect key="frame" x="10" y="0.0" width="20" height="20"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain"/>
+                                            <connections>
+                                                <action selector="infoTapped:" destination="-1" eventType="touchUpInside" id="96M-r0-Gvn"/>
+                                            </connections>
+                                        </button>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="xmark" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="EJE-wn-epO">
+                                            <rect key="frame" x="363" y="2.6666666666666634" width="20" height="15"/>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" secondItem="EJE-wn-epO" secondAttribute="height" multiplier="1:1" id="poe-LM-8Nk"/>
+                                            </constraints>
+                                        </imageView>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WZ0-gN-ne7">
+                                            <rect key="frame" x="363" y="0.0" width="20" height="20"/>
+                                            <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <state key="normal" title="Button"/>
+                                            <buttonConfiguration key="configuration" style="plain"/>
+                                            <connections>
+                                                <action selector="closeTapped:" destination="-1" eventType="touchUpInside" id="6kz-HV-4U2"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
+                                        <constraint firstItem="BvC-2K-Vma" firstAttribute="height" secondItem="4Ve-HL-PCM" secondAttribute="height" id="2Mz-lR-Yu4"/>
+                                        <constraint firstItem="BvC-2K-Vma" firstAttribute="width" secondItem="4Ve-HL-PCM" secondAttribute="width" id="6wH-sz-6Mi"/>
+                                        <constraint firstAttribute="bottom" secondItem="4Ve-HL-PCM" secondAttribute="bottom" id="AXA-EY-6fr"/>
+                                        <constraint firstItem="EJE-wn-epO" firstAttribute="top" secondItem="ilL-sa-S3z" secondAttribute="top" id="Au3-CR-v7i"/>
                                         <constraint firstAttribute="height" constant="20" id="Cks-by-L6n"/>
+                                        <constraint firstItem="WZ0-gN-ne7" firstAttribute="height" secondItem="EJE-wn-epO" secondAttribute="height" id="FqX-Mf-D0D"/>
+                                        <constraint firstItem="4Ve-HL-PCM" firstAttribute="leading" secondItem="ilL-sa-S3z" secondAttribute="leading" constant="10" id="G16-8l-AO5"/>
+                                        <constraint firstItem="BvC-2K-Vma" firstAttribute="centerY" secondItem="4Ve-HL-PCM" secondAttribute="centerY" id="Go5-59-tbX"/>
+                                        <constraint firstItem="BvC-2K-Vma" firstAttribute="centerX" secondItem="4Ve-HL-PCM" secondAttribute="centerX" id="Jhw-Co-DiE"/>
+                                        <constraint firstItem="WZ0-gN-ne7" firstAttribute="width" secondItem="EJE-wn-epO" secondAttribute="width" id="LVK-un-UTj"/>
+                                        <constraint firstItem="EJE-wn-epO" firstAttribute="centerY" secondItem="ilL-sa-S3z" secondAttribute="centerY" id="SYf-a6-kPh"/>
+                                        <constraint firstItem="4Ve-HL-PCM" firstAttribute="centerY" secondItem="ilL-sa-S3z" secondAttribute="centerY" id="Tp0-UD-a29"/>
+                                        <constraint firstAttribute="trailing" secondItem="EJE-wn-epO" secondAttribute="trailing" constant="10" id="Y2G-3G-SmF"/>
+                                        <constraint firstItem="WZ0-gN-ne7" firstAttribute="centerX" secondItem="EJE-wn-epO" secondAttribute="centerX" id="hL3-Xg-CUg"/>
+                                        <constraint firstItem="4Ve-HL-PCM" firstAttribute="top" secondItem="ilL-sa-S3z" secondAttribute="top" id="jeI-Yj-xRT"/>
+                                        <constraint firstAttribute="bottom" secondItem="EJE-wn-epO" secondAttribute="bottom" id="qa9-DT-zzO"/>
+                                        <constraint firstItem="WZ0-gN-ne7" firstAttribute="centerY" secondItem="EJE-wn-epO" secondAttribute="centerY" id="trF-TC-Mbf"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yiw-HF-77n" userLabel="upperScreen">
@@ -138,6 +189,8 @@
         </view>
     </objects>
     <resources>
+        <image name="info" catalog="system" width="93" height="128"/>
+        <image name="xmark" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

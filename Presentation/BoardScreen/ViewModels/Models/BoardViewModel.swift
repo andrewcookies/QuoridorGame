@@ -14,11 +14,16 @@ protocol BoardViewModelProtocol {
     func quitMatch()
     func startMatch()
     func allowedPawnMoves() -> [Pawn]
+    func close()
 }
 
+struct BoardViewNavigation {
+    let close : () -> ()
+}
 
 final class BoardViewModel {
     
+    private var navigation : BoardViewNavigation
     private var useCases : GameOutputUseCaseProtocol
     private var matchmakingUseCase : MatchMakingUseCaseProtocol
     private var boardFactory : BoardFactoryInterface
@@ -27,9 +32,11 @@ final class BoardViewModel {
     
     private var subscribers: [AnyCancellable] = []
     
-    init(useCases: GameOutputUseCaseProtocol,
+    init(navigation : BoardViewNavigation,
+         useCases: GameOutputUseCaseProtocol,
          matchmakingUseCase : MatchMakingUseCaseProtocol,
          boardFactory : BoardFactoryInterface) {
+        self.navigation = navigation
         self.useCases = useCases
         self.matchmakingUseCase = matchmakingUseCase
         self.boardFactory = boardFactory
@@ -38,6 +45,10 @@ final class BoardViewModel {
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
+    func close() {
+        navigation.close()
+    }
+    
     func allowedPawnMoves() -> [Pawn] {
         return useCases.allowedPawnMoves()
     }

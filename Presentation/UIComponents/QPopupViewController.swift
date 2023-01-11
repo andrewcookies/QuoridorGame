@@ -34,11 +34,14 @@ class QPopupViewController: UIViewController {
     
     weak var delegate : PopupDelegate?
     
-    var type : PopupType = .rules {
-        didSet {
-            setup(type: type)
-        }
-        
+    var type : PopupType = .rules
+    
+    init() {
+        super.init(nibName: String(describing: "QPopup"), bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -51,67 +54,60 @@ class QPopupViewController: UIViewController {
         
         innerRoot.layer.cornerRadius = 4
         innerRoot.clipsToBounds = true
+        
+        
+        setup()
     }
 
-    func setup(type : PopupType){
+    func setup(){
         switch type {
         case .wonMatch:
             titlePopupLabel.text = "*Congratulations"
             contentPopupLabel.text = "*You won the match!"
             rightButtonLabel.isHidden = true
             leftButtonLabel.text = "*Close"
-            leftButtonLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(confirmMatchWon)))
+            
             
         case .lostMatch:
             titlePopupLabel.text = "*Oh No"
             contentPopupLabel.text = "*You lost the match!"
             rightButtonLabel.isHidden = true
             leftButtonLabel.text = "*Close"
-            leftButtonLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(confirmMatchLost)))
             
         case .quitMatch:
             titlePopupLabel.text = "*Quit the match"
             contentPopupLabel.text = "*You will lost the match. Are you sure?"
             rightButtonLabel.isHidden = false
             leftButtonLabel.text = "*Confirm"
-            leftButtonLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(confirmQuitMatch)))
             rightButtonLabel.text = "*Deny"
-            rightButtonLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(denyQuitMatch)))
             
         case .rules:
             titlePopupLabel.text = "*Quoridor"
             contentPopupLabel.text = "*Rules...."
             rightButtonLabel.isHidden = true
-            leftButtonLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closePopup)))
+            leftButtonLabel.text = "*Got it"
 
         }
     }
-    
-    @objc
-    func confirmMatchWon(){
-        self.dismiss(animated: true)
-        delegate?.acceptWonMatch()
-    }
-    
-    @objc
-    func confirmMatchLost(){
-        self.dismiss(animated: true)
-        delegate?.acceptLostMatch()
-    }
-    
-    @objc
-    func confirmQuitMatch(){
-        self.dismiss(animated: true)
-        delegate?.acceptQuitMatch()
-    }
-    
-    @objc
-    func denyQuitMatch(){
+ 
+    @IBAction func leftButtonTapped(_ sender: UIButton) {
+        switch type {
+        case .wonMatch:
+            delegate?.acceptWonMatch()
+        case .lostMatch:
+            delegate?.acceptLostMatch()
+        case .quitMatch:
+            delegate?.acceptQuitMatch()
+        case .rules:
+            break
+        }
         self.dismiss(animated: true)
     }
     
-    @objc
-    func closePopup(){
+    
+    @IBAction func rightButtonTapped(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
+    
+    
 }

@@ -53,7 +53,11 @@ final class Coordinator {
         
         let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: inputDataLayer, gameFactory: gameFactory)
         
-        let boardViewModel = BoardViewModel(useCases: outputUseCase, matchmakingUseCase: matchMakingUseCase, boardFactory: boardFactory)
+        
+        let navigation = BoardViewNavigation(close: { [weak self] in
+            self?.closeView()
+        })
+        let boardViewModel = BoardViewModel(navigation: navigation, useCases: outputUseCase, matchmakingUseCase: matchMakingUseCase, boardFactory: boardFactory)
         let boardViewController = BoardViewController(viewModel: boardViewModel)
         
         boardViewModel.viewControllerInterface = boardViewController
@@ -92,6 +96,10 @@ final class Coordinator {
         navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.popViewController(animated: false)
         navigationController?.pushViewController(vc, animated: false)
+    }
+    
+    private func closeView(){
+        navigationController?.popViewController(animated: false)
     }
     
     
