@@ -11,7 +11,7 @@ import Foundation
 protocol GameOutputUseCaseProtocol {
     func movePawn(newPawn : Pawn) async -> GameEvent
     func insertWall(wall : Wall) async -> GameEvent
-    func allowedPawnMoves() -> [Pawn]
+    func allowedPawnMoves(pawn : Pawn) -> [Pawn]
     func quitMatch() async -> GameEvent
 }
 

@@ -28,16 +28,16 @@
                                     <rect key="frame" x="0.0" y="0.0" width="112.66666666666667" height="100"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="l7w-vc-aZs">
-                                            <rect key="frame" x="10" y="27" width="50" height="46.666666666666671"/>
+                                            <rect key="frame" x="10" y="35" width="33.666666666666664" height="30.666666666666671"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" secondItem="l7w-vc-aZs" secondAttribute="height" multiplier="1:1" id="Rp5-RR-MCX"/>
+                                                <constraint firstAttribute="width" secondItem="l7w-vc-aZs" secondAttribute="height" multiplier="1:1" id="BD6-3P-vbD"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
+                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="width" secondItem="DiD-AE-ecF" secondAttribute="width" multiplier="0.3" id="3T6-tM-eV6"/>
                                         <constraint firstItem="l7w-vc-aZs" firstAttribute="leading" secondItem="DiD-AE-ecF" secondAttribute="leading" constant="10" id="XaQ-28-xxC"/>
-                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="height" secondItem="DiD-AE-ecF" secondAttribute="height" multiplier="0.5" id="d4B-6g-GtE"/>
                                         <constraint firstItem="l7w-vc-aZs" firstAttribute="centerY" secondItem="DiD-AE-ecF" secondAttribute="centerY" id="fjb-X7-RV4"/>
                                     </constraints>
                                 </view>
@@ -80,13 +80,13 @@
                                     <rect key="frame" x="450.33333333333331" y="0.0" width="112.66666666666669" height="100"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVb-Bq-Egv">
-                                            <rect key="frame" x="0.0" y="40" width="41.333333333333336" height="20.333333333333329"/>
+                                            <rect key="frame" x="0.0" y="40" width="82.666666666666671" height="20.333333333333329"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timer" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jjk-E4-ivj">
-                                            <rect key="frame" x="41.333333333333371" y="41" width="20" height="18.666666666666671"/>
+                                            <rect key="frame" x="82.666666666666686" y="41" width="20" height="18.666666666666671"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Jjk-E4-ivj" secondAttribute="height" multiplier="1:1" id="fpj-ez-Ai4"/>
                                             </constraints>

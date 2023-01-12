@@ -17,7 +17,7 @@ protocol GameFactoryProtocol {
     func updateWall(wall : Wall) -> Result<Game,GameEvent>
     func updateGame(game : Game)
     func getGame() -> Game
-    func fetchAllowedCurrentPawn() -> [Pawn]
+    func fetchAllowedCurrentPawn(pawn : Pawn) -> [Pawn]
     func createGame() -> Game
     func getPlayerToJoinGame() -> Player
 }
@@ -109,7 +109,6 @@ final class GameFactory {
     }
     
     func checkRing(pawn : Pawn, walls : [Wall], mode : PlayerType) -> Bool {
-        GameLog.shared.debug(message: "checkRing \(pawn.position)", className: "GameFactory")
         if validatePawnMove(pawn: pawn, mode: mode) == .matchWon {
             return false
         }
@@ -342,17 +341,10 @@ extension GameFactory : GameFactoryProtocol {
         return currentGame
     }
     
-    func fetchAllowedCurrentPawn() -> [Pawn] {
-        var mode = PlayerType.player1
-        var player = currentGame.player1
+    func fetchAllowedCurrentPawn(pawn : Pawn) -> [Pawn] {
+        var mode = currentGame.player1.playerId == userInfo.getUserInfo().userId ? PlayerType.player1 : PlayerType.player2
         
-        
-        if currentGame.player2.playerId == userInfo.getUserInfo().userId {
-            player = currentGame.player2
-            mode = .player2
-        }
-        
-        let pawns = fetchAllowedPawn(pawn: player.pawnPosition, walls: currentGame.getTotalWalls(), mode: mode)
+        let pawns = fetchAllowedPawn(pawn: pawn, walls: currentGame.getTotalWalls(), mode: mode)
         return pawns
     }
     

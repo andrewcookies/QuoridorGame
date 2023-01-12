@@ -14,7 +14,7 @@ protocol BoardViewModelProtocol {
     func insertWall(cellIndex: Int, side: BoardCellSide)
     func quitMatch()
     func startMatch()
-    func allowedPawnMoves() -> [Pawn]
+    func allowedPawnMoves(cellIndex : Int) -> [Pawn]
     func close()
 }
 
@@ -54,8 +54,8 @@ extension BoardViewModel : BoardViewModelProtocol {
         navigation.close()
     }
     
-    func allowedPawnMoves() -> [Pawn] {
-        return useCases.allowedPawnMoves()
+    func allowedPawnMoves(cellIndex : Int) -> [Pawn] {
+        return useCases.allowedPawnMoves(pawn : Pawn(position: cellIndex))
     }
     
     func quitMatch() {

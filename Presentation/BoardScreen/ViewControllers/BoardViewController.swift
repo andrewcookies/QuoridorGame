@@ -330,7 +330,7 @@ extension BoardViewController : BoardCellDelegate {
                 allowedCells.removeAll()
                 gameAction = .noAction
             } else {
-                allowedCells = viewModel?.allowedPawnMoves() ?? []
+                allowedCells = viewModel?.allowedPawnMoves(cellIndex: index) ?? []
                 updateBoardAllowedPawnCells(allowed: true)
                 gameAction = .pawnSelected
             }

@@ -22,8 +22,8 @@ final class GameOutputUseCase {
 }
 
 extension GameOutputUseCase : GameOutputUseCaseProtocol {
-    func allowedPawnMoves() -> [Pawn] {
-        return gameFactory.fetchAllowedCurrentPawn()
+    func allowedPawnMoves(pawn : Pawn) -> [Pawn] {
+        return gameFactory.fetchAllowedCurrentPawn(pawn : pawn)
     }
     
     func quitMatch() async -> GameEvent {
@@ -61,7 +61,7 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
         do {
             switch result {
             case .success(let game):
-                GameLog.shared.debug(message: "update wall", className: "GameOutputUseCase")
+                GameLog.shared.debug(message: "update wall - \(game.getTotalWalls())", className: "GameOutputUseCase")
                 try await gameInterface.updateGame(game: game)
                 gameFactory.updateGame(game: game)
                 return .waitingOpponentMove
