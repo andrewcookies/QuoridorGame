@@ -56,7 +56,7 @@ class PlayerInfoView: UIView {
     
     private func setupInfo(state : GameAction){
         if type == .player2 {
-            playerInfoLabel.text = state == .searchMatch ? "- -" : "*Waiting for your move"
+            playerInfoLabel.text = state == .searchMatch ? defaultPlayerName : "*Waiting for your move"
         } else {
             switch state {
             case .wallSelected:

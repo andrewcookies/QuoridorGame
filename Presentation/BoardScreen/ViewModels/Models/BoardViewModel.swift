@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 protocol BoardViewModelProtocol {
+    func getPlayerName() -> String
     func movePawn(cellIndex: Int)
     func insertWall(cellIndex: Int, side: BoardCellSide)
     func quitMatch()
@@ -45,6 +46,10 @@ final class BoardViewModel {
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
+    func getPlayerName() -> String {
+        return boardFactory.getPlayerName()
+    }
+    
     func close() {
         navigation.close()
     }
@@ -97,6 +102,7 @@ extension BoardViewModel : BoardViewModelProtocol {
     func startMatch()  {
         viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
         Task {
+   //         try await Task.sleep(nanoseconds: 4000000000) mock waiting
             let searchResult = await matchmakingUseCase.searchMatch()
             switch searchResult {
             case .success(let gameId):

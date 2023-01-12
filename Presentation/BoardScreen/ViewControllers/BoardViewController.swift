@@ -24,6 +24,8 @@ enum GameAction {
 
 class BoardViewController: UIViewController {
 
+    @IBOutlet weak var loadingSpinner: UIActivityIndicatorView!
+    @IBOutlet weak var loadingView: UIView!
     
     @IBOutlet weak var rootView: UIView!
     @IBOutlet weak var optionScreenHeight: NSLayoutConstraint!
@@ -60,6 +62,16 @@ class BoardViewController: UIViewController {
         viewModel?.startMatch()
         
         
+    }
+    
+    private func startLoading(isLoading : Bool){
+        if isLoading {
+            loadingView.isHidden = false
+            loadingSpinner.startAnimating()
+        } else {
+            loadingView.isHidden = true
+            loadingSpinner.stopAnimating()
+        }
     }
 
     
@@ -104,6 +116,26 @@ class BoardViewController: UIViewController {
         boardContainer.clipsToBounds = true
         
         boardView.backgroundColor = colorBorder
+        
+        loadingView.backgroundColor = mainColor
+        playerWallContaier.backgroundColor = colorBorder
+        
+        //setup players dashboard
+        if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
+            playerView.frame = CGRect(x: 0, y: 0, width: playerInfoView.frame.width, height: playerInfoView.frame.height)
+            playerView.setup(name: viewModel?.getPlayerName() ?? "", player : .player1)
+            playerView.actionState = .searchMatch
+            playerView.delegate = self
+            playerInfoView.addSubview(playerView)
+        }
+        
+        if let opponentView = PlayerInfoView.getView() as? PlayerInfoView {
+            opponentView.frame = CGRect(x: 0, y: 0, width: opponentInfoView.frame.width, height: opponentInfoView.frame.height)
+            opponentView.setup(name: defaultPlayerName, player : .player2)
+            opponentView.actionState = .searchMatch
+            opponentView.delegate = self
+            opponentInfoView.addSubview(opponentView)
+        }
 
         
     }
@@ -194,10 +226,11 @@ extension BoardViewController : BoardViewControllerProtocol {
             if let view = playerInfoView.subviews.first as? PlayerInfoView {
                 view.actionState = .searchMatch
             }
+            startLoading(isLoading: false)
             
         case .endGame:
-            //When I quit the match
             viewModel?.close()
+            
         case .joiningMatch:
             break
         }
@@ -244,21 +277,15 @@ extension BoardViewController : BoardViewControllerProtocol {
         }
         
         
-        if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
-            playerView.frame = CGRect(x: 0, y: 0, width: playerInfoView.frame.width, height: playerInfoView.frame.height)
-            playerView.setup(name: board.player.name, player : .player1)
-            playerView.actionState = .noAction
-            playerView.delegate = self
-            playerInfoView.addSubview(playerView)
+        if let view = opponentInfoView.subviews.first as? PlayerInfoView {
+            view.actionState = .noAction
         }
         
-        if let opponentView = PlayerInfoView.getView() as? PlayerInfoView {
-            opponentView.frame = CGRect(x: 0, y: 0, width: opponentInfoView.frame.width, height: opponentInfoView.frame.height)
-            opponentView.setup(name: board.opponent.name, player : .player2)
-            opponentView.actionState = .noAction
-            opponentView.delegate = self
-            opponentInfoView.addSubview(opponentView)
+        if let view = playerInfoView.subviews.first as? PlayerInfoView {
+            view.actionState = .noAction
         }
+        
+        startLoading(isLoading: false)
     }
     
     func updateOpponentPawn(start: BoardCell, destination: BoardCell) {

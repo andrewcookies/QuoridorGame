@@ -12,6 +12,8 @@
             <connections>
                 <outlet property="boardContainer" destination="b4R-0R-Ysr" id="mxv-cx-Oqb"/>
                 <outlet property="boardView" destination="4BY-B1-Mzp" id="wqt-dX-zJ3"/>
+                <outlet property="loadingSpinner" destination="xOx-B9-gfp" id="FpW-WC-cRQ"/>
+                <outlet property="loadingView" destination="Z09-82-ST8" id="RuG-su-qcK"/>
                 <outlet property="middleScreenHeight" destination="nN1-Jw-MAI" id="kmO-kP-1ln"/>
                 <outlet property="opponentInfoView" destination="Zw2-Lp-H3H" id="FX5-9I-AxO"/>
                 <outlet property="optionScreenHeight" destination="Cks-by-L6n" id="tf1-Qo-oEU"/>
@@ -123,7 +125,7 @@
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XiH-cl-RXc" userLabel="PlayerWallsContainer">
                                                     <rect key="frame" x="0.0" y="363" width="383" height="37"/>
-                                                    <color key="backgroundColor" systemColor="systemGreenColor"/>
+                                                    <color key="backgroundColor" red="0.32156862745098036" green="0.31372549019607843" blue="0.30196078431372547" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </view>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBlueColor"/>
@@ -138,13 +140,32 @@
                                                 <constraint firstItem="4BY-B1-Mzp" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="top" id="uqq-9H-Hdz"/>
                                             </constraints>
                                         </view>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z09-82-ST8">
+                                            <rect key="frame" x="8" y="8" width="377" height="384"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="xOx-B9-gfp">
+                                                    <rect key="frame" x="170" y="173.66666666666669" width="37" height="37"/>
+                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstItem="xOx-B9-gfp" firstAttribute="centerY" secondItem="Z09-82-ST8" secondAttribute="centerY" id="aBo-l1-BIw"/>
+                                                <constraint firstItem="xOx-B9-gfp" firstAttribute="centerX" secondItem="Z09-82-ST8" secondAttribute="centerX" id="rHx-JI-dQK"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="Z09-82-ST8" secondAttribute="bottom" id="8hb-28-m4l"/>
                                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="leading" secondItem="rHr-D1-GDI" secondAttribute="leading" constant="5" id="9j6-xT-kgO"/>
                                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="centerX" secondItem="rHr-D1-GDI" secondAttribute="centerX" id="AwU-Ic-5oR"/>
+                                        <constraint firstItem="Z09-82-ST8" firstAttribute="leading" secondItem="rHr-D1-GDI" secondAttribute="leadingMargin" id="LoC-IF-gDu"/>
                                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="top" secondItem="rHr-D1-GDI" secondAttribute="top" id="Q5C-mD-rVb"/>
+                                        <constraint firstItem="Z09-82-ST8" firstAttribute="top" secondItem="rHr-D1-GDI" secondAttribute="topMargin" id="bWg-Ry-VyF"/>
                                         <constraint firstAttribute="bottom" secondItem="b4R-0R-Ysr" secondAttribute="bottom" id="cqS-U8-5fO"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="Z09-82-ST8" secondAttribute="trailing" id="d0g-TE-6Yc"/>
                                         <constraint firstAttribute="trailing" secondItem="b4R-0R-Ysr" secondAttribute="trailing" constant="5" id="f9o-aL-ta3"/>
                                         <constraint firstAttribute="height" constant="400" id="nN1-Jw-MAI"/>
                                     </constraints>
@@ -196,9 +217,6 @@
         </systemColor>
         <systemColor name="systemBlueColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
