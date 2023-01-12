@@ -20,6 +20,8 @@ enum GameAction {
     case pawnSelected
     case noAction
     case searchMatch
+    case waitingForOpponant
+    case loadYourMove
 }
 
 class BoardViewController: UIViewController {
@@ -157,6 +159,17 @@ class BoardViewController: UIViewController {
         return vc
     }
     
+    private func updateInfoBoxes(state : GameAction){
+        if let view = opponentInfoView.subviews.first as? PlayerInfoView {
+            view.actionState = state
+        }
+        
+        if let view = playerInfoView.subviews.first as? PlayerInfoView {
+            view.actionState = state
+        }
+        
+    }
+    
     //MARK: Actions
     
     @IBAction func infoTapped(_ sender: UIButton) {
@@ -194,9 +207,11 @@ extension BoardViewController : BoardViewControllerProtocol {
     func handelEvent(gameEvent: GameEvent) {
         switch gameEvent {
         case .waiting:
-            break
+            updateInfoBoxes(state: .loadYourMove)
+            
         case .waitingOpponentMove:
-            break
+            updateInfoBoxes(state: .waitingForOpponant)
+
         case .matchWon:
             let popup = getPopup(type: .wonMatch)
             self.present(popup, animated: true)
@@ -205,34 +220,30 @@ extension BoardViewController : BoardViewControllerProtocol {
             let popup = getPopup(type: .lostMatch)
             self.present(popup, animated: true)
             
-        case .updateBoard:
-            break
         case .error:
-            break
+            let popup = getPopup(type: .wonMatch)
+            self.present(popup, animated: true)
+            
+            
         case .invalidWall:
             break
         case .noWall:
             break
         case .invalidPawn:
             break
+            
+            
         case .noEvent:
             //Everything is all right, no error
             break
-        case .searchingOpponents:
-            if let view = opponentInfoView.subviews.first as? PlayerInfoView {
-                view.actionState = .searchMatch
-            }
             
-            if let view = playerInfoView.subviews.first as? PlayerInfoView {
-                view.actionState = .searchMatch
-            }
+        case .searchingOpponents:
+            updateInfoBoxes(state: .searchMatch)
             startLoading(isLoading: true)
             
         case .endGame:
             viewModel?.close()
             
-        case .joiningMatch:
-            break
         }
     }
     
@@ -276,15 +287,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerWallContaier.backgroundColor = colorCell
         }
         
-        
-        if let view = opponentInfoView.subviews.first as? PlayerInfoView {
-            view.actionState = .noAction
-        }
-        
-        if let view = playerInfoView.subviews.first as? PlayerInfoView {
-            view.actionState = .noAction
-        }
-        
+        updateInfoBoxes(state: .noAction)
         startLoading(isLoading: false)
     }
     

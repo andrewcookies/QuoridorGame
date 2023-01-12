@@ -12,6 +12,7 @@ enum PopupType {
     case lostMatch
     case quitMatch
     case rules
+    case genericError
 }
 
 protocol PopupDelegate : AnyObject {
@@ -87,6 +88,12 @@ class QPopupViewController: UIViewController {
             rightButtonLabel.isHidden = true
             leftButtonLabel.text = "*Got it"
 
+        case .genericError:
+            titlePopupLabel.text = "*Ops"
+            contentPopupLabel.text = "*Something went wrong. Please retry later"
+            rightButtonLabel.isHidden = true
+            leftButtonLabel.text = "*Quit"
+
         }
     }
  
@@ -100,6 +107,8 @@ class QPopupViewController: UIViewController {
             delegate?.acceptQuitMatch()
         case .rules:
             break
+        case .genericError:
+            delegate?.acceptQuitMatch()
         }
         self.dismiss(animated: true)
     }

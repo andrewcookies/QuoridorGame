@@ -67,6 +67,11 @@ class PlayerInfoView: UIView {
                 playerInfoLabel.text = "*Select a wall or tap the pawn to move it"
             case .searchMatch:
                 playerInfoLabel.text = "*Searching match ..."
+            case .waitingForOpponant:
+                playerInfoLabel.text = "*Waiting for the opponent ..."
+            case .loadYourMove:
+                playerInfoLabel.text = "*..."
+
             }
         }
     }

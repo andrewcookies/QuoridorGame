@@ -14,12 +14,10 @@ enum GameEvent : Error {
     case waitingOpponentMove
     case matchWon
     case matchLost
-    case updateBoard
     case error
     case noWall
     case invalidPawn
     case noEvent
     case searchingOpponents
-    case joiningMatch
     case endGame
 }

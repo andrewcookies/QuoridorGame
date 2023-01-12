@@ -70,8 +70,8 @@ extension BoardViewModel : BoardViewModelProtocol {
     
     func movePawn(cellIndex: Int) {
         let pawn = boardFactory.resolvePawn(cellIndex: cellIndex)
+        viewControllerInterface?.handelEvent(gameEvent: .waiting)
         Task {
-            viewControllerInterface?.handelEvent(gameEvent: .waiting)
             let res = await useCases.movePawn(newPawn: pawn)
             DispatchQueue.main.async {
                 self.viewControllerInterface?.handelEvent(gameEvent: res)
@@ -86,8 +86,8 @@ extension BoardViewModel : BoardViewModelProtocol {
     
     func insertWall(cellIndex: Int, side: BoardCellSide) {
         let wall = boardFactory.resolveWall(cellIndex: cellIndex, side: side)
+        viewControllerInterface?.handelEvent(gameEvent: .waiting)
         Task {
-            viewControllerInterface?.handelEvent(gameEvent: .waiting)
             let res = await useCases.insertWall(wall: wall)
             DispatchQueue.main.async {
                 self.viewControllerInterface?.handelEvent(gameEvent: res )
