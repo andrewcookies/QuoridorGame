@@ -19,6 +19,7 @@ enum GameAction {
     case wallSelected
     case pawnSelected
     case noAction
+    case searchMatch
 }
 
 class BoardViewController: UIViewController {
@@ -186,7 +187,14 @@ extension BoardViewController : BoardViewControllerProtocol {
             //Everything is all right, no error
             break
         case .searchingOpponents:
-            break
+            if let view = opponentInfoView.subviews.first as? PlayerInfoView {
+                view.actionState = .searchMatch
+            }
+            
+            if let view = playerInfoView.subviews.first as? PlayerInfoView {
+                view.actionState = .searchMatch
+            }
+            
         case .endGame:
             //When I quit the match
             viewModel?.close()
