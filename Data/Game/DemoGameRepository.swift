@@ -66,8 +66,10 @@ class DemoGameInputRepository : DemoGameOutputRepository, GameRepositoryInputInt
     }
     
     @objc func update(){
-        if let g = demoGame {
-            inputUseCase.updateGameFromOpponent(game: g)
+        DispatchQueue.main.async {
+            if let g = self.demoGame {
+                self.inputUseCase.updateGameFromOpponent(game: g)
+            }
         }
     }
     
