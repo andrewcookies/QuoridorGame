@@ -102,7 +102,7 @@ extension BoardViewModel : BoardViewModelProtocol {
     func startMatch()  {
         viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
         Task {
-   //         try await Task.sleep(nanoseconds: 4000000000) mock waiting
+            try await Task.sleep(nanoseconds: 4000000000) //mock waiting
             let searchResult = await matchmakingUseCase.searchMatch()
             switch searchResult {
             case .success(let gameId):

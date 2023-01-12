@@ -116,9 +116,9 @@ class BoardViewController: UIViewController {
         boardContainer.clipsToBounds = true
         
         boardView.backgroundColor = colorBorder
-        
-        loadingView.backgroundColor = mainColor
         playerWallContaier.backgroundColor = colorBorder
+
+        loadingView.backgroundColor = mainColor
         
         //setup players dashboard
         if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
@@ -226,7 +226,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             if let view = playerInfoView.subviews.first as? PlayerInfoView {
                 view.actionState = .searchMatch
             }
-            startLoading(isLoading: false)
+            startLoading(isLoading: true)
             
         case .endGame:
             viewModel?.close()

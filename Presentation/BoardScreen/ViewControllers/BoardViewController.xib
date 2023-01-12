@@ -12,8 +12,8 @@
             <connections>
                 <outlet property="boardContainer" destination="b4R-0R-Ysr" id="mxv-cx-Oqb"/>
                 <outlet property="boardView" destination="4BY-B1-Mzp" id="wqt-dX-zJ3"/>
-                <outlet property="loadingSpinner" destination="xOx-B9-gfp" id="FpW-WC-cRQ"/>
-                <outlet property="loadingView" destination="Z09-82-ST8" id="RuG-su-qcK"/>
+                <outlet property="loadingSpinner" destination="2lM-E5-VrR" id="6kL-0n-1fD"/>
+                <outlet property="loadingView" destination="cqM-bP-bAN" id="aOU-4e-q1O"/>
                 <outlet property="middleScreenHeight" destination="nN1-Jw-MAI" id="kmO-kP-1ln"/>
                 <outlet property="opponentInfoView" destination="Zw2-Lp-H3H" id="FX5-9I-AxO"/>
                 <outlet property="optionScreenHeight" destination="Cks-by-L6n" id="tf1-Qo-oEU"/>
@@ -140,34 +140,33 @@
                                                 <constraint firstItem="4BY-B1-Mzp" firstAttribute="top" secondItem="b4R-0R-Ysr" secondAttribute="top" id="uqq-9H-Hdz"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z09-82-ST8">
-                                            <rect key="frame" x="8" y="8" width="377" height="384"/>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cqM-bP-bAN">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="400"/>
                                             <subviews>
-                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="xOx-B9-gfp">
-                                                    <rect key="frame" x="170" y="173.66666666666669" width="37" height="37"/>
-                                                    <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="2lM-E5-VrR">
+                                                    <rect key="frame" x="178" y="181.66666666666669" width="37" height="37"/>
                                                     <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             <constraints>
-                                                <constraint firstItem="xOx-B9-gfp" firstAttribute="centerY" secondItem="Z09-82-ST8" secondAttribute="centerY" id="aBo-l1-BIw"/>
-                                                <constraint firstItem="xOx-B9-gfp" firstAttribute="centerX" secondItem="Z09-82-ST8" secondAttribute="centerX" id="rHx-JI-dQK"/>
+                                                <constraint firstItem="2lM-E5-VrR" firstAttribute="centerY" secondItem="cqM-bP-bAN" secondAttribute="centerY" id="9ER-GY-6Ra"/>
+                                                <constraint firstItem="2lM-E5-VrR" firstAttribute="centerX" secondItem="cqM-bP-bAN" secondAttribute="centerX" id="kYk-k9-SON"/>
                                             </constraints>
                                         </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstAttribute="bottomMargin" secondItem="Z09-82-ST8" secondAttribute="bottom" id="8hb-28-m4l"/>
                                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="leading" secondItem="rHr-D1-GDI" secondAttribute="leading" constant="5" id="9j6-xT-kgO"/>
                                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="centerX" secondItem="rHr-D1-GDI" secondAttribute="centerX" id="AwU-Ic-5oR"/>
-                                        <constraint firstItem="Z09-82-ST8" firstAttribute="leading" secondItem="rHr-D1-GDI" secondAttribute="leadingMargin" id="LoC-IF-gDu"/>
+                                        <constraint firstItem="cqM-bP-bAN" firstAttribute="top" secondItem="rHr-D1-GDI" secondAttribute="top" id="EPo-r0-Cuv"/>
+                                        <constraint firstAttribute="trailing" secondItem="cqM-bP-bAN" secondAttribute="trailing" id="IPa-wG-8f4"/>
                                         <constraint firstItem="b4R-0R-Ysr" firstAttribute="top" secondItem="rHr-D1-GDI" secondAttribute="top" id="Q5C-mD-rVb"/>
-                                        <constraint firstItem="Z09-82-ST8" firstAttribute="top" secondItem="rHr-D1-GDI" secondAttribute="topMargin" id="bWg-Ry-VyF"/>
+                                        <constraint firstItem="cqM-bP-bAN" firstAttribute="leading" secondItem="rHr-D1-GDI" secondAttribute="leading" id="T8l-NS-BR5"/>
                                         <constraint firstAttribute="bottom" secondItem="b4R-0R-Ysr" secondAttribute="bottom" id="cqS-U8-5fO"/>
-                                        <constraint firstAttribute="trailingMargin" secondItem="Z09-82-ST8" secondAttribute="trailing" id="d0g-TE-6Yc"/>
                                         <constraint firstAttribute="trailing" secondItem="b4R-0R-Ysr" secondAttribute="trailing" constant="5" id="f9o-aL-ta3"/>
                                         <constraint firstAttribute="height" constant="400" id="nN1-Jw-MAI"/>
+                                        <constraint firstAttribute="bottom" secondItem="cqM-bP-bAN" secondAttribute="bottom" id="sY5-aM-KSE"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PCu-H6-YIZ" userLabel="bottomScreen">

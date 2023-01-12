@@ -9,9 +9,6 @@ import Foundation
 import UIKit
 
 
-extension UIColor {
-    static var colorWall : UIColor { return UIColor.init(red: CGFloat(249/255), green: CGFloat(226/255), blue: CGFloat(149.0/255), alpha: CGFloat(1.0)) }
-}
 /*
  Colors
  */
