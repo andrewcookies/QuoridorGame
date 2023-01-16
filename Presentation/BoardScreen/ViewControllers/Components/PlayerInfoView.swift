@@ -56,19 +56,35 @@ class PlayerInfoView: UIView {
     
     private func setupInfo(state : GameAction){
         if type == .player2 {
-            playerInfoLabel.text = state == .searchMatch ? defaultPlayerName : "*Waiting for your move"
+            switch state {
+            case .noAction, .pawnSelected, .wallSelected, .loadYourMove:
+                playerInfoLabel.text = "*Waiting for your move"
+                
+            case .searchMatch:
+                playerInfoLabel.text = defaultPlayerName
+                
+            case .waitingForOpponant:
+                playerInfoLabel.text = "*He's moving..."
+
+            }
+            
         } else {
             switch state {
             case .wallSelected:
-                playerInfoLabel.text = "*Tap one cell to move the pawn"
-            case .pawnSelected:
                 playerInfoLabel.text = "*Tap between cells to insert the wall"
+                
+            case .pawnSelected:
+                playerInfoLabel.text = "*Tap one cell to move the pawn"
+                
             case .noAction:
                 playerInfoLabel.text = "*Select a wall or tap the pawn to move it"
+                
             case .searchMatch:
                 playerInfoLabel.text = "*Searching match ..."
+                
             case .waitingForOpponant:
                 playerInfoLabel.text = "*Waiting for the opponent ..."
+                
             case .loadYourMove:
                 playerInfoLabel.text = "*..."
 

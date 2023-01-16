@@ -55,7 +55,11 @@ class BoardViewController: UIViewController {
     
     
     
-    private var gameAction : GameAction = .noAction
+    private var gameAction : GameAction = .noAction {
+        didSet {
+            updateInfoBoxes(state: gameAction)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -207,23 +211,19 @@ extension BoardViewController : BoardViewControllerProtocol {
     func handelEvent(gameEvent: GameEvent) {
         switch gameEvent {
         case .waiting:
-            updateInfoBoxes(state: .loadYourMove)
+            gameAction = .loadYourMove
             
         case .waitingOpponentMove:
-            updateInfoBoxes(state: .waitingForOpponant)
+            gameAction = .waitingForOpponant
 
         case .matchWon:
-            let popup = getPopup(type: .wonMatch)
-            self.present(popup, animated: true)
+            self.present(getPopup(type: .wonMatch), animated: true)
             
         case .matchLost:
-            let popup = getPopup(type: .lostMatch)
-            self.present(popup, animated: true)
+            self.present(getPopup(type: .lostMatch), animated: true)
             
         case .error:
-            let popup = getPopup(type: .wonMatch)
-            self.present(popup, animated: true)
-            
+            self.present(getPopup(type: .genericError), animated: true)
             
         case .invalidWall:
             break
@@ -238,7 +238,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             break
             
         case .searchingOpponents:
-            updateInfoBoxes(state: .searchMatch)
+            gameAction = .searchMatch
             startLoading(isLoading: true)
             
         case .endGame:
@@ -287,7 +287,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerWallContaier.backgroundColor = colorCell
         }
         
-        updateInfoBoxes(state: .noAction)
+        gameAction = .noAction
         startLoading(isLoading: false)
     }
     
@@ -297,6 +297,8 @@ extension BoardViewController : BoardViewControllerProtocol {
             newOpponentCell.setup(cell: destination)
             currentPosition = Pawn(position: destination.index)
         }
+        
+        gameAction = .noAction
     }
     
     func updateWall(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
@@ -313,15 +315,14 @@ extension BoardViewController : BoardViewControllerProtocol {
             cell.setup(cell: bottomLeft)
         }
         
-        if gameAction == .wallSelected {
-            //I just put the wall
-            if let wall = playerAvailableWalls.filter({ $0.currentState == .normal }).first {
-                wall.removeFromSuperview()
-                playerAvailableWalls.forEach({ $0.setup(state: .normal)})
-                gameAction = .noAction
-            }
+
+        
+        if let wall = playerAvailableWalls.filter({ $0.currentState == .normal }).first {
+            wall.removeFromSuperview()
+            playerAvailableWalls.forEach({ $0.setup(state: .normal)})
         }
         
+        gameAction = .noAction
     }
 }
 
