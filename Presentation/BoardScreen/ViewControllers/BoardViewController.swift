@@ -103,13 +103,13 @@ class BoardViewController: UIViewController {
         let infoHeight = screenHeight*0.10
         
         optionScreenHeight.constant = optionHeight
-        upperScreenHeight.constant = infoHeight
-        middleScreenHeight.constant = boardHeight
+        //upperScreenHeight.constant = infoHeight
+        //middleScreenHeight.constant = boardHeight
     }
     
     private func setupUI(){
         
-        setDimensions()
+       // setDimensions()
         
         opponentInfoView.layer.cornerRadius = 4
         opponentInfoView.clipsToBounds = true
