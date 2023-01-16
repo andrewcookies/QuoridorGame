@@ -32,7 +32,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
     }
     
     func opponentQuitMatch(game: Game) {
-        viewControllerProtocol?.handelEvent(gameEvent: .endGame)
+        viewControllerProtocol?.handelEvent(gameEvent: .opponentQuitMatch)
     }
     
     func opponentWonMatch(game: Game) {

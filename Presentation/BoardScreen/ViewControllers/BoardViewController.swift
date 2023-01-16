@@ -189,6 +189,14 @@ class BoardViewController: UIViewController {
 }
 
 extension BoardViewController : PopupDelegate {
+    func acceptOpponentQuitMatch() {
+        viewModel?.close()
+    }
+    
+    func acceptError() {
+        viewModel?.close()
+    }
+    
     func acceptQuitMatch() {
         viewModel?.quitMatch()
     }
@@ -204,12 +212,14 @@ extension BoardViewController : PopupDelegate {
 }
 
 
-
-
-
 extension BoardViewController : BoardViewControllerProtocol {
     func handelEvent(gameEvent: GameEvent) {
         switch gameEvent {
+        case .noEvent, .noWall, . invalidPawn, .invalidWall:
+            //Everything is all right, no error
+            break
+            
+            
         case .waiting:
             gameAction = .loadYourMove
             
@@ -225,17 +235,6 @@ extension BoardViewController : BoardViewControllerProtocol {
         case .error:
             self.present(getPopup(type: .genericError), animated: true)
             
-        case .invalidWall:
-            break
-        case .noWall:
-            break
-        case .invalidPawn:
-            break
-            
-            
-        case .noEvent:
-            //Everything is all right, no error
-            break
             
         case .searchingOpponents:
             gameAction = .searchMatch
@@ -244,6 +243,11 @@ extension BoardViewController : BoardViewControllerProtocol {
         case .endGame:
             viewModel?.close()
             
+        case .opponentQuitMatch:
+            self.present(getPopup(type: .opponentQuitMatch), animated: true)
+            
+        case .ringFound:
+            self.present(getPopup(type: .ringWallFound), animated: true)
         }
     }
     

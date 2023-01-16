@@ -13,12 +13,16 @@ enum PopupType {
     case quitMatch
     case rules
     case genericError
+    case opponentQuitMatch
+    case ringWallFound
 }
 
 protocol PopupDelegate : AnyObject {
     func acceptQuitMatch()
     func acceptLostMatch()
     func acceptWonMatch()
+    func acceptOpponentQuitMatch()
+    func acceptError()
 }
 
 class QPopupViewController: UIViewController {
@@ -94,6 +98,17 @@ class QPopupViewController: UIViewController {
             rightButtonLabel.isHidden = true
             leftButtonLabel.text = "*Quit"
 
+        case .opponentQuitMatch:
+            titlePopupLabel.text = "*Opponent Quit"
+            contentPopupLabel.text = "*Your opponent quit. Please retry later"
+            rightButtonLabel.isHidden = true
+            leftButtonLabel.text = "*Quit game"
+            
+        case .ringWallFound:
+            titlePopupLabel.text = "*Warning"
+            contentPopupLabel.text = "*You cannot close your opponent"
+            rightButtonLabel.isHidden = true
+            leftButtonLabel.text = "*Got it"
         }
     }
  
@@ -105,10 +120,12 @@ class QPopupViewController: UIViewController {
             delegate?.acceptLostMatch()
         case .quitMatch:
             delegate?.acceptQuitMatch()
-        case .rules:
+        case .rules, .ringWallFound:
             break
         case .genericError:
             delegate?.acceptQuitMatch()
+        case .opponentQuitMatch:
+            delegate?.acceptOpponentQuitMatch()
         }
         self.dismiss(animated: true)
     }

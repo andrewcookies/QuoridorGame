@@ -53,7 +53,7 @@ final class GameFactory {
         let playerWalls = currentGame.player1.playerId == userInfo.getUserInfo().userId ? currentGame.player1.walls : currentGame.player2.walls
         if playerWalls.count > numberWallPerPlayer {
             GameLog.shared.debug(message: "validateWall \(playerWalls.count) walls", className: "GameFactory")
-            return .invalidWall
+            return .noWall
         }
         
         //1.check out of bound
@@ -105,7 +105,7 @@ final class GameFactory {
         }
         
         GameLog.shared.debug(message: "validateWall ring found walls", className: "GameFactory")
-        return .invalidWall
+        return .ringFound
     }
     
     func checkRing(pawn : Pawn, walls : [Wall], mode : PlayerType) -> Bool {
