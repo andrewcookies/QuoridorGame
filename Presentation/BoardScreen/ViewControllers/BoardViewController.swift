@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 protocol BoardViewControllerProtocol {
+    func updateOpponentPawnOnBoard(start : BoardCell, destination : BoardCell)
     func updatePawnOnBoard(start : BoardCell, destination : BoardCell)
     func updateWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     func initBoard(board : Board)
@@ -18,7 +19,7 @@ protocol BoardViewControllerProtocol {
 enum GameAction {
     case wallSelected
     case pawnSelected
-    case noAction
+    case chooseMove
     case searchMatch
     case waitingForOpponant
     case loadYourMove
@@ -54,8 +55,9 @@ class BoardViewController: UIViewController {
     
     
     
-    private var gameAction : GameAction = .noAction {
+    private var gameAction : GameAction = .chooseMove {
         didSet {
+            GameLog.shared.debug(message: "current game action \(gameAction)", className: "BoardViewController")
             updateInfoBoxes(state: gameAction)
         }
     }
@@ -173,6 +175,13 @@ class BoardViewController: UIViewController {
         
     }
     
+    private func updatePawnPosition(start: BoardCell, destination: BoardCell) {
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == start.index  }).first as? BoardCellView,  let newCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == destination.index }).first as? BoardCellView {
+            cell.setup(cell: start)
+            newCell.setup(cell: destination)
+        }
+    }
+    
     //MARK: Actions
     
     @IBAction func infoTapped(_ sender: UIButton) {
@@ -288,17 +297,18 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerWallContaier.backgroundColor = colorCell
         }
         
-        gameAction = .noAction
+        gameAction = .chooseMove
         startLoading(isLoading: false)
     }
     
     func updatePawnOnBoard(start: BoardCell, destination: BoardCell) {
-        if let opponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == start.index  }).first as? BoardCellView,  let newOpponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == destination.index }).first as? BoardCellView {
-            opponentCell.setup(cell: start)
-            newOpponentCell.setup(cell: destination)
-        }
-        
-        gameAction = .noAction
+        updatePawnPosition(start: start, destination: destination)
+        gameAction = .waitingForOpponant
+    }
+    
+    func updateOpponentPawnOnBoard(start: BoardCell, destination: BoardCell) {
+        updatePawnPosition(start: start, destination: destination)
+        gameAction = .chooseMove
     }
     
     func updateWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
@@ -322,7 +332,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerAvailableWalls.forEach({ $0.setup(state: .normal)})
         }
         
-        gameAction = .noAction
+        gameAction = .chooseMove
     }
 }
 
@@ -332,8 +342,9 @@ extension BoardViewController : BoardCellDelegate {
             if gameAction == .pawnSelected {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
-                gameAction = .noAction
-            } else {
+                gameAction = .chooseMove
+                
+            } else if gameAction == .chooseMove {
                 allowedCells = viewModel?.allowedPawnMoves(cellIndex: index) ?? []
                 updateBoardAllowedPawnCells(allowed: true)
                 gameAction = .pawnSelected
@@ -344,7 +355,7 @@ extension BoardViewController : BoardCellDelegate {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
                 viewModel?.movePawn(cellIndex: index)
-                gameAction = .noAction
+                gameAction = .chooseMove
             }
         }
     }
@@ -360,7 +371,7 @@ extension BoardViewController : BoardCellDelegate {
 
 extension BoardViewController : WallViewDelegate {
     func tapWallView(wallIndex: Int) {
-        if gameAction == .noAction {
+        if gameAction == .chooseMove {
             for w in playerAvailableWalls {
                 if w.wallIndex != wallIndex {
                     w.setup(state: .disabled)
@@ -372,7 +383,7 @@ extension BoardViewController : WallViewDelegate {
             if let wall = playerAvailableWalls.filter({ $0.wallIndex == wallIndex}).first {
                 if wall.currentState == .normal {
                     playerAvailableWalls.forEach({ $0.setup(state: .normal)})
-                    gameAction = .noAction
+                    gameAction = .chooseMove
                 }
             }
         }

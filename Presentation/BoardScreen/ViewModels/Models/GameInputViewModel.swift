@@ -57,7 +57,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
             let newPosition = game.lastMove.pawnMove
             let wrapper = boardFactory.getBoardCellsFromPawn(newMove: newPosition, contentType : .opponentPawn)
             currentBoard = wrapper.updatedBoard
-            viewControllerProtocol?.updatePawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)
+            viewControllerProtocol?.updateOpponentPawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)
             
             
         case .opponentInsertWall:

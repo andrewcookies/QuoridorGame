@@ -25,7 +25,7 @@ class PlayerInfoView: UIView {
     @IBOutlet weak var timerImageView: UIImageView!
     
     weak var delegate : PlayerInfoViewDelegate?
-    var actionState : GameAction = .noAction {
+    var actionState : GameAction = .chooseMove {
         didSet {
             setupInfo(state: actionState)
         }
@@ -57,7 +57,7 @@ class PlayerInfoView: UIView {
     private func setupInfo(state : GameAction){
         if type == .player2 {
             switch state {
-            case .noAction, .pawnSelected, .wallSelected, .loadYourMove:
+            case .chooseMove, .pawnSelected, .wallSelected, .loadYourMove:
                 playerInfoLabel.text = "*Waiting for your move"
                 
             case .searchMatch:
@@ -76,7 +76,7 @@ class PlayerInfoView: UIView {
             case .pawnSelected:
                 playerInfoLabel.text = "*Tap one cell to move the pawn"
                 
-            case .noAction:
+            case .chooseMove:
                 playerInfoLabel.text = "*Select a wall or tap the pawn to move it"
                 
             case .searchMatch:
