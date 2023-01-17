@@ -123,7 +123,8 @@ class QPopupViewController: UIViewController {
         case .rules, .ringWallFound:
             break
         case .genericError:
-            delegate?.acceptQuitMatch()
+            delegate?.acceptError()
+            
         case .opponentQuitMatch:
             delegate?.acceptOpponentQuitMatch()
         }

@@ -169,7 +169,7 @@ class BoardCellView: UIView {
         leftWallView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapLeftWall)))
         
         tmpLabel.text = "\(cellIndex)"
-        tmpLabel.isHidden = true
+        tmpLabel.isHidden = false
         
     }
     

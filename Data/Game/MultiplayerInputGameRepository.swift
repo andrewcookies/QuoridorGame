@@ -129,7 +129,7 @@ extension MultiplayerInputGameRepository : GameRepositoryInputInterface {
         
         if waitingGames.count == 0 {
             GameLog.shared.debug(message: "start new game", className: "MultiplayerInputGameRepository")
-            return "nomatch"
+            throw APIError.currentInfoNIL
         } else {
             GameLog.shared.debug(message: "join existing game", className: "MultiplayerInputGameRepository")
             let gameDocument = waitingGames.first

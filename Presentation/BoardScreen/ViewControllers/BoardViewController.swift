@@ -9,8 +9,8 @@ import UIKit
 import Combine
 
 protocol BoardViewControllerProtocol {
-    func updateOpponentPawn(start : BoardCell, destination : BoardCell)
-    func updateWall(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
+    func updatePawnOnBoard(start : BoardCell, destination : BoardCell)
+    func updateWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     func initBoard(board : Board)
     func handelEvent(gameEvent : GameEvent)
 }
@@ -295,7 +295,7 @@ extension BoardViewController : BoardViewControllerProtocol {
         startLoading(isLoading: false)
     }
     
-    func updateOpponentPawn(start: BoardCell, destination: BoardCell) {
+    func updatePawnOnBoard(start: BoardCell, destination: BoardCell) {
         if let opponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == start.index  }).first as? BoardCellView,  let newOpponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == destination.index }).first as? BoardCellView {
             opponentCell.setup(cell: start)
             newOpponentCell.setup(cell: destination)
@@ -305,7 +305,7 @@ extension BoardViewController : BoardViewControllerProtocol {
         gameAction = .noAction
     }
     
-    func updateWall(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
+    func updateWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
         if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == topRight.index  }).first as? BoardCellView {
             cell.setup(cell: topRight)
         }

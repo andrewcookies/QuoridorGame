@@ -9,13 +9,14 @@ import Foundation
 import UIKit
 
 enum MatchType {
-    case local
+    case demo
     case online
 }
 
 final class Coordinator {
     
     private var navigationController : UINavigationController?
+    private var matchType : MatchType = .online
     
     init(navigationController: UINavigationController? = nil) {
         self.navigationController = navigationController
@@ -42,14 +43,14 @@ final class Coordinator {
         let boardFactory = BoardFactory(userInfo: userInfo)
         let gameFactory = GameFactory(gameValidator: boardFactory, userInfo: userInfo)
         
-        let outputDataLayer = DemoGameOutputRepository()//resolveBoardOutpuDataLayer(localDataRepository: multiplayerDataBaseRepository)
+        let outputDataLayer = matchType == .demo ? DemoGameOutputRepository() : resolveBoardOutpuDataLayer(localDataRepository: multiplayerDataBaseRepository)
         
         let outputUseCase = GameOutputUseCase(gameFactory: gameFactory, gameInterface: outputDataLayer)
        
         let inputViewModel = GameInputViewModel(boardFactory: boardFactory)
         let inputUseCase = GameInputUseCase(viewModelListener: inputViewModel, gameFactory: gameFactory)
         
-        let inputDataLayer = DemoGameInputRepository(inputUseCase: inputUseCase)//resolveBoardInputDataLayer(localGameRepository: multiplayerDataBaseRepository, inputUseCase: inputUseCase)
+        let inputDataLayer = matchType == .demo ? DemoGameInputRepository(inputUseCase: inputUseCase) : resolveBoardInputDataLayer(localGameRepository: multiplayerDataBaseRepository, inputUseCase: inputUseCase)
         
         let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: inputDataLayer, gameFactory: gameFactory)
         

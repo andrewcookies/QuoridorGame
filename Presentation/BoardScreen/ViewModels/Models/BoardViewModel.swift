@@ -77,7 +77,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                 self.viewControllerInterface?.handelEvent(gameEvent: res)
                 if res == .waitingOpponentMove {
                     let wrapper = self.boardFactory.getBoardCellsFromPawn(newMove: pawn, contentType: .playerPawn)
-                    self.viewControllerInterface?.updateOpponentPawn(start: wrapper.startPosition, destination: wrapper.endPosition)
+                    self.viewControllerInterface?.updatePawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)
                 }
             }
         }
@@ -93,7 +93,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                 self.viewControllerInterface?.handelEvent(gameEvent: res )
                 if res == .waitingOpponentMove {
                     let wrapper = self.boardFactory.getBoardCellsFromWall(newWall: wall)
-                    self.viewControllerInterface?.updateWall(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
+                    self.viewControllerInterface?.updateWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
                 }
             }
         }
@@ -102,7 +102,7 @@ extension BoardViewModel : BoardViewModelProtocol {
     func startMatch()  {
         viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
         Task {
-            try await Task.sleep(nanoseconds: 4000000000) //mock waiting
+          //  try await Task.sleep(nanoseconds: 4000000000) //mock waiting
             let searchResult = await matchmakingUseCase.searchMatch()
             switch searchResult {
             case .success(let gameId):
@@ -127,8 +127,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                     switch createResult {
                     case .success(let game):
                         DispatchQueue.main.async {
-                            let board = self.boardFactory.getBoardFromGame(game: game)
-                            self.viewControllerInterface?.initBoard(board: board)
+                            self.viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
                         }
                         
                     case .failure(_):
