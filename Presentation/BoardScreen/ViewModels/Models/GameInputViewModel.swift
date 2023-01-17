@@ -64,7 +64,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
             let newWall = game.lastMove.wallMove
             let wrapper = boardFactory.getBoardCellsFromWall(newWall: newWall)
             currentBoard = wrapper.updatedBoard
-            viewControllerProtocol?.updateWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
+            viewControllerProtocol?.updateOpponentWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
             
         case .noMove:
             break

@@ -11,6 +11,7 @@ import Combine
 protocol BoardViewControllerProtocol {
     func updateOpponentPawnOnBoard(start : BoardCell, destination : BoardCell)
     func updatePawnOnBoard(start : BoardCell, destination : BoardCell)
+    func updateOpponentWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     func updateWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     func initBoard(board : Board)
     func handelEvent(gameEvent : GameEvent)
@@ -152,6 +153,21 @@ class BoardViewController: UIViewController {
             if let pawnCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == c.position  }).first as? BoardCellView {
                 pawnCell.updateColor(allowed: allowed)
             }
+        }
+    }
+    
+    private func updateWallPosition(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == topRight.index  }).first as? BoardCellView {
+            cell.setup(cell: topRight)
+        }
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == topLeft.index  }).first as? BoardCellView {
+            cell.setup(cell: topLeft)
+        }
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == bottomRight.index  }).first as? BoardCellView {
+            cell.setup(cell: bottomRight)
+        }
+        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == bottomLeft.index  }).first as? BoardCellView {
+            cell.setup(cell: bottomLeft)
         }
     }
     
@@ -312,20 +328,8 @@ extension BoardViewController : BoardViewControllerProtocol {
     }
     
     func updateWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
-        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == topRight.index  }).first as? BoardCellView {
-            cell.setup(cell: topRight)
-        }
-        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == topLeft.index  }).first as? BoardCellView {
-            cell.setup(cell: topLeft)
-        }
-        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == bottomRight.index  }).first as? BoardCellView {
-            cell.setup(cell: bottomRight)
-        }
-        if let cell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == bottomLeft.index  }).first as? BoardCellView {
-            cell.setup(cell: bottomLeft)
-        }
         
-
+        updateWallPosition(topRight: topRight, topLeft: topLeft, bottomRight: bottomRight, bottomLeft: bottomLeft)
         
         if let wall = playerAvailableWalls.filter({ $0.currentState == .normal }).first {
             wall.removeFromSuperview()
@@ -333,6 +337,11 @@ extension BoardViewController : BoardViewControllerProtocol {
         }
         
         gameAction = .chooseMove
+    }
+    
+    func updateOpponentWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
+        updateWallPosition(topRight: topRight, topLeft: topLeft, bottomRight: bottomRight, bottomLeft: bottomLeft)
+        gameAction = .waitingForOpponant
     }
 }
 
