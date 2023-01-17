@@ -113,6 +113,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                     DispatchQueue.main.async {
                         let board = self.boardFactory.getBoardFromGame(game: game)
                         self.viewControllerInterface?.initBoard(board: board)
+                        self.viewControllerInterface?.handelEvent(gameEvent: .waitingOpponentMove)
                     }
                     
                 case .failure(_):
