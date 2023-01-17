@@ -43,7 +43,6 @@ class BoardViewController: UIViewController {
     @IBOutlet private var boardView : UIView!
     
     private var viewModel : BoardViewModelProtocol?
-    private var currentPosition : Pawn = Pawn(position: startPlayer1PawnPosition)
     private var allowedCells : [Pawn] = []
     
     private var subscribers: [AnyCancellable] = []
@@ -129,7 +128,7 @@ class BoardViewController: UIViewController {
         //setup players dashboard
         if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
             playerView.frame = CGRect(x: 0, y: 0, width: playerInfoView.frame.width, height: playerInfoView.frame.height)
-            playerView.setup(name: viewModel?.getPlayerName() ?? "", player : .player1)
+            playerView.setup(name: viewModel?.currentPlayerName ?? "", player : .player1)
             playerView.actionState = .searchMatch
             playerView.delegate = self
             playerInfoView.addSubview(playerView)
@@ -254,8 +253,6 @@ extension BoardViewController : BoardViewControllerProtocol {
     func initBoard(board: Board) {
         let width = Int(boardView.frame.width)
         let cellWidth = Int(width/numberOfCellPerRow)
-
-        currentPosition = board.player.pawnPosition
         
         for (rowId,cellsRow) in board.cells.enumerated() {
             //let cellRow = board.cells[rowIndex]
@@ -299,7 +296,6 @@ extension BoardViewController : BoardViewControllerProtocol {
         if let opponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == start.index  }).first as? BoardCellView,  let newOpponentCell = boardView.subviews.filter({ ($0 as? BoardCellView)?.getIndex() == destination.index }).first as? BoardCellView {
             opponentCell.setup(cell: start)
             newOpponentCell.setup(cell: destination)
-            currentPosition = Pawn(position: destination.index)
         }
         
         gameAction = .noAction
@@ -332,7 +328,7 @@ extension BoardViewController : BoardViewControllerProtocol {
 
 extension BoardViewController : BoardCellDelegate {
     func tapCell(index: Int) {
-        if index == currentPosition.position {
+        if index == viewModel?.currentPawnPosition {
             if gameAction == .pawnSelected {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()

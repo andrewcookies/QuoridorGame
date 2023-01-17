@@ -29,7 +29,9 @@ struct WallWrapper {
 }
 
 protocol BoardFactoryInterface {
-    func getPlayerName() -> String
+    var playerPosition : Int { get }
+    var playerName : String { get }
+    
     func getBoardFromGame(game : Game) -> Board
     func resolveWall(cellIndex: Int, side: BoardCellSide) -> Wall
     func resolvePawn(cellIndex: Int) -> Pawn
@@ -62,7 +64,11 @@ final class BoardFactory {
 }
 
 extension BoardFactory : BoardFactoryInterface {
-    func getPlayerName() -> String {
+    var playerPosition : Int {
+        return userInfo?.getUserInfo().userId == currentBoard.player.playerId ? currentBoard.player.pawnPosition.position : currentBoard.opponent.pawnPosition.position
+    }
+    
+    var playerName : String {
         return userInfo?.getUserInfo().name ?? defaultPlayerName
     }
     

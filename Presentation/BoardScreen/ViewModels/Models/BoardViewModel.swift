@@ -9,7 +9,9 @@ import Foundation
 import Combine
 
 protocol BoardViewModelProtocol {
-    func getPlayerName() -> String
+    var currentPawnPosition : Int { get }
+    var currentPlayerName : String { get }
+
     func movePawn(cellIndex: Int)
     func insertWall(cellIndex: Int, side: BoardCellSide)
     func quitMatch()
@@ -28,6 +30,8 @@ final class BoardViewModel {
     private var useCases : GameOutputUseCaseProtocol
     private var matchmakingUseCase : MatchMakingUseCaseProtocol
     private var boardFactory : BoardFactoryInterface
+    
+    private var currentBoard : Board?
 
     var viewControllerInterface : BoardViewControllerProtocol?
     
@@ -46,10 +50,14 @@ final class BoardViewModel {
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
-    func getPlayerName() -> String {
-        return boardFactory.getPlayerName()
+    var currentPawnPosition: Int {
+        return boardFactory.playerPosition
     }
     
+    var currentPlayerName : String {
+        return boardFactory.playerName
+    }
+
     func close() {
         navigation.close()
     }
@@ -77,6 +85,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                 self.viewControllerInterface?.handelEvent(gameEvent: res)
                 if res == .waitingOpponentMove {
                     let wrapper = self.boardFactory.getBoardCellsFromPawn(newMove: pawn, contentType: .playerPawn)
+                    self.currentBoard = wrapper.updatedBoard
                     self.viewControllerInterface?.updatePawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)
                 }
             }
@@ -93,6 +102,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                 self.viewControllerInterface?.handelEvent(gameEvent: res )
                 if res == .waitingOpponentMove {
                     let wrapper = self.boardFactory.getBoardCellsFromWall(newWall: wall)
+                    self.currentBoard = wrapper.updatedBoard
                     self.viewControllerInterface?.updateWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
                 }
             }
