@@ -14,7 +14,9 @@ protocol BoardViewControllerProtocol {
     func updateOpponentWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     func updateWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     
-    func initBoard(board : Board)
+    func joinBoard(board : Board)
+    func createBoard(board : Board)
+
     func handelEvent(gameEvent : GameEvent)
 }
 
@@ -315,9 +317,15 @@ extension BoardViewController : BoardViewControllerProtocol {
         }
     }
     
-    func initBoard(board: Board) {
+    func createBoard(board: Board) {
         drawBoard(board: board)
         gameAction = .chooseMove
+        startLoading(isLoading: false)
+    }
+    
+    func joinBoard(board: Board) {
+        drawBoard(board: board)
+        gameAction = .waitingForOpponant
         startLoading(isLoading: false)
     }
     

@@ -50,7 +50,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
         switch stage {
         case .gameAlreadyStarted:
             currentBoard = boardFactory.getBoardFromGame(game: game)
-            viewControllerProtocol?.initBoard(board: currentBoard)
+            viewControllerProtocol?.createBoard(board: currentBoard)
             
             
         case .opponentMovePawn:

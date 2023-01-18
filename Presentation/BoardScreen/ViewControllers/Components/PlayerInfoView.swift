@@ -103,7 +103,7 @@ class PlayerInfoView: UIView {
             case .waitingForOpponant:
                 initTimer()
             default:
-                timerLabel.text = defaultPlayerId
+                timerLabel.text = Localized.defaultNilText
                 
             }
             
@@ -112,7 +112,7 @@ class PlayerInfoView: UIView {
             case .chooseMove:
                 initTimer()
             default:
-                timerLabel.text = defaultPlayerId
+                timerLabel.text = Localized.defaultNilText
                 
             }
         }
@@ -141,7 +141,7 @@ class PlayerInfoView: UIView {
             timeForPlayer = secondsForPlayer
             delegate?.timeUp(player: type)
         } else {
-            timerLabel.text = "\(timeForPlayer)"
+            timerLabel.text = timeForPlayer >= 10 ? "00:\(timeForPlayer)" : "00:0\(timeForPlayer)"
             timeForPlayer -= 1
         }
         
