@@ -13,6 +13,7 @@ protocol BoardViewControllerProtocol {
     func updatePawnOnBoard(start : BoardCell, destination : BoardCell)
     func updateOpponentWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
     func updateWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
+    
     func initBoard(board : Board)
     func handelEvent(gameEvent : GameEvent)
 }
@@ -198,6 +199,45 @@ class BoardViewController: UIViewController {
         }
     }
     
+    private func drawBoard(board : Board){
+        let width = Int(boardView.frame.width)
+        let cellWidth = Int(width/numberOfCellPerRow)
+        
+        for (rowId,cellsRow) in board.cells.enumerated() {
+            //let cellRow = board.cells[rowIndex]
+            for (columnId,cell) in cellsRow.enumerated() {
+               // let cell = cellRow[columnIndex]
+                if let v = BoardCellView.getView() as? BoardCellView {
+                    v.frame = CGRect(x: columnId*cellWidth, y: rowId*cellWidth, width: cellWidth, height: cellWidth)
+                    v.setup(cell: cell)
+                    v.delegate = self
+                    boardView.addSubview(v)
+                }
+            }
+        }
+        
+        
+        let wallWidth = Int(Double(cellWidth) * 0.10 * 2)
+        let wallHeight = Int(cellWidth*2 - wallWidth*2)
+        let sectionHeight = Int(playerWallContaier.frame.height)
+    
+        for rowId in 0...numberWallPerPlayer {
+            let v = UIView(frame: CGRect(x: ((rowId*cellWidth) + 10 - (wallWidth/2)), y: 0, width: wallWidth, height: sectionHeight))
+            v.backgroundColor = colorEmptyWall
+            
+            
+            let wall = WallView(frame: CGRect(x: 0, y: 10, width: wallWidth, height: wallHeight))
+            wall.setup(state: .normal)
+            wall.wallIndex = rowId+wallViiewConst
+            wall.delegate = self
+            
+            v.addSubview(wall)
+            playerAvailableWalls.append(wall)
+            playerWallContaier.addSubview(v)
+            playerWallContaier.backgroundColor = colorCell
+        }
+        
+    }
     //MARK: Actions
     
     @IBAction func infoTapped(_ sender: UIButton) {
@@ -276,43 +316,7 @@ extension BoardViewController : BoardViewControllerProtocol {
     }
     
     func initBoard(board: Board) {
-        let width = Int(boardView.frame.width)
-        let cellWidth = Int(width/numberOfCellPerRow)
-        
-        for (rowId,cellsRow) in board.cells.enumerated() {
-            //let cellRow = board.cells[rowIndex]
-            for (columnId,cell) in cellsRow.enumerated() {
-               // let cell = cellRow[columnIndex]
-                if let v = BoardCellView.getView() as? BoardCellView {
-                    v.frame = CGRect(x: columnId*cellWidth, y: rowId*cellWidth, width: cellWidth, height: cellWidth)
-                    v.setup(cell: cell)
-                    v.delegate = self
-                    boardView.addSubview(v)
-                }
-            }
-        }
-        
-        
-        let wallWidth = Int(Double(cellWidth) * 0.10 * 2)
-        let wallHeight = Int(cellWidth*2 - wallWidth*2)
-        let sectionHeight = Int(playerWallContaier.frame.height)
-    
-        for rowId in 0...numberWallPerPlayer {
-            let v = UIView(frame: CGRect(x: ((rowId*cellWidth) + 10 - (wallWidth/2)), y: 0, width: wallWidth, height: sectionHeight))
-            v.backgroundColor = colorEmptyWall
-            
-            
-            let wall = WallView(frame: CGRect(x: 0, y: 10, width: wallWidth, height: wallHeight))
-            wall.setup(state: .normal)
-            wall.wallIndex = rowId+wallViiewConst
-            wall.delegate = self
-            
-            v.addSubview(wall)
-            playerAvailableWalls.append(wall)
-            playerWallContaier.addSubview(v)
-            playerWallContaier.backgroundColor = colorCell
-        }
-        
+        drawBoard(board: board)
         gameAction = .chooseMove
         startLoading(isLoading: false)
     }
@@ -400,5 +404,11 @@ extension BoardViewController : WallViewDelegate {
 }
 
 extension BoardViewController : PlayerInfoViewDelegate {
-    
+    func timeUp(player: PlayerType) {
+        if player == .player1 {
+            if let currentPosition = viewModel?.currentPawnPosition {
+                viewModel?.movePawn(cellIndex: currentPosition)
+            }
+        }
+    }
 }

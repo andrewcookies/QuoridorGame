@@ -8,12 +8,16 @@
 import UIKit
 
 protocol PlayerInfoViewDelegate : AnyObject {
-    
+    func timeUp(player : PlayerType)
 }
 
 class PlayerInfoView: UIView {
     
     private var type : PlayerType = .player1
+    private var timer: Timer?
+    private var timeForPlayer = secondsForPlayer
+
+    
     @IBOutlet weak var rootView: UIView!
     @IBOutlet weak var outerRootView: UIView!
     
@@ -55,6 +59,7 @@ class PlayerInfoView: UIView {
     }
     
     private func setupInfo(state : GameAction){
+        setupTimer(state: state)
         if type == .player2 {
             switch state {
             case .chooseMove, .pawnSelected, .wallSelected, .loadYourMove:
@@ -65,7 +70,7 @@ class PlayerInfoView: UIView {
                 
             case .waitingForOpponant:
                 playerInfoLabel.text = Localized.board_infobox_opponent_turn
-
+                
             }
             
         } else {
@@ -87,11 +92,34 @@ class PlayerInfoView: UIView {
                 
             case .loadYourMove:
                 playerInfoLabel.text = Localized.board_infobox_opponent_waiting
-
+                
             }
         }
     }
     
+    private func setupTimer(state : GameAction){
+        if type == .player2 {
+            switch state {
+            case .waitingForOpponant:
+                initTimer()
+            default:
+                timerLabel.text = defaultPlayerId
+                
+            }
+            
+        } else {
+            switch state {
+            case .chooseMove:
+                initTimer()
+            default:
+                timerLabel.text = defaultPlayerId
+                
+            }
+        }
+    }
+    
+    
+        
     private func setupUI(type : PlayerType){
         profileImageView.tintColor = colorPlayerPawn
         profileImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
@@ -101,4 +129,22 @@ class PlayerInfoView: UIView {
         rootView.backgroundColor = colorCell
         outerRootView.backgroundColor =  type == .player1 ? colorPlayerPawn : colorOpponentPawn
     }
+    
+    private func initTimer(){
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+        timer?.fire()
+    }
+    
+    @objc func fireTimer() {
+        if timeForPlayer == -1 {
+            timer?.invalidate()
+            timeForPlayer = secondsForPlayer
+            delegate?.timeUp(player: type)
+        } else {
+            timerLabel.text = "\(timeForPlayer)"
+            timeForPlayer -= 1
+        }
+        
+    }
+    
 }
