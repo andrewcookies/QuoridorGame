@@ -7,12 +7,26 @@
 
 import UIKit
 
+enum QLabelType : String {
+    case title
+    case main
+    case regular
+}
+
 @IBDesignable class QLabel : UILabel {
     
     
     @IBInspectable var labelType : String = "" {
         didSet {
-            //create your style
+            if labelType == QLabelType.title.rawValue {
+                self.font = UIFont(name: "Inter-Bold", size: 48)
+                
+            } else if labelType == QLabelType.main.rawValue {
+                self.font = UIFont(name: "Inter-Medium", size: 14)
+
+            } else if labelType == QLabelType.regular.rawValue {
+                self.font = UIFont(name: "Inter-Regular", size: 12)
+            }
         }
     }
     
