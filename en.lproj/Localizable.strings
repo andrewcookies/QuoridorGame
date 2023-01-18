@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  QuoridorGame
+
+  Created by Andrea Colussi on 18/01/23.
+  
+*/
+"app_title" = "Quoridor";
+
+/*
+ Login
+ */
+"login_namefield" = "Player's name";
+
+/*
+ Board View
+ */
+"board_infobox_player_turn" = "Pick up a wall or move";
+"board_infobox_opponent_waiting" = "Waiting for your move";
+"board_infobox_player_waiting" = "Waiting for the opponent";
+"board_infobox_opponent_waiting" = "He's moving";
+"board_infobox_player_pawn" = "Tap one cell to move the pawn";
+"board_infobox_player_wall" = "Tap between cells to insert wall";
+"board_infobox_player_loadMove" = "...";
+"board_infobox_player_searchingMatch" = "Searching match";
+
+
+/*
+ Popup
+ */
+"popup_title_matchWon" = "Congratulations";
+"popup_content_matchWon" = "You won the match!";
+"popup_content_confirmWon" = "Close";
+
+"popup_title_matchLost" = "Oh No!";
+"popup_content_matchLost" = "You lost the match!";
+"popup_confirm_matchLost" = "Close";
+
+"popup_title_quitMatch" = "Quit the match";
+"popup_content_quitMatch" = "You will loose the match. Are you sure?";
+"popup_confirm_quitMatch" = "Confirm";
+"popup_deny_quitMatch" = "Quit";
+
+"popup_title_rules" = "Quoridor Game";
+"popup_content_rules" = "Reach the opposite side of the board before your opponent!\n\nin every turn, move your pawn or insert a wall in the board.\n\nEnjoy the game!";
+"popup_confirm_rules" = "Got it";
+
+
+
