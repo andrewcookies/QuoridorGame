@@ -45,5 +45,14 @@
 "popup_content_rules" = "Reach the opposite side of the board before your opponent!\n\nin every turn, move your pawn or insert a wall in the board.\n\nEnjoy the game!";
 "popup_confirm_rules" = "Got it";
 
+"popup_title_error" = "Ops";
+"popup_content_error" = "Something went wrong. Please retry later.";
+"popup_confirm_error" = "Close";
 
+"popup_title_opponentQuitMatch" = "Opponent Quit";
+"popup_content_opponentQuitMatch" = "Your opponent quit the match. You won the match";
+"popup_confirm_opponentQuitMatch" = "Quit";
 
+"popup_title_invalidWall" = "Warning";
+"popup_content_invalidWall" = "You cannot block your opponent";
+"popup_confirm_invalidWall" = "Got it";
