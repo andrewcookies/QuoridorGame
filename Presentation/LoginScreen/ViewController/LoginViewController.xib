@@ -28,7 +28,7 @@
                     <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t9c-rt-VDU" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                            <rect key="frame" x="50" y="50" width="293" height="56.333333333333343"/>
+                            <rect key="frame" x="50" y="50" width="293" height="58.333333333333343"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="48"/>
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
@@ -67,7 +67,7 @@
     </objects>
     <designables>
         <designable name="t9c-rt-VDU">
-            <size key="intrinsicContentSize" width="121" height="57.333333333333336"/>
+            <size key="intrinsicContentSize" width="127.33333333333333" height="58.333333333333336"/>
         </designable>
     </designables>
 </document>

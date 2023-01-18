@@ -16,7 +16,7 @@ enum MatchType {
 final class Coordinator {
     
     private var navigationController : UINavigationController?
-    private var matchType : MatchType = .online
+    private var matchType : MatchType = .demo//.online
     
     init(navigationController: UINavigationController? = nil) {
         self.navigationController = navigationController

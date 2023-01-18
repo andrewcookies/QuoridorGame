@@ -96,6 +96,7 @@ class PlayerInfoView: UIView {
         profileImageView.tintColor = colorPlayerPawn
         profileImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
         timerImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
+        playerNameLabel.textColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
         rootView.backgroundColor = colorCell
         outerRootView.backgroundColor =  type == .player1 ? colorPlayerPawn : colorOpponentPawn
     }
