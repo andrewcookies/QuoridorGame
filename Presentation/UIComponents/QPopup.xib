@@ -25,13 +25,13 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ioy-Zd-GwB" userLabel="root">
-                    <rect key="frame" x="78.666666666666671" y="348.33333333333331" width="235.66666666666663" height="180.66666666666669"/>
+                    <rect key="frame" x="78.666666666666671" y="347.66666666666669" width="235.66666666666663" height="181.66666666666669"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0HT-SC-NZk" userLabel="root">
-                            <rect key="frame" x="5" y="5" width="225.66666666666666" height="170.66666666666666"/>
+                            <rect key="frame" x="5" y="5" width="225.66666666666666" height="171.66666666666666"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAf-56-bov" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="9.9999999999999982" width="205.66666666666666" height="20.333333333333329"/>
+                                    <rect key="frame" x="10" y="10" width="205.66666666666666" height="22"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -40,7 +40,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a1D-EW-tny" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                    <rect key="frame" x="10" y="60.333333333333378" width="205.66666666666666" height="20.333333333333336"/>
+                                    <rect key="frame" x="10" y="61.999999999999993" width="205.66666666666666" height="19.666666666666664"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
@@ -49,7 +49,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </label>
                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="MlE-Kv-x7c">
-                                    <rect key="frame" x="10" y="130.66666666666669" width="205.66666666666666" height="30"/>
+                                    <rect key="frame" x="10" y="131.66666666666663" width="205.66666666666666" height="30"/>
                                     <subviews>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fq8-6D-GkZ">
                                             <rect key="frame" x="0.0" y="0.0" width="103" height="30"/>
@@ -164,16 +164,16 @@
     </objects>
     <designables>
         <designable name="Tpr-Ob-QzA">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="41.666666666666664" height="19.666666666666668"/>
         </designable>
         <designable name="a1D-EW-tny">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="41.666666666666664" height="19.666666666666668"/>
         </designable>
         <designable name="qAf-56-bov">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="47.333333333333336" height="22"/>
         </designable>
         <designable name="utg-tt-BRD">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="41.666666666666664" height="19.666666666666668"/>
         </designable>
     </designables>
     <resources>

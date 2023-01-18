@@ -28,7 +28,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="112.66666666666667" height="100"/>
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="l7w-vc-aZs">
-                                            <rect key="frame" x="10" y="35" width="33.666666666666664" height="30.666666666666671"/>
+                                            <rect key="frame" x="10" y="29.333333333333329" width="45" height="42"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="l7w-vc-aZs" secondAttribute="height" multiplier="1:1" id="BD6-3P-vbD"/>
                                             </constraints>
@@ -36,7 +36,7 @@
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
-                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="width" secondItem="DiD-AE-ecF" secondAttribute="width" multiplier="0.3" id="3T6-tM-eV6"/>
+                                        <constraint firstItem="l7w-vc-aZs" firstAttribute="width" secondItem="DiD-AE-ecF" secondAttribute="width" multiplier="0.4" id="3T6-tM-eV6"/>
                                         <constraint firstItem="l7w-vc-aZs" firstAttribute="leading" secondItem="DiD-AE-ecF" secondAttribute="leading" constant="10" id="XaQ-28-xxC"/>
                                         <constraint firstItem="l7w-vc-aZs" firstAttribute="centerY" secondItem="DiD-AE-ecF" secondAttribute="centerY" id="fjb-X7-RV4"/>
                                     </constraints>
@@ -45,10 +45,10 @@
                                     <rect key="frame" x="112.66666666666666" y="0.0" width="337.66666666666674" height="100"/>
                                     <subviews>
                                         <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="o4T-l0-297">
-                                            <rect key="frame" x="0.0" y="0.0" width="337.66666666666669" height="100"/>
+                                            <rect key="frame" x="0.0" y="5" width="337.66666666666669" height="90"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ecS-Zt-JE7" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="0.0" width="337.66666666666669" height="50"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="337.66666666666669" height="45"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -57,7 +57,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mxW-ro-Z8D" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                                    <rect key="frame" x="0.0" y="50" width="337.66666666666669" height="50"/>
+                                                    <rect key="frame" x="0.0" y="45" width="337.66666666666669" height="45"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -78,15 +78,15 @@
                                     <constraints>
                                         <constraint firstItem="o4T-l0-297" firstAttribute="leading" secondItem="YBc-Gc-kwd" secondAttribute="leading" id="KHi-A0-B3n"/>
                                         <constraint firstAttribute="trailing" secondItem="o4T-l0-297" secondAttribute="trailing" id="S6U-n0-3DK"/>
-                                        <constraint firstAttribute="bottom" secondItem="o4T-l0-297" secondAttribute="bottom" id="uwH-0R-dFC"/>
-                                        <constraint firstItem="o4T-l0-297" firstAttribute="top" secondItem="YBc-Gc-kwd" secondAttribute="top" id="yDC-jf-4dD"/>
+                                        <constraint firstAttribute="bottom" secondItem="o4T-l0-297" secondAttribute="bottom" constant="5" id="uwH-0R-dFC"/>
+                                        <constraint firstItem="o4T-l0-297" firstAttribute="top" secondItem="YBc-Gc-kwd" secondAttribute="top" constant="5" id="yDC-jf-4dD"/>
                                     </constraints>
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r58-Ar-r4y" userLabel="TimerContainer">
                                     <rect key="frame" x="450.33333333333331" y="0.0" width="112.66666666666669" height="100"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVb-Bq-Egv" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="40" width="41.333333333333336" height="20.333333333333329"/>
+                                            <rect key="frame" x="0.0" y="40.333333333333329" width="82.666666666666671" height="19.666666666666671"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -95,7 +95,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timer" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jjk-E4-ivj">
-                                            <rect key="frame" x="41.333333333333371" y="41" width="20" height="18.666666666666671"/>
+                                            <rect key="frame" x="82.666666666666686" y="41" width="20" height="18.666666666666671"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Jjk-E4-ivj" secondAttribute="height" multiplier="1:1" id="fpj-ez-Ai4"/>
                                             </constraints>
@@ -156,13 +156,13 @@
     </objects>
     <designables>
         <designable name="ecS-Zt-JE7">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="47.333333333333336" height="22"/>
         </designable>
         <designable name="mxW-ro-Z8D">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="41.666666666666664" height="19.666666666666668"/>
         </designable>
         <designable name="vVb-Bq-Egv">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="41.666666666666664" height="19.666666666666668"/>
         </designable>
     </designables>
     <resources>
