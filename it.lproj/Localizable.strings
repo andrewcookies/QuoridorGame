@@ -19,7 +19,7 @@
 "board_infobox_player_turn" = "Prendi un muro o fai una mossa";
 "board_infobox_opponent_waiting" = "In attesa della tua mossa";
 "board_infobox_player_waiting" = "In attesa dell'avversario";
-"board_infobox_opponent_waiting" = "Sta per muovere";
+"board_infobox_opponent_turn" = "Sta per muovere";
 "board_infobox_player_pawn" = "Premi una cella per muovere il pedone";
 "board_infobox_player_wall" = "Premi tra le celle per inserire il muro";
 "board_infobox_player_loadMove" = "...";
@@ -43,17 +43,17 @@
 "popup_deny_quitMatch" = "No";
 
 "popup_title_rules" = "Quoridor Game";
-"popup_content_rules" = "Reach the opposite side of the board before your opponent!\n\nin every turn, move your pawn or insert a wall in the board.\n\nEnjoy the game!";
-"popup_confirm_rules" = "Got it";
+"popup_content_rules" = "Raggiungi il lato opposto della scacchiera prima del tuo avversario\n\nAd ogni turno, muovi il pedone o inserisci un muro tra le celle.\n\nBuon divertimento!";
+"popup_confirm_rules" = "Capito";
 
 "popup_title_error" = "Ops";
-"popup_content_error" = "Something went wrong. Please retry later.";
-"popup_confirm_error" = "Close";
+"popup_content_error" = "Qualcosa è andato storto. Per favore riprova più tardi.";
+"popup_confirm_error" = "Chiudi";
 
-"popup_title_opponentQuitMatch" = "Opponent Quit";
-"popup_content_opponentQuitMatch" = "Your opponent quit the match. You won the match";
-"popup_confirm_opponentQuitMatch" = "Quit";
+"popup_title_opponentQuitMatch" = "L'avversario ha abbandonato";
+"popup_content_opponentQuitMatch" = "L'avversario ha abbandanato la partina. Hai vinto!";
+"popup_confirm_opponentQuitMatch" = "Chiudi";
 
-"popup_title_invalidWall" = "Warning";
-"popup_content_invalidWall" = "You cannot block your opponent";
-"popup_confirm_invalidWall" = "Got it";
+"popup_title_invalidWall" = "Attenzione";
+"popup_content_invalidWall" = "Non puoi bloccare la strada al tuo avversario";
+"popup_confirm_invalidWall" = "Capito";

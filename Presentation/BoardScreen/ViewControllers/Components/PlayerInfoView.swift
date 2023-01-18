@@ -58,35 +58,35 @@ class PlayerInfoView: UIView {
         if type == .player2 {
             switch state {
             case .chooseMove, .pawnSelected, .wallSelected, .loadYourMove:
-                playerInfoLabel.text = "*Waiting for your move"
+                playerInfoLabel.text = Localized.board_infobox_opponent_waiting
                 
             case .searchMatch:
-                playerInfoLabel.text = defaultPlayerName
+                playerInfoLabel.text = Localized.defaultNilText
                 
             case .waitingForOpponant:
-                playerInfoLabel.text = "*He's moving..."
+                playerInfoLabel.text = Localized.board_infobox_opponent_turn
 
             }
             
         } else {
             switch state {
             case .wallSelected:
-                playerInfoLabel.text = "*Tap between cells to insert the wall"
+                playerInfoLabel.text = Localized.board_infobox_player_wall
                 
             case .pawnSelected:
-                playerInfoLabel.text = "*Tap one cell to move the pawn"
+                playerInfoLabel.text = Localized.board_infobox_player_pawn
                 
             case .chooseMove:
-                playerInfoLabel.text = "*Select a wall or tap the pawn to move it"
+                playerInfoLabel.text = Localized.board_infobox_player_turn
                 
             case .searchMatch:
-                playerInfoLabel.text = "*Searching match ..."
+                playerInfoLabel.text = Localized.board_infobox_player_searchingMatch
                 
             case .waitingForOpponant:
-                playerInfoLabel.text = "*Waiting for the opponent ..."
+                playerInfoLabel.text = Localized.board_infobox_player_waiting
                 
             case .loadYourMove:
-                playerInfoLabel.text = "*..."
+                playerInfoLabel.text = Localized.board_infobox_opponent_waiting
 
             }
         }

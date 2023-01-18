@@ -18,7 +18,7 @@
 "board_infobox_player_turn" = "Pick up a wall or move";
 "board_infobox_opponent_waiting" = "Waiting for your move";
 "board_infobox_player_waiting" = "Waiting for the opponent";
-"board_infobox_opponent_waiting" = "He's moving";
+"board_infobox_opponent_turn" = "He's moving";
 "board_infobox_player_pawn" = "Tap one cell to move the pawn";
 "board_infobox_player_wall" = "Tap between cells to insert wall";
 "board_infobox_player_loadMove" = "...";

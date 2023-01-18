@@ -21,7 +21,7 @@ class LoginViewController: UIViewController {
         playerNameTextField.textColor = textColor
         playerNameTextField.font = regularFont
         
-        titleLabel.text = "*Quoridor"
+        titleLabel.text = Localized.app_title
         titleLabel.textColor = colorEmptyWall
     }
 

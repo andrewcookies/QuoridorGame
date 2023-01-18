@@ -60,6 +60,10 @@ class QPopupViewController: UIViewController {
         innerRoot.layer.cornerRadius = 4
         innerRoot.clipsToBounds = true
         
+        contentPopupLabel.textColor = textColor
+        titlePopupLabel.textColor = textColor
+        leftButtonLabel.textColor = textColor
+        rightButtonLabel.textColor = textColor
         
         setup()
     }
@@ -67,48 +71,48 @@ class QPopupViewController: UIViewController {
     func setup(){
         switch type {
         case .wonMatch:
-            titlePopupLabel.text = "*Congratulations"
-            contentPopupLabel.text = "*You won the match!"
+            titlePopupLabel.text = Localized.popup_title_matchWon
+            contentPopupLabel.text = Localized.popup_content_matchWon
             rightButtonLabel.isHidden = true
-            leftButtonLabel.text = "*Close"
+            leftButtonLabel.text = Localized.popup_confirm_confirmWon
             
             
         case .lostMatch:
-            titlePopupLabel.text = "*Oh No"
-            contentPopupLabel.text = "*You lost the match!"
+            titlePopupLabel.text = Localized.popup_title_matchLost
+            contentPopupLabel.text = Localized.popup_content_matchLost
             rightButtonLabel.isHidden = true
-            leftButtonLabel.text = "*Close"
+            leftButtonLabel.text = Localized.popup_confirm_matchLost
             
         case .quitMatch:
-            titlePopupLabel.text = "*Quit the match"
-            contentPopupLabel.text = "*You will lost the match. Are you sure?"
+            titlePopupLabel.text = Localized.popup_title_quitMatch
+            contentPopupLabel.text = Localized.popup_content_quitMatch
             rightButtonLabel.isHidden = false
-            leftButtonLabel.text = "*Confirm"
-            rightButtonLabel.text = "*Deny"
+            leftButtonLabel.text = Localized.popup_confirm_quitMatch
+            rightButtonLabel.text = Localized.popup_deny_quitMatch
             
         case .rules:
-            titlePopupLabel.text = "*Quoridor"
-            contentPopupLabel.text = "*Rules...."
+            titlePopupLabel.text = Localized.popup_title_rules
+            contentPopupLabel.text = Localized.popup_content_rules
             rightButtonLabel.isHidden = true
-            leftButtonLabel.text = "*Got it"
+            leftButtonLabel.text = Localized.popup_confirm_rules
 
         case .genericError:
-            titlePopupLabel.text = "*Ops"
-            contentPopupLabel.text = "*Something went wrong. Please retry later"
+            titlePopupLabel.text = Localized.popup_title_error
+            contentPopupLabel.text = Localized.popup_confirm_error
             rightButtonLabel.isHidden = true
-            leftButtonLabel.text = "*Quit"
+            leftButtonLabel.text = Localized.popup_confirm_error
 
         case .opponentQuitMatch:
-            titlePopupLabel.text = "*Opponent Quit"
-            contentPopupLabel.text = "*Your opponent quit. Please retry later"
+            titlePopupLabel.text = Localized.popup_title_opponentQuitMatch
+            contentPopupLabel.text = Localized.popup_content_opponentQuitMatch
             rightButtonLabel.isHidden = true
-            leftButtonLabel.text = "*Quit game"
+            leftButtonLabel.text = Localized.popup_confirm_opponentQuitMatch
             
         case .ringWallFound:
-            titlePopupLabel.text = "*Warning"
-            contentPopupLabel.text = "*You cannot close your opponent"
+            titlePopupLabel.text = Localized.popup_title_invalidWall
+            contentPopupLabel.text = Localized.popup_content_invalidWall
             rightButtonLabel.isHidden = true
-            leftButtonLabel.text = "*Got it"
+            leftButtonLabel.text = Localized.popup_confirm_invalidWall
         }
     }
  
@@ -116,10 +120,13 @@ class QPopupViewController: UIViewController {
         switch type {
         case .wonMatch:
             delegate?.acceptWonMatch()
+            
         case .lostMatch:
             delegate?.acceptLostMatch()
+            
         case .quitMatch:
             delegate?.acceptQuitMatch()
+            
         case .rules, .ringWallFound:
             break
         case .genericError:
