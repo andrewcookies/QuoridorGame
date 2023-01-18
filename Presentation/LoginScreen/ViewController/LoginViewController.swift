@@ -18,8 +18,10 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         playerNameTextField.delegate = self
         playerNameTextField.backgroundColor = mainColor
+        playerNameTextField.textColor = textColor
+        playerNameTextField.font = regularFont
         
-        titleLabel.text = "Quoridor"
+        titleLabel.text = "*Quoridor"
         titleLabel.textColor = colorEmptyWall
     }
 

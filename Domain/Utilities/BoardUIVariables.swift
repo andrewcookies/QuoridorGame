@@ -8,11 +8,19 @@
 import Foundation
 import UIKit
 
+/*
+ Fonts
+ */
+
+let titleFont = UIFont(name: "Inter-Bold", size: 48)
+let mainFont = UIFont(name: "Inter-SemiBold", size: 18)
+let regularFont = UIFont(name: "Inter-Medium", size: 16)
 
 /*
  Colors
  */
 let mainColor = UIColor(red: 82/255, green: 80/255, blue: 77/255, alpha: 1.0)
+let textColor = UIColor(red: 218/255, green: 218/255, blue: 218/255, alpha: 1.0)
 
 let colorBorder = UIColor.init(red: 44/255, green: 44/255, blue: 44/255, alpha: 1.0)
 let colorCell = UIColor.init(red: 44/255, green: 44/255, blue: 44/255, alpha: 1.0)

@@ -19,13 +19,13 @@ enum QLabelType : String {
     @IBInspectable var labelType : String = "" {
         didSet {
             if labelType == QLabelType.title.rawValue {
-                font = UIFont(name: "Inter-Bold", size: 48)
+                font = titleFont
                 
             } else if labelType == QLabelType.main.rawValue {
-                font = UIFont(name: "Inter-SemiBold", size: 18)
+                font = mainFont
 
             } else if labelType == QLabelType.regular.rawValue {
-                font = UIFont(name: "Inter-Medium", size: 16)
+                font = regularFont
             }
             
             adjustsFontForContentSizeCategory = true
