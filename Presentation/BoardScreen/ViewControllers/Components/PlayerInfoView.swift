@@ -103,6 +103,7 @@ class PlayerInfoView: UIView {
             case .waitingForOpponant:
                 initTimer()
             default:
+                stopTimer()
                 timerLabel.text = Localized.defaultNilText
                 
             }
@@ -112,6 +113,7 @@ class PlayerInfoView: UIView {
             case .chooseMove:
                 initTimer()
             default:
+                stopTimer()
                 timerLabel.text = Localized.defaultNilText
                 
             }
@@ -136,11 +138,16 @@ class PlayerInfoView: UIView {
         timer?.fire()
     }
     
-    @objc func fireTimer() {
-        if timeForPlayer == -1 {
+    private func stopTimer() {
+        if timer != nil {
             timer?.invalidate()
             timer = nil
-            timeForPlayer = secondsForPlayer
+        }
+    }
+    
+    @objc func fireTimer() {
+        if timeForPlayer == -1 {
+            stopTimer()
             delegate?.timeUp(player: type)
         } else {
             timerLabel.text = timeForPlayer >= 10 ? "00:\(timeForPlayer)" : "00:0\(timeForPlayer)"

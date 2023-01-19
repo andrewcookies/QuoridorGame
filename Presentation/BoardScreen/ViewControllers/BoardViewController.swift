@@ -95,27 +95,9 @@ class BoardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func setDimensions(){
-        
-        let screenHeight = rootView.frame.height
-
-        let boardWidth = boardView.frame.width//screenWidth
-        let wallHeight = (boardWidth / CGFloat(numberOfCellPerRow))*2
-        let boardHeight = boardWidth + wallHeight
-        
-        let optionHeight = CGFloat(25)
-        
-        let infoHeight = screenHeight*0.10
-        
-        optionScreenHeight.constant = optionHeight
-        //upperScreenHeight.constant = infoHeight
-        //middleScreenHeight.constant = boardHeight
-    }
     
     private func setupUI(){
-        
-       // setDimensions()
-        
+                
         opponentInfoView.layer.cornerRadius = 4
         opponentInfoView.clipsToBounds = true
 
@@ -192,6 +174,12 @@ class BoardViewController: UIViewController {
             view.actionState = state
         }
         
+    }
+    
+    private func updateOpponentName(name : String){
+        if let view = opponentInfoView.subviews.first as? PlayerInfoView {
+            view.setup(name: name, player: .player2)
+        }
     }
     
     private func updatePawnPosition(start: BoardCell, destination: BoardCell) {
@@ -319,12 +307,14 @@ extension BoardViewController : BoardViewControllerProtocol {
     
     func createBoard(board: Board) {
         drawBoard(board: board)
+        updateOpponentName(name: board.opponent.name)
         gameAction = .chooseMove
         startLoading(isLoading: false)
     }
     
     func joinBoard(board: Board) {
         drawBoard(board: board)
+        updateOpponentName(name: board.opponent.name)
         gameAction = .waitingForOpponant
         startLoading(isLoading: false)
     }
