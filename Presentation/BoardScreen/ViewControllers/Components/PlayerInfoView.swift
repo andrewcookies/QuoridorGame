@@ -131,6 +131,7 @@ class PlayerInfoView: UIView {
     }
     
     private func initTimer(){
+        timeForPlayer = secondsForPlayer
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
         timer?.fire()
     }
@@ -138,6 +139,7 @@ class PlayerInfoView: UIView {
     @objc func fireTimer() {
         if timeForPlayer == -1 {
             timer?.invalidate()
+            timer = nil
             timeForPlayer = secondsForPlayer
             delegate?.timeUp(player: type)
         } else {
