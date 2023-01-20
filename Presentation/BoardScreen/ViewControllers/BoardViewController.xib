@@ -14,9 +14,9 @@
                 <outlet property="boardView" destination="4BY-B1-Mzp" id="wqt-dX-zJ3"/>
                 <outlet property="loadingSpinner" destination="2lM-E5-VrR" id="6kL-0n-1fD"/>
                 <outlet property="loadingView" destination="cqM-bP-bAN" id="aOU-4e-q1O"/>
-                <outlet property="opponentInfoView" destination="Zw2-Lp-H3H" id="FX5-9I-AxO"/>
+                <outlet property="opponentInfoView" destination="Zw2-Lp-H3H" id="CeQ-GX-vTS"/>
                 <outlet property="optionScreenHeight" destination="Cks-by-L6n" id="tf1-Qo-oEU"/>
-                <outlet property="playerInfoView" destination="JYp-JG-9fs" id="c3D-7h-E6F"/>
+                <outlet property="playerInfoView" destination="JYp-JG-9fs" id="tVf-He-JdR"/>
                 <outlet property="playerWallContaier" destination="XiH-cl-RXc" id="j2d-mQ-uGb"/>
                 <outlet property="rootView" destination="NVo-dM-xlz" id="XuP-lg-NnF"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -91,9 +91,12 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yiw-HF-77n" userLabel="upperScreen">
                             <rect key="frame" x="0.0" y="24.999999999999993" width="393" height="98.333333333333314"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zw2-Lp-H3H" userLabel="Opponent dashboard">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zw2-Lp-H3H" userLabel="Opponent dashboard" customClass="PlayerInfoView" customModule="QuoridorGame" customModuleProvider="target">
                                     <rect key="frame" x="5" y="5" width="383" height="88.333333333333329"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="playerType" value="player2"/>
+                                    </userDefinedRuntimeAttributes>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -166,9 +169,12 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PCu-H6-YIZ" userLabel="bottomScreen">
                             <rect key="frame" x="0.0" y="660.66666666666663" width="393" height="98.333333333333371"/>
                             <subviews>
-                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-JG-9fs" userLabel="PlayerDashBoard">
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-JG-9fs" userLabel="PlayerDashBoard" customClass="PlayerInfoView" customModule="QuoridorGame" customModuleProvider="target">
                                     <rect key="frame" x="5" y="5" width="383" height="88.333333333333329"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="string" keyPath="playerType" value="player1"/>
+                                    </userDefinedRuntimeAttributes>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

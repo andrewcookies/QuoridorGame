@@ -10,14 +10,21 @@ import UIKit
 protocol PlayerInfoViewDelegate : AnyObject {
     func timeUp(player : PlayerType)
 }
-
+@IBDesignable
 class PlayerInfoView: UIView {
+    
+    @IBInspectable var playerType : String = "" {
+        didSet {
+            type = PlayerType(rawValue: playerType) ?? .player1
+        }
+    }
     
     private var type : PlayerType = .player1
     private var timer: Timer?
     private var timeForPlayer = secondsForPlayer
 
     
+    @IBOutlet var content: UIView!
     @IBOutlet weak var rootView: UIView!
     @IBOutlet weak var outerRootView: UIView!
     
@@ -28,34 +35,46 @@ class PlayerInfoView: UIView {
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var timerImageView: UIImageView!
     
+    
     weak var delegate : PlayerInfoViewDelegate?
+    var playerName : String = "" {
+        didSet {
+            playerNameLabel.text = playerName
+            setupUI()
+        }
+    }
+
     var actionState : GameAction = .chooseMove {
         didSet {
             setupInfo(state: actionState)
         }
     }
         
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
-    static func getView() -> UIView? {
-        guard let _view = Bundle.main.loadNibNamed("PlayerInfoView", owner: self, options: nil)?.first,
-              let view = _view as? PlayerInfoView
-        else { return nil }
-        return view
-    }
-    
     override func layoutSubviews() {
         rootView.layer.cornerRadius = 4
         rootView.clipsToBounds = true
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        commonInit()
+    }
     
-    func setup(name : String, player : PlayerType){
-        playerNameLabel.text = name
-        type = player
-        setupUI(type: player)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+    
+    private func commonInit() {
+        guard let view = loadViewFromNib() else { return }
+        view.frame = self.bounds
+        self.addSubview(view)
+        content = view
+    }
+    
+    private func loadViewFromNib() -> UIView? {
+        let nib = UINib(nibName: "PlayerInfoView", bundle: nil)
+        return nib.instantiate(withOwner: self, options: nil).first as? UIView
     }
     
     private func setupInfo(state : GameAction){
@@ -122,7 +141,7 @@ class PlayerInfoView: UIView {
     
     
         
-    private func setupUI(type : PlayerType){
+    private func setupUI(){
         profileImageView.tintColor = colorPlayerPawn
         profileImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
         timerImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn

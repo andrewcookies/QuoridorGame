@@ -36,14 +36,12 @@ class BoardViewController: UIViewController {
     
     @IBOutlet weak var rootView: UIView!
     @IBOutlet weak var optionScreenHeight: NSLayoutConstraint!
-    @IBOutlet weak var upperScreenHeight: NSLayoutConstraint!
-    @IBOutlet weak var middleScreenHeight: NSLayoutConstraint!
     
     @IBOutlet weak var boardContainer: UIView!
     @IBOutlet weak var playerWallContaier: UIView!
+
     @IBOutlet weak var playerInfoView: PlayerInfoView!
-    @IBOutlet weak var opponentInfoView: UIView!
-    
+    @IBOutlet weak var opponentInfoView: PlayerInfoView!
     
     @IBOutlet private var boardView : UIView!
     
@@ -114,22 +112,14 @@ class BoardViewController: UIViewController {
         loadingView.backgroundColor = mainColor
         
         //setup players dashboard
-        if let playerView = PlayerInfoView.getView() as? PlayerInfoView {
-            playerView.frame = CGRect(x: 0, y: 0, width: playerInfoView.frame.width, height: playerInfoView.frame.height)
-            playerView.setup(name: viewModel?.currentPlayerName ?? "", player : .player1)
-            playerView.actionState = .searchMatch
-            playerView.delegate = self
-            playerInfoView.addSubview(playerView)
-        }
+        playerInfoView.playerName = viewModel?.currentPlayerName ?? defaultPlayerName
+        playerInfoView.actionState = .searchMatch
+        playerInfoView.delegate = self
         
-        if let opponentView = PlayerInfoView.getView() as? PlayerInfoView {
-            opponentView.frame = CGRect(x: 0, y: 0, width: opponentInfoView.frame.width, height: opponentInfoView.frame.height)
-            opponentView.setup(name: defaultPlayerName, player : .player2)
-            opponentView.actionState = .searchMatch
-            opponentView.delegate = self
-            opponentInfoView.addSubview(opponentView)
-        }
-
+        
+        opponentInfoView.playerName = defaultPlayerName
+        opponentInfoView.actionState = .searchMatch
+        opponentInfoView.delegate = self
         
     }
     
@@ -166,20 +156,12 @@ class BoardViewController: UIViewController {
     }
     
     private func updateInfoBoxes(state : GameAction){
-        if let view = opponentInfoView.subviews.first as? PlayerInfoView {
-            view.actionState = state
-        }
-        
-        if let view = playerInfoView.subviews.first as? PlayerInfoView {
-            view.actionState = state
-        }
-        
+        playerInfoView.actionState = state
+        opponentInfoView.actionState = state
     }
     
     private func updateOpponentName(name : String){
-        if let view = opponentInfoView.subviews.first as? PlayerInfoView {
-            view.setup(name: name, player: .player2)
-        }
+        opponentInfoView.playerName = name
     }
     
     private func updatePawnPosition(start: BoardCell, destination: BoardCell) {
