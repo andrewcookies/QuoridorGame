@@ -13,10 +13,11 @@ enum MatchType {
     case online
 }
 
+var matchType : MatchType = .demo
+
 final class Coordinator {
     
     private var navigationController : UINavigationController?
-    private var matchType : MatchType = .online
     
     init(navigationController: UINavigationController? = nil) {
         self.navigationController = navigationController

@@ -34,7 +34,8 @@ class PlayerInfoView: UIView {
     
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var timerImageView: UIImageView!
-    
+    @IBOutlet weak var timerContainer: UIView!
+
     
     weak var delegate : PlayerInfoViewDelegate?
     var playerName : String = "" {
@@ -47,6 +48,12 @@ class PlayerInfoView: UIView {
     var actionState : GameAction = .chooseMove {
         didSet {
             setupInfo(state: actionState)
+        }
+    }
+    
+    var opponentRemainingWall : Int = 0 {
+        didSet {
+            timerLabel.text = "\(opponentRemainingWall) walls"
         }
     }
         
@@ -78,7 +85,6 @@ class PlayerInfoView: UIView {
     }
     
     private func setupInfo(state : GameAction){
-        setupTimer(state: state)
         if type == .player2 {
             switch state {
             case .chooseMove, .pawnSelected, .wallSelected, .loadYourMove:
@@ -116,31 +122,7 @@ class PlayerInfoView: UIView {
         }
     }
     
-    private func setupTimer(state : GameAction){
-        if type == .player2 {
-            switch state {
-            case .waitingForOpponant:
-                initTimer()
-            default:
-                stopTimer()
-                timerLabel.text = Localized.defaultNilText
-                
-            }
             
-        } else {
-            switch state {
-            case .chooseMove:
-                initTimer()
-            default:
-                stopTimer()
-                timerLabel.text = Localized.defaultNilText
-                
-            }
-        }
-    }
-    
-    
-        
     private func setupUI(){
         profileImageView.tintColor = colorPlayerPawn
         profileImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
@@ -149,18 +131,19 @@ class PlayerInfoView: UIView {
         playerInfoLabel.textColor = textColor
         rootView.backgroundColor = colorCell
         outerRootView.backgroundColor =  type == .player1 ? colorPlayerPawn : colorOpponentPawn
+        timerImageView.isHidden = type == .player2
     }
     
-    private func initTimer(){
+    func startTimer(){
         timeForPlayer = secondsForPlayer
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
-        timer?.fire()
     }
     
-    private func stopTimer() {
+    func stopTimer() {
         if timer != nil {
             timer?.invalidate()
             timer = nil
+            timerLabel.text = Localized.defaultNilText
         }
     }
     

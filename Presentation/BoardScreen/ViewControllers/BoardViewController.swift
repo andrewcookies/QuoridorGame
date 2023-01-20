@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 protocol BoardViewControllerProtocol {
+    func opponentDidNotMove()
     func updateOpponentPawnOnBoard(start : BoardCell, destination : BoardCell)
     func updatePawnOnBoard(start : BoardCell, destination : BoardCell)
     func updateOpponentWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
@@ -158,6 +159,14 @@ class BoardViewController: UIViewController {
     private func updateInfoBoxes(state : GameAction){
         playerInfoView.actionState = state
         opponentInfoView.actionState = state
+        
+        if state == .waitingForOpponant {
+            playerInfoView.stopTimer()
+        }
+        
+        if state == .chooseMove {
+            playerInfoView.startTimer()
+        }
     }
     
     private func updateOpponentName(name : String){
@@ -176,9 +185,7 @@ class BoardViewController: UIViewController {
         let cellWidth = Int(width/numberOfCellPerRow)
         
         for (rowId,cellsRow) in board.cells.enumerated() {
-            //let cellRow = board.cells[rowIndex]
             for (columnId,cell) in cellsRow.enumerated() {
-               // let cell = cellRow[columnIndex]
                 if let v = BoardCellView.getView() as? BoardCellView {
                     v.frame = CGRect(x: columnId*cellWidth, y: rowId*cellWidth, width: cellWidth, height: cellWidth)
                     v.setup(cell: cell)
@@ -213,8 +220,12 @@ class BoardViewController: UIViewController {
     //MARK: Actions
     
     @IBAction func infoTapped(_ sender: UIButton) {
-        let vc = getPopup(type : .rules)
-        self.present(vc, animated: true)
+        if matchType == .demo {
+            NotificationCenter.default.post(name: Notification.Name("update"), object: nil)
+        } else {
+            let vc = getPopup(type : .rules)
+            self.present(vc, animated: true)
+        }
     }
     
     @IBAction func closeTapped(_ sender: UIButton) {
@@ -308,6 +319,9 @@ extension BoardViewController : BoardViewControllerProtocol {
     
     func updateOpponentPawnOnBoard(start: BoardCell, destination: BoardCell) {
         updatePawnPosition(start: start, destination: destination)
+    }
+    
+    func opponentDidNotMove() {
         gameAction = .chooseMove
     }
     
@@ -320,12 +334,12 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerAvailableWalls.forEach({ $0.setup(state: .normal)})
         }
         
-        gameAction = .chooseMove
+        gameAction = .waitingForOpponant
     }
     
     func updateOpponentWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
         updateWallPosition(topRight: topRight, topLeft: topLeft, bottomRight: bottomRight, bottomLeft: bottomLeft)
-        gameAction = .waitingForOpponant
+        gameAction = .chooseMove
     }
 }
 
@@ -348,7 +362,6 @@ extension BoardViewController : BoardCellDelegate {
                 updateBoardAllowedPawnCells(allowed: false)
                 allowedCells.removeAll()
                 viewModel?.movePawn(cellIndex: index)
-                gameAction = .chooseMove
             }
         }
     }

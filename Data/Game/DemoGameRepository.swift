@@ -32,7 +32,6 @@ class DemoGameOutputRepository : GameRepositoryOutputInterface {
                             lastMove: g.lastMove,
                             gameMoves: g.gameMoves)
             demoGame = game
-            NotificationCenter.default.post(name: Notification.Name("update"), object: nil)
         }
     }
     
@@ -48,7 +47,6 @@ class DemoGameOutputRepository : GameRepositoryOutputInterface {
                                lastMove: demoMove,
                                gameMoves: moves)
             demoGame = newGame
-            NotificationCenter.default.post(name: Notification.Name("update"), object: nil)
         }
     }
     
@@ -66,10 +64,8 @@ class DemoGameInputRepository : DemoGameOutputRepository, GameRepositoryInputInt
     }
     
     @objc func update(){
-        DispatchQueue.main.async {
-            if let g = self.demoGame {
-                self.inputUseCase.updateGameFromOpponent(game: g)
-            }
+        if let g = self.demoGame {
+            self.inputUseCase.updateGameFromOpponent(game: g)
         }
     }
     

@@ -16,6 +16,7 @@
                 <outlet property="playerNameLabel" destination="ecS-Zt-JE7" id="kSw-hx-iMV"/>
                 <outlet property="profileImageView" destination="l7w-vc-aZs" id="dyq-Y3-0HK"/>
                 <outlet property="rootView" destination="0WO-AJ-g6B" id="Avb-XK-c9p"/>
+                <outlet property="timerContainer" destination="r58-Ar-r4y" id="pKn-2Q-m74"/>
                 <outlet property="timerImageView" destination="Jjk-E4-ivj" id="AHi-PH-F5U"/>
                 <outlet property="timerLabel" destination="vVb-Bq-Egv" id="C60-yY-Ydb"/>
             </connections>
@@ -96,8 +97,8 @@
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="r58-Ar-r4y" userLabel="TimerContainer">
                                     <rect key="frame" x="450.33333333333331" y="0.0" width="112.66666666666669" height="100"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVb-Bq-Egv" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="40" width="82.666666666666671" height="20.333333333333329"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="- -" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vVb-Bq-Egv" customClass="QLabel" customModule="QuoridorGame" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="40" width="19.666666666666668" height="20.333333333333329"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
@@ -106,7 +107,7 @@
                                             </userDefinedRuntimeAttributes>
                                         </label>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timer" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Jjk-E4-ivj">
-                                            <rect key="frame" x="82.666666666666686" y="41" width="20" height="18.666666666666671"/>
+                                            <rect key="frame" x="19.666666666666686" y="41" width="20" height="18.666666666666671"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" secondItem="Jjk-E4-ivj" secondAttribute="height" multiplier="1:1" id="fpj-ez-Ai4"/>
                                             </constraints>
@@ -164,7 +165,7 @@
             <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
         </designable>
         <designable name="vVb-Bq-Egv">
-            <size key="intrinsicContentSize" width="41.333333333333336" height="20.333333333333332"/>
+            <size key="intrinsicContentSize" width="19.666666666666668" height="20.333333333333332"/>
         </designable>
     </designables>
     <resources>

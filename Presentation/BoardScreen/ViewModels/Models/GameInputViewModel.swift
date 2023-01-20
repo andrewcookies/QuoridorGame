@@ -67,7 +67,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
             viewControllerProtocol?.updateOpponentWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
             
         case .noMove:
-            break
+            viewControllerProtocol?.opponentDidNotMove()
         }
     }
     
