@@ -147,6 +147,7 @@ class PlayerInfoView: UIView {
     func stopTimer() {
         timer?.invalidate()
         timer = nil
+        timerLabel.text = defaultPlayerName
     }
     
     @objc func fireTimer() {

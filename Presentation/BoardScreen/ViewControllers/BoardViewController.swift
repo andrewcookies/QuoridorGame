@@ -9,7 +9,6 @@ import UIKit
 import Combine
 
 protocol BoardViewControllerProtocol {
-    func opponentDidNotMove()
     func updateOpponentPawnOnBoard(start : BoardCell, destination : BoardCell)
     func updatePawnOnBoard(start : BoardCell, destination : BoardCell)
     func updateOpponentWallOnBoard(topRight : BoardCell, topLeft : BoardCell, bottomRight : BoardCell, bottomLeft : BoardCell)
@@ -273,6 +272,8 @@ extension BoardViewController : BoardViewControllerProtocol {
             //Everything is all right, no error
             break
             
+        case .waitingYourMove:
+            gameAction = .chooseMove
             
         case .waiting:
             gameAction = .loadYourMove
@@ -302,35 +303,30 @@ extension BoardViewController : BoardViewControllerProtocol {
             
         case .ringFound:
             self.present(getPopup(type: .ringWallFound), animated: true)
+
         }
     }
     
     func createBoard(board: Board) {
         drawBoard(board: board)
         updateOpponentName(name: board.opponent.name)
-        gameAction = .chooseMove
         startLoading(isLoading: false)
     }
     
     func joinBoard(board: Board) {
         drawBoard(board: board)
         updateOpponentName(name: board.opponent.name)
-        gameAction = .waitingForOpponant
         startLoading(isLoading: false)
     }
     
     func updatePawnOnBoard(start: BoardCell, destination: BoardCell) {
         updatePawnPosition(start: start, destination: destination)
-        gameAction = .waitingForOpponant
     }
     
     func updateOpponentPawnOnBoard(start: BoardCell, destination: BoardCell) {
         updatePawnPosition(start: start, destination: destination)
     }
     
-    func opponentDidNotMove() {
-        gameAction = .chooseMove
-    }
     
     func updateWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
         
@@ -341,13 +337,11 @@ extension BoardViewController : BoardViewControllerProtocol {
             playerAvailableWalls.forEach({ $0.setup(state: .normal)})
         }
         
-        gameAction = .waitingForOpponant
     }
     
     func updateOpponentWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
         updateWallPosition(topRight: topRight, topLeft: topLeft, bottomRight: bottomRight, bottomLeft: bottomLeft)
         updateOpponentWalls()
-        gameAction = .chooseMove
     }
 }
 

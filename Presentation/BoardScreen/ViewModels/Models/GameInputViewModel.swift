@@ -51,6 +51,8 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
         case .gameAlreadyStarted:
             currentBoard = boardFactory.getBoardFromGame(game: game)
             viewControllerProtocol?.createBoard(board: currentBoard)
+            viewControllerProtocol?.handelEvent(gameEvent: .waitingYourMove)
+
             
             
         case .opponentMovePawn:
@@ -58,6 +60,8 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
             let wrapper = boardFactory.getBoardCellsFromPawn(newMove: newPosition, contentType : .opponentPawn)
             currentBoard = wrapper.updatedBoard
             viewControllerProtocol?.updateOpponentPawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)
+            viewControllerProtocol?.handelEvent(gameEvent: .waitingYourMove)
+
             
             
         case .opponentInsertWall:
@@ -65,9 +69,11 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
             let wrapper = boardFactory.getBoardCellsFromWall(newWall: newWall)
             currentBoard = wrapper.updatedBoard
             viewControllerProtocol?.updateOpponentWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
+            viewControllerProtocol?.handelEvent(gameEvent: .waitingYourMove)
+
             
         case .noMove:
-            viewControllerProtocol?.opponentDidNotMove()
+            viewControllerProtocol?.handelEvent(gameEvent: .waitingYourMove)
         }
     }
     

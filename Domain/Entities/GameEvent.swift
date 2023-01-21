@@ -12,6 +12,8 @@ enum GameEvent : Error {
     
     case waiting
     case waitingOpponentMove
+    case waitingYourMove
+    
     case opponentQuitMatch
     case matchWon
     case matchLost
