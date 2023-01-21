@@ -29,6 +29,7 @@ struct WallWrapper {
 }
 
 protocol BoardFactoryInterface {
+    var opponentRemainingWalls : Int { get }
     var playerPosition : Int { get }
     var playerName : String { get }
     
@@ -64,12 +65,16 @@ final class BoardFactory {
 }
 
 extension BoardFactory : BoardFactoryInterface {
+    var opponentRemainingWalls: Int {
+        numberWallPerPlayer - currentBoard.opponent.walls.count
+    }
+    
     var playerPosition : Int {
-        return userInfo?.getUserInfo().userId == currentBoard.player.playerId ? currentBoard.player.pawnPosition.position : currentBoard.opponent.pawnPosition.position
+        userInfo?.getUserInfo().userId == currentBoard.player.playerId ? currentBoard.player.pawnPosition.position : currentBoard.opponent.pawnPosition.position
     }
     
     var playerName : String {
-        return userInfo?.getUserInfo().name ?? defaultPlayerName
+        userInfo?.getUserInfo().name ?? defaultPlayerName
     }
     
     func resolvePawn(cellIndex: Int) -> Pawn {

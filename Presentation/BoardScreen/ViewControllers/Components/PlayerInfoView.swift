@@ -33,7 +33,6 @@ class PlayerInfoView: UIView {
     @IBOutlet weak var profileImageView: UIImageView!
     
     @IBOutlet weak var timerLabel: UILabel!
-    @IBOutlet weak var timerImageView: UIImageView!
     @IBOutlet weak var timerContainer: UIView!
 
     
@@ -51,12 +50,8 @@ class PlayerInfoView: UIView {
         }
     }
     
-    var opponentRemainingWall : Int = 0 {
-        didSet {
-            timerLabel.text = "\(opponentRemainingWall) walls"
-        }
-    }
-        
+    var opponentRemainingWall : Int = numberWallPerPlayer
+    
     override func layoutSubviews() {
         rootView.layer.cornerRadius = 4
         rootView.clipsToBounds = true
@@ -94,7 +89,7 @@ class PlayerInfoView: UIView {
                 playerInfoLabel.text = Localized.defaultNilText
                 
             case .waitingForOpponant:
-                playerInfoLabel.text = Localized.board_infobox_opponent_turn
+                playerInfoLabel.text = Localized.board_infobox_opponent_turn + " - \(opponentRemainingWall) walls"
                 
             }
             
@@ -124,27 +119,34 @@ class PlayerInfoView: UIView {
     
             
     private func setupUI(){
+        outerRootView.backgroundColor =  type == .player1 ? colorPlayerPawn : colorOpponentPawn
+        rootView.backgroundColor = colorCell
+        
         profileImageView.tintColor = colorPlayerPawn
         profileImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
-        timerImageView.tintColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
         playerNameLabel.textColor = type == .player1 ? colorPlayerPawn : colorOpponentPawn
         playerInfoLabel.textColor = textColor
-        rootView.backgroundColor = colorCell
-        outerRootView.backgroundColor =  type == .player1 ? colorPlayerPawn : colorOpponentPawn
-        timerImageView.isHidden = type == .player2
+        
+        timerContainer.isHidden = type == .player2
     }
     
     func startTimer(){
+        
+        guard timer == nil else { return }
+
         timeForPlayer = secondsForPlayer
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(fireTimer), userInfo: nil, repeats: true)
+        timer =  Timer.scheduledTimer(
+             timeInterval: TimeInterval(1.0),
+             target      : self,
+             selector    : #selector(fireTimer),
+             userInfo    : nil,
+             repeats     : true)
+        
     }
     
     func stopTimer() {
-        if timer != nil {
-            timer?.invalidate()
-            timer = nil
-            timerLabel.text = Localized.defaultNilText
-        }
+        timer?.invalidate()
+        timer = nil
     }
     
     @objc func fireTimer() {

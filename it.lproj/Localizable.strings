@@ -51,7 +51,7 @@
 "popup_confirm_error" = "Chiudi";
 
 "popup_title_opponentQuitMatch" = "L'avversario ha abbandonato";
-"popup_content_opponentQuitMatch" = "L'avversario ha abbandanato la partina. Hai vinto!";
+"popup_content_opponentQuitMatch" = "L'avversario ha abbandanato la partita. Hai vinto!";
 "popup_confirm_opponentQuitMatch" = "Chiudi";
 
 "popup_title_invalidWall" = "Attenzione";

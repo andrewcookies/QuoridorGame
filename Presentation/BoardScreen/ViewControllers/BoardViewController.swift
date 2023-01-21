@@ -74,16 +74,9 @@ class BoardViewController: UIViewController {
         
     }
     
-    private func startLoading(isLoading : Bool){
-        if isLoading {
-            loadingView.isHidden = false
-            loadingSpinner.startAnimating()
-        } else {
-            loadingView.isHidden = true
-            loadingSpinner.stopAnimating()
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        playerInfoView.stopTimer()
     }
-
     
     init(viewModel: BoardViewModelProtocol) {
         super.init(nibName: String(describing: "BoardViewController"), bundle: nil)
@@ -94,6 +87,15 @@ class BoardViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func startLoading(isLoading : Bool){
+        if isLoading {
+            loadingView.isHidden = false
+            loadingSpinner.startAnimating()
+        } else {
+            loadingView.isHidden = true
+            loadingSpinner.stopAnimating()
+        }
+    }
     
     private func setupUI(){
                 
@@ -121,6 +123,7 @@ class BoardViewController: UIViewController {
         opponentInfoView.playerName = defaultPlayerName
         opponentInfoView.actionState = .searchMatch
         opponentInfoView.delegate = self
+        opponentInfoView.opponentRemainingWall = viewModel?.opponentRemainingWalls ?? numberWallPerPlayer
         
     }
     
@@ -171,6 +174,10 @@ class BoardViewController: UIViewController {
     
     private func updateOpponentName(name : String){
         opponentInfoView.playerName = name
+    }
+    
+    private func updateOpponentWalls(){
+        opponentInfoView.opponentRemainingWall = viewModel?.opponentRemainingWalls ?? numberWallPerPlayer
     }
     
     private func updatePawnPosition(start: BoardCell, destination: BoardCell) {
@@ -339,6 +346,7 @@ extension BoardViewController : BoardViewControllerProtocol {
     
     func updateOpponentWallOnBoard(topRight: BoardCell, topLeft: BoardCell, bottomRight: BoardCell, bottomLeft: BoardCell) {
         updateWallPosition(topRight: topRight, topLeft: topLeft, bottomRight: bottomRight, bottomLeft: bottomLeft)
+        updateOpponentWalls()
         gameAction = .chooseMove
     }
 }

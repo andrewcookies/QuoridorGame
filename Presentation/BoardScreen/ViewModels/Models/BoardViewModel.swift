@@ -11,6 +11,7 @@ import Combine
 protocol BoardViewModelProtocol {
     var currentPawnPosition : Int { get }
     var currentPlayerName : String { get }
+    var opponentRemainingWalls : Int { get }
 
     func movePawn(cellIndex: Int)
     func insertWall(cellIndex: Int, side: BoardCellSide)
@@ -50,12 +51,16 @@ final class BoardViewModel {
 }
 
 extension BoardViewModel : BoardViewModelProtocol {
+    var opponentRemainingWalls: Int {
+        boardFactory.opponentRemainingWalls
+    }
+    
     var currentPawnPosition: Int {
-        return boardFactory.playerPosition
+        boardFactory.playerPosition
     }
     
     var currentPlayerName : String {
-        return boardFactory.playerName
+        boardFactory.playerName
     }
 
     func close() {
@@ -82,8 +87,9 @@ extension BoardViewModel : BoardViewModelProtocol {
         Task {
             let res = await useCases.movePawn(newPawn: pawn)
             DispatchQueue.main.async {
-                self.viewControllerInterface?.handelEvent(gameEvent: res)
-                if res == .waitingOpponentMove {
+                if res != .waitingOpponentMove {
+                    self.viewControllerInterface?.handelEvent(gameEvent: res)
+                } else {
                     let wrapper = self.boardFactory.getBoardCellsFromPawn(newMove: pawn, contentType: .playerPawn)
                     self.currentBoard = wrapper.updatedBoard
                     self.viewControllerInterface?.updatePawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)
@@ -99,8 +105,9 @@ extension BoardViewModel : BoardViewModelProtocol {
         Task {
             let res = await useCases.insertWall(wall: wall)
             DispatchQueue.main.async {
-                self.viewControllerInterface?.handelEvent(gameEvent: res )
-                if res == .waitingOpponentMove {
+                if res != .waitingOpponentMove {
+                    self.viewControllerInterface?.handelEvent(gameEvent: res)
+                } else {
                     let wrapper = self.boardFactory.getBoardCellsFromWall(newWall: wall)
                     self.currentBoard = wrapper.updatedBoard
                     self.viewControllerInterface?.updateWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
