@@ -33,8 +33,10 @@ class QPopupViewController: UIViewController {
     @IBOutlet weak var titlePopupLabel: QLabel!
     @IBOutlet weak var contentPopupLabel: QLabel!
     
+    @IBOutlet weak var leftContainerView: UIView!
     @IBOutlet weak var leftButtonLabel: QLabel!
     @IBOutlet weak var rightButtonLabel: QLabel!
+    @IBOutlet weak var rightContainerView: UIView!
     
     
     weak var delegate : PopupDelegate?
@@ -73,45 +75,45 @@ class QPopupViewController: UIViewController {
         case .wonMatch:
             titlePopupLabel.text = Localized.popup_title_matchWon
             contentPopupLabel.text = Localized.popup_content_matchWon
-            rightButtonLabel.isHidden = true
+            rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_confirmWon
             
             
         case .lostMatch:
             titlePopupLabel.text = Localized.popup_title_matchLost
             contentPopupLabel.text = Localized.popup_content_matchLost
-            rightButtonLabel.isHidden = true
+            rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_matchLost
             
         case .quitMatch:
             titlePopupLabel.text = Localized.popup_title_quitMatch
             contentPopupLabel.text = Localized.popup_content_quitMatch
-            rightButtonLabel.isHidden = false
+            rightContainerView.isHidden = false
             leftButtonLabel.text = Localized.popup_confirm_quitMatch
             rightButtonLabel.text = Localized.popup_deny_quitMatch
             
         case .rules:
             titlePopupLabel.text = Localized.popup_title_rules
             contentPopupLabel.text = Localized.popup_content_rules
-            rightButtonLabel.isHidden = true
+            rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_rules
 
         case .genericError:
             titlePopupLabel.text = Localized.popup_title_error
             contentPopupLabel.text = Localized.popup_confirm_error
-            rightButtonLabel.isHidden = true
+            rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_error
 
         case .opponentQuitMatch:
             titlePopupLabel.text = Localized.popup_title_opponentQuitMatch
             contentPopupLabel.text = Localized.popup_content_opponentQuitMatch
-            rightButtonLabel.isHidden = true
+            rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_opponentQuitMatch
             
         case .ringWallFound:
             titlePopupLabel.text = Localized.popup_title_invalidWall
             contentPopupLabel.text = Localized.popup_content_invalidWall
-            rightButtonLabel.isHidden = true
+            rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_invalidWall
         }
     }

@@ -13,7 +13,9 @@
                 <outlet property="contentPopupLabel" destination="a1D-EW-tny" id="2ia-LH-bY0"/>
                 <outlet property="innerRoot" destination="0HT-SC-NZk" id="Xnx-ce-YgG"/>
                 <outlet property="leftButtonLabel" destination="Tpr-Ob-QzA" id="qyT-GJ-BZF"/>
+                <outlet property="leftContainerView" destination="fq8-6D-GkZ" id="2cl-8n-Lz6"/>
                 <outlet property="rightButtonLabel" destination="utg-tt-BRD" id="7xM-Bo-vLl"/>
+                <outlet property="rightContainerView" destination="KsJ-qC-bUn" id="qHb-SK-y7b"/>
                 <outlet property="root" destination="ioy-Zd-GwB" id="HhW-in-dmf"/>
                 <outlet property="titlePopupLabel" destination="qAf-56-bov" id="aMI-To-zvJ"/>
                 <outlet property="view" destination="iN0-l3-epB" id="mqn-0V-Dzv"/>
@@ -124,10 +126,12 @@
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="2iF-Zu-0rT"/>
                                         <constraint firstAttribute="bottom" secondItem="KsJ-qC-bUn" secondAttribute="bottom" id="4zt-NZ-Z2e"/>
-                                        <constraint firstItem="fq8-6D-GkZ" firstAttribute="width" secondItem="MlE-Kv-x7c" secondAttribute="width" multiplier="0.5" id="9Sy-Si-J9A"/>
                                         <constraint firstItem="KsJ-qC-bUn" firstAttribute="width" secondItem="MlE-Kv-x7c" secondAttribute="width" multiplier="0.5" id="AKB-Qz-mPY"/>
                                         <constraint firstItem="fq8-6D-GkZ" firstAttribute="top" secondItem="MlE-Kv-x7c" secondAttribute="top" id="TaI-wq-O8l"/>
+                                        <constraint firstAttribute="trailing" secondItem="KsJ-qC-bUn" secondAttribute="trailing" constant="2.8421709430404007e-14" id="W3o-5Z-edq"/>
+                                        <constraint firstItem="KsJ-qC-bUn" firstAttribute="leading" secondItem="fq8-6D-GkZ" secondAttribute="trailing" id="kUt-Uy-WG0"/>
                                         <constraint firstAttribute="bottom" secondItem="fq8-6D-GkZ" secondAttribute="bottom" id="mnD-L9-dlP"/>
+                                        <constraint firstItem="fq8-6D-GkZ" firstAttribute="leading" secondItem="MlE-Kv-x7c" secondAttribute="leading" id="qZW-UR-Ohu"/>
                                         <constraint firstItem="KsJ-qC-bUn" firstAttribute="top" secondItem="MlE-Kv-x7c" secondAttribute="top" id="zTX-XX-gki"/>
                                     </constraints>
                                 </stackView>
