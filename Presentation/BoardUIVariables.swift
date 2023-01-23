@@ -33,7 +33,7 @@ let colorAllowedCell = UIColor.init(red: 244/255, green: 208/255, blue: 147/255,
 /*
  Const
  */
-
+let percentaceEmptyCell = 0.15
 let startPlayer1PawnPosition = 84
 let startPlayer2PawnPosition = 4
 let bufferLeftRightCell = 1

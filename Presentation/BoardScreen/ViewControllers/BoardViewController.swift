@@ -201,7 +201,7 @@ class BoardViewController: UIViewController {
         }
         
         
-        let wallWidth = Int(Double(cellWidth) * 0.10 * 2)
+        let wallWidth = Int(Double(cellWidth) * percentaceEmptyCell * 2)
         let wallHeight = Int(cellWidth*2 - wallWidth*2)
         let sectionHeight = Int(playerWallContaier.frame.height)
     

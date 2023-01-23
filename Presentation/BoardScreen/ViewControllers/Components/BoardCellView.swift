@@ -61,6 +61,8 @@ class BoardCellView: UIView {
     override func layoutSubviews() {
         pawnView.layer.cornerRadius = pawnView.frame.size.width / 2
         pawnView.clipsToBounds = true
+        
+        setWallsArea()
     }
     
     func updateColor(allowed : Bool){
@@ -182,6 +184,42 @@ class BoardCellView: UIView {
         case .boardBorder:
             return colorBorder
         }
+    }
+    
+    private func setViewArea(width : Bool, father : UIView, child : UIView) {
+        child.translatesAutoresizingMaskIntoConstraints = false
+
+        if width {
+            child.widthAnchor.constraint(equalTo: father.widthAnchor, multiplier: percentaceEmptyCell).isActive = true
+        } else {
+            child.heightAnchor.constraint(equalTo: father.heightAnchor, multiplier: percentaceEmptyCell).isActive = true
+        }
+        
+    }
+    
+    
+    private func setWallsArea() {
+        setViewArea(width: true, father: cellView, child: topLeftCornerView)
+        setViewArea(width: false, father: cellView, child: topLeftCornerView)
+        
+        setViewArea(width: false, father: cellView, child: topWallView)
+        
+        setViewArea(width: true, father: cellView, child: topRightCornerView)
+        setViewArea(width: false, father: cellView, child: topRightCornerView)
+        
+        
+        setViewArea(width: true, father: cellView, child: rightWallView)
+        
+        setViewArea(width: true, father: cellView, child: bottomRightCornerView)
+        setViewArea(width: false, father: cellView, child: bottomRightCornerView)
+
+        setViewArea(width: false, father: cellView, child: bottomWallView)
+
+        setViewArea(width: true, father: cellView, child: bottomLeftCornerView)
+        setViewArea(width: false, father: cellView, child: bottomLeftCornerView)
+        
+        setViewArea(width: true, father: cellView, child: leftWallView)
+        
     }
     
     @IBAction func tapCell(){
