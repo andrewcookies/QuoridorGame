@@ -66,11 +66,10 @@ class BoardViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupUI()
         
         viewModel?.startMatch()
-        
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {

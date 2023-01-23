@@ -33,7 +33,8 @@ final class LoginViewModel {
 extension LoginViewModel : LoginViewModelProtocol {
     func setUserName(name: String) {
         let random = Int.random(in: 0...100)
-        userInterface?.setUserInfo(user: User(userId: "id_\(random)", name: name))
+        let timestamp = Int(Date().timeIntervalSince1970)
+        userInterface?.setUserInfo(user: User(userId: "id_\(random)-\(timestamp)", name: name))
         navigation?.startGame()
     }
 }
