@@ -34,11 +34,8 @@ let colorAllowedCell = UIColor.init(red: 244/255, green: 208/255, blue: 147/255,
  Const
  */
 
-let numberOfCellPerRow = 9
-let numberWallPerPlayer = 10
 let startPlayer1PawnPosition = 84
 let startPlayer2PawnPosition = 4
-let pawnNilMove = -1
 let bufferLeftRightCell = 1
 let bufferTopDownCell = 10
 let leftRightBorder = [-1,9,19,29,39,49,59,69,79]
@@ -47,7 +44,7 @@ let bottomCellsBorder = [80,81,82,83,84,85,86,87,88]
 let leftCellsBorder = [0,10,20,30,40,50,60,70,80]
 let rightCellsBorder = [8,18,28,38,48,58,68,78,88]
 let wallViiewConst = 80
-let secondsForPlayer = 59
+let secondsForPlayer = 10
 
 /*
  Default values

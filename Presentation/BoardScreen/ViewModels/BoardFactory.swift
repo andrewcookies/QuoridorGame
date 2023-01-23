@@ -12,6 +12,7 @@ enum GameStage {
     case opponentMovePawn
     case opponentInsertWall
     case noMove
+    case gameAlreadyCreated
 }
 struct PawnWrapper {
     let updatedBoard : Board
@@ -128,6 +129,11 @@ extension BoardFactory : BoardFactoryInterface {
                 return .gameAlreadyStarted
             } else {
                 return lastMove.moveType == .movePawn ? .opponentMovePawn : .opponentInsertWall
+            }
+        } else {
+            if game.gameMoves.count == 1 {
+                //first move (just put the pawn)
+                return .gameAlreadyCreated
             }
         }
         return .noMove
