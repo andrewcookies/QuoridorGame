@@ -42,7 +42,7 @@
                                     </constraints>
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BvC-2K-Vma">
-                                    <rect key="frame" x="10" y="2.6666666666666643" width="25" height="20"/>
+                                    <rect key="frame" x="10" y="0.0" width="25" height="25"/>
                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain"/>
@@ -58,7 +58,7 @@
                                     </constraints>
                                 </imageView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WZ0-gN-ne7">
-                                    <rect key="frame" x="358" y="2.6666666666666643" width="25" height="20"/>
+                                    <rect key="frame" x="358" y="0.0" width="25" height="25"/>
                                     <color key="tintColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain"/>
@@ -69,12 +69,12 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="BvC-2K-Vma" firstAttribute="height" secondItem="4Ve-HL-PCM" secondAttribute="height" multiplier="0.8" id="2Mz-lR-Yu4"/>
+                                <constraint firstItem="BvC-2K-Vma" firstAttribute="height" secondItem="4Ve-HL-PCM" secondAttribute="height" id="2Mz-lR-Yu4"/>
                                 <constraint firstItem="BvC-2K-Vma" firstAttribute="width" secondItem="4Ve-HL-PCM" secondAttribute="width" id="6wH-sz-6Mi"/>
                                 <constraint firstAttribute="bottom" secondItem="4Ve-HL-PCM" secondAttribute="bottom" id="AXA-EY-6fr"/>
                                 <constraint firstItem="EJE-wn-epO" firstAttribute="top" secondItem="ilL-sa-S3z" secondAttribute="top" id="Au3-CR-v7i"/>
                                 <constraint firstAttribute="height" constant="25" id="Cks-by-L6n"/>
-                                <constraint firstItem="WZ0-gN-ne7" firstAttribute="height" secondItem="EJE-wn-epO" secondAttribute="height" multiplier="0.8" id="FqX-Mf-D0D"/>
+                                <constraint firstItem="WZ0-gN-ne7" firstAttribute="height" secondItem="EJE-wn-epO" secondAttribute="height" id="FqX-Mf-D0D"/>
                                 <constraint firstItem="4Ve-HL-PCM" firstAttribute="leading" secondItem="ilL-sa-S3z" secondAttribute="leading" constant="10" id="G16-8l-AO5"/>
                                 <constraint firstItem="BvC-2K-Vma" firstAttribute="centerY" secondItem="4Ve-HL-PCM" secondAttribute="centerY" id="Go5-59-tbX"/>
                                 <constraint firstItem="BvC-2K-Vma" firstAttribute="centerX" secondItem="4Ve-HL-PCM" secondAttribute="centerX" id="Jhw-Co-DiE"/>

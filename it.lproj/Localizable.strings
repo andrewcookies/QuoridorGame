@@ -44,7 +44,7 @@
 
 "popup_title_rules" = "Quoridor Game";
 "popup_content_rules" = "Raggiungi il lato opposto della scacchiera prima del tuo avversario\n\nAd ogni turno, muovi il pedone o inserisci un muro tra le celle.\n\nBuon divertimento!";
-"popup_confirm_rules" = "Capito";
+"popup_confirm_rules" = "Chiudi";
 
 "popup_title_error" = "Ops";
 "popup_content_error" = "Qualcosa è andato storto. Per favore riprova più tardi.";
@@ -56,4 +56,4 @@
 
 "popup_title_invalidWall" = "Attenzione";
 "popup_content_invalidWall" = "Non puoi bloccare la strada al tuo avversario";
-"popup_confirm_invalidWall" = "Capito";
+"popup_confirm_invalidWall" = "Chiudi";
