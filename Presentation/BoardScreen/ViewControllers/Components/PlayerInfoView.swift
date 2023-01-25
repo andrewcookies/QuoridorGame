@@ -130,11 +130,15 @@ class PlayerInfoView: UIView {
         timerContainer.isHidden = type == .player2
     }
     
-    func startTimer(){
+    func startTimer(matchmaking : Bool? = false){
         
-        guard timer == nil else { return }
+        if timer != nil  {
+            stopTimer()
+        }
+        
+        //TODO: hanlde time ran out for search match
 
-        timeForPlayer = secondsForPlayer
+        timeForPlayer = matchmaking ?? false ? matchmakingSeconds : secondsForPlayer
         timer =  Timer.scheduledTimer(
              timeInterval: TimeInterval(1.0),
              target      : self,

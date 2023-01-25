@@ -161,6 +161,10 @@ class BoardViewController: UIViewController {
         playerInfoView.actionState = state
         opponentInfoView.actionState = state
         
+        if state == .searchMatch {
+            playerInfoView.startTimer(matchmaking: true)
+        }
+        
         if state == .waitingForOpponant {
             playerInfoView.stopTimer()
         }
