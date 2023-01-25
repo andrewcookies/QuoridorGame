@@ -245,6 +245,10 @@ class BoardViewController: UIViewController {
 }
 
 extension BoardViewController : PopupDelegate {
+    func acceptNoOpponentFound() {
+        viewModel?.quitMatch()
+    }
+    
     func acceptOpponentQuitMatch() {
         viewModel?.close()
     }
@@ -402,11 +406,17 @@ extension BoardViewController : WallViewDelegate {
 }
 
 extension BoardViewController : PlayerInfoViewDelegate {
-    func timeUp(player: PlayerType) {
+    func timeRanOut(player: PlayerType) {
         if player == .player1 {
             if let currentPosition = viewModel?.currentPawnPosition {
                 viewModel?.movePawn(cellIndex: currentPosition)
             }
         }
     }
+    
+    func timeRanOutMatchmaking() {
+        let vc = getPopup(type: .noOpponentFound)
+        self.present(vc, animated: true)
+    }
+   
 }

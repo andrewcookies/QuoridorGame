@@ -45,7 +45,7 @@ let leftCellsBorder = [0,10,20,30,40,50,60,70,80]
 let rightCellsBorder = [8,18,28,38,48,58,68,78,88]
 let wallViiewConst = 80
 let secondsForPlayer = 59
-let matchmakingSeconds = 30
+let matchmakingSeconds = 40
 
 /*
  Default values

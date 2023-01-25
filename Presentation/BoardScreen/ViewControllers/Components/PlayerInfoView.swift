@@ -6,9 +6,13 @@
 //
 
 import UIKit
-
+enum TimerType {
+    case matchmaking
+    case yourTurn
+}
 protocol PlayerInfoViewDelegate : AnyObject {
-    func timeUp(player : PlayerType)
+    func timeRanOut(player : PlayerType)
+    func timeRanOutMatchmaking()
 }
 @IBDesignable
 class PlayerInfoView: UIView {
@@ -22,6 +26,7 @@ class PlayerInfoView: UIView {
     private var type : PlayerType = .player1
     private var timer: Timer?
     private var timeForPlayer = secondsForPlayer
+    private var timerType : TimerType = .yourTurn
 
     
     @IBOutlet var content: UIView!
@@ -136,9 +141,9 @@ class PlayerInfoView: UIView {
             stopTimer()
         }
         
-        //TODO: hanlde time ran out for search match
-
         timeForPlayer = matchmaking ?? false ? matchmakingSeconds : secondsForPlayer
+        timerType = matchmaking ?? false ? .matchmaking : .yourTurn
+        
         timer =  Timer.scheduledTimer(
              timeInterval: TimeInterval(1.0),
              target      : self,
@@ -157,7 +162,11 @@ class PlayerInfoView: UIView {
     @objc func fireTimer() {
         if timeForPlayer == -1 {
             stopTimer()
-            delegate?.timeUp(player: type)
+            if timerType == .yourTurn {
+                delegate?.timeRanOut(player: type)
+            } else {
+                delegate?.timeRanOutMatchmaking()
+            }
         } else {
             timerLabel.text = timeForPlayer >= 10 ? "00:\(timeForPlayer)" : "00:0\(timeForPlayer)"
             timeForPlayer -= 1

@@ -15,6 +15,7 @@ enum PopupType {
     case genericError
     case opponentQuitMatch
     case ringWallFound
+    case noOpponentFound
 }
 
 protocol PopupDelegate : AnyObject {
@@ -23,6 +24,7 @@ protocol PopupDelegate : AnyObject {
     func acceptWonMatch()
     func acceptOpponentQuitMatch()
     func acceptError()
+    func acceptNoOpponentFound()
 }
 
 class QPopupViewController: UIViewController {
@@ -115,6 +117,12 @@ class QPopupViewController: UIViewController {
             contentPopupLabel.text = Localized.popup_content_invalidWall
             rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_invalidWall
+            
+        case .noOpponentFound:
+            titlePopupLabel.text = "Oh No"
+            contentPopupLabel.text = "Non player found"
+            rightContainerView.isHidden = true
+            leftButtonLabel.text = "Quit"
         }
     }
  
@@ -136,6 +144,9 @@ class QPopupViewController: UIViewController {
             
         case .opponentQuitMatch:
             delegate?.acceptOpponentQuitMatch()
+            
+        case .noOpponentFound:
+            delegate?.acceptNoOpponentFound()
         }
         self.dismiss(animated: true)
     }
