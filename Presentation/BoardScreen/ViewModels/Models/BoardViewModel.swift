@@ -82,6 +82,7 @@ extension BoardViewModel : BoardViewModelProtocol {
     
     
     func movePawn(cellIndex: Int) {
+        GameLog.shared.debug(message: "move pawn \(cellIndex)", className: "BoardViewModel")
         let pawn = boardFactory.resolvePawn(cellIndex: cellIndex)
         viewControllerInterface?.handelEvent(gameEvent: .waiting)
         Task {
@@ -98,7 +99,10 @@ extension BoardViewModel : BoardViewModelProtocol {
         
     }
     
+    
+    
     func insertWall(cellIndex: Int, side: BoardCellSide) {
+        GameLog.shared.debug(message: "insert wall \(cellIndex) - \(side)", className: "BoardViewModel")
         let wall = boardFactory.resolveWall(cellIndex: cellIndex, side: side)
         viewControllerInterface?.handelEvent(gameEvent: .waiting)
         Task {

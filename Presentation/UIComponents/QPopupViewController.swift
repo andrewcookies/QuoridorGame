@@ -100,7 +100,7 @@ class QPopupViewController: UIViewController {
 
         case .genericError:
             titlePopupLabel.text = Localized.popup_title_error
-            contentPopupLabel.text = Localized.popup_confirm_error
+            contentPopupLabel.text = Localized.popup_content_error
             rightContainerView.isHidden = true
             leftButtonLabel.text = Localized.popup_confirm_error
 

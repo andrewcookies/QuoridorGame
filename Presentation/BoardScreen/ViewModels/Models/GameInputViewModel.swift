@@ -47,6 +47,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
     
     func opponentMadeMove(game: Game) {
         let stage = boardFactory.gameState(game: game)
+        GameLog.shared.debug(message: "opponent Made move \(stage)", className: "GameInputViewModel")
         switch stage {
         case .gameAlreadyStarted:
             //opponent just put its pawn on board ( first phase of the game )
