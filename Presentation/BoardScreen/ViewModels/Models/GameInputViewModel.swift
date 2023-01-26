@@ -50,7 +50,7 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
         GameLog.shared.debug(message: "move coming \(stage)", className: "GameInputViewModel")
         switch stage {
         case .gameAlreadyStarted:
-            //opponent just put its pawn on board ( first phase of the game )
+            //opponent join the game you created before and he just put its pawn on board ( first phase of the game )
             currentBoard = boardFactory.getBoardFromGame(game: game)
             viewControllerProtocol?.createBoard(board: currentBoard)
             viewControllerProtocol?.handelEvent(gameEvent: .waitingYourMove)
@@ -75,8 +75,8 @@ extension GameInputViewModel : PresentationLayerInputListenerInterface {
 
             
         case .noMove:
-            //the opponent ran out of time
-            viewControllerProtocol?.handelEvent(gameEvent: .waitingYourMove)
+            //it means that the last move is yours, some error happens
+            viewControllerProtocol?.handelEvent(gameEvent: .error)
             
         case .gameAlreadyCreated:
             //no move needed, it's just when the player create the board and the listener has been notified

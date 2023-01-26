@@ -13,6 +13,7 @@ final class MultiplayerInputGameRepository {
     
     private var gameInputUseCase : GameInputUseCaseProtocol?
     private var localRepoWriter : MultiplayerLocalRepositoryInterface?
+    private var userInfo : UserInfoInterface?
     
     private let db : Firestore?
     
@@ -20,13 +21,15 @@ final class MultiplayerInputGameRepository {
 
     
     init(gameInputUseCase: GameInputUseCaseProtocol,
-         localRepoWriter : MultiplayerLocalRepositoryInterface?) {
+         localRepoWriter : MultiplayerLocalRepositoryInterface?,
+         userInfo : UserInfoInterface?) {
         if FirebaseApp.app() == nil {
             FirebaseApp.configure()
         }
         db = Firestore.firestore()
         self.gameInputUseCase = gameInputUseCase
         self.localRepoWriter = localRepoWriter
+        self.userInfo = userInfo
     }
 
     private func startNewGame(game : Game) async throws -> Game {
@@ -73,8 +76,10 @@ final class MultiplayerInputGameRepository {
                 let lastMove = game.lastMove
                 
                 //avoid game update from my last move
-                GameLog.shared.debug(message: "updated received from \(lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
-                self?.gameInputUseCase?.updateGameFromOpponent(game: game)
+                if self?.userInfo?.getUserInfo().userId != lastMove.playerId {
+                    GameLog.shared.debug(message: "updated received from \(lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
+                    self?.gameInputUseCase?.updateGameFromOpponent(game: game)
+                }
             }
         })
         

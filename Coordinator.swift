@@ -33,7 +33,8 @@ final class Coordinator {
         let navigation = LoginViewNavigation(startGame: { [weak self] in
             self?.startGame(userInfo : userInfo)
         })
-        let viewModel = LoginViewModel(userInterface: userInfo, navigation: navigation)
+        let viewModel = LoginViewModel(userInterface: userInfo,
+                                       navigation: navigation)
         let viewController = LoginViewController(viewModel: viewModel)
         return viewController
     }
@@ -51,7 +52,7 @@ final class Coordinator {
         let inputViewModel = GameInputViewModel(boardFactory: boardFactory)
         let inputUseCase = GameInputUseCase(viewModelListener: inputViewModel, gameFactory: gameFactory)
         
-        let inputDataLayer = matchType == .demo ? DemoGameInputRepository(inputUseCase: inputUseCase) : resolveBoardInputDataLayer(localGameRepository: multiplayerDataBaseRepository, inputUseCase: inputUseCase)
+        let inputDataLayer = matchType == .demo ? DemoGameInputRepository(inputUseCase: inputUseCase) : resolveBoardInputDataLayer(localGameRepository: multiplayerDataBaseRepository, inputUseCase: inputUseCase, userInfo: userInfo)
         
         let matchMakingUseCase = MatchMakingUseCase(gameInputInterface: inputDataLayer, gameFactory: gameFactory)
         
@@ -59,7 +60,10 @@ final class Coordinator {
         let navigation = BoardViewNavigation(close: { [weak self] in
             self?.closeView()
         })
-        let boardViewModel = BoardViewModel(navigation: navigation, useCases: outputUseCase, matchmakingUseCase: matchMakingUseCase, boardFactory: boardFactory)
+        let boardViewModel = BoardViewModel(navigation: navigation,
+                                            useCases: outputUseCase,
+                                            matchmakingUseCase: matchMakingUseCase,
+                                            boardFactory: boardFactory)
         let boardViewController = BoardViewController(viewModel: boardViewModel)
         
         boardViewModel.viewControllerInterface = boardViewController
@@ -86,8 +90,12 @@ final class Coordinator {
     private func resolveBoardOutpuDataLayer(localDataRepository : MultiplayerLocalRepositoryInterface) -> GameRepositoryOutputInterface {
         return MultiplayerOutputGameRepository(dbReader: localDataRepository)
     }
-    private func resolveBoardInputDataLayer(localGameRepository : MultiplayerLocalRepositoryInterface, inputUseCase : GameInputUseCaseProtocol) -> GameRepositoryInputInterface {
-        return MultiplayerInputGameRepository(gameInputUseCase: inputUseCase, localRepoWriter: localGameRepository)
+    private func resolveBoardInputDataLayer(localGameRepository : MultiplayerLocalRepositoryInterface,
+                                            inputUseCase : GameInputUseCaseProtocol,
+                                            userInfo : UserInfoInterface) -> GameRepositoryInputInterface {
+        return MultiplayerInputGameRepository(gameInputUseCase: inputUseCase,
+                                              localRepoWriter: localGameRepository,
+                                              userInfo: userInfo)
     }
         
     
