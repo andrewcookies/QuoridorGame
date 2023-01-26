@@ -79,6 +79,13 @@ final class MultiplayerInputGameRepository {
                 if self?.userInfo?.getUserInfo().userId != lastMove.playerId {
                     GameLog.shared.debug(message: "updated received from \(lastMove.playerId), gameState \(game.state)", className: "MultiplayerInputGameRepository")
                     self?.gameInputUseCase?.updateGameFromOpponent(game: game)
+                    
+                    //delete quit game
+                    if game.state == .quit {
+                        let id = document.documentID
+                        collection?.document(id).delete()
+                    }
+                        
                 }
             }
         })
