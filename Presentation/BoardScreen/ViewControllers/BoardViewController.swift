@@ -160,18 +160,6 @@ class BoardViewController: UIViewController {
     private func updateInfoBoxes(state : GameAction){
         playerInfoView.actionState = state
         opponentInfoView.actionState = state
-        
-        if state == .searchMatch {
-            playerInfoView.startTimer(matchmaking: true)
-        }
-        
-        if state == .waitingForOpponant {
-            playerInfoView.stopTimer()
-        }
-        
-        if state == .chooseMove {
-            playerInfoView.startTimer()
-        }
     }
     
     private func updateOpponentName(name : String){
@@ -281,6 +269,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             
         case .waitingYourMove:
             gameAction = .chooseMove
+            playerInfoView.startTimer()
             
         case .waiting:
             gameAction = .loadYourMove
@@ -289,6 +278,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             gameAction = .waitingForOpponant
 
         case .matchWon:
+            playerInfoView.stopTimer()
             self.present(getPopup(type: .wonMatch), animated: true)
             
         case .matchLost:
@@ -300,6 +290,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             
         case .searchingOpponents:
             gameAction = .searchMatch
+            playerInfoView.startTimer(matchmaking: true)
             startLoading(isLoading: true)
             
         case .endGame:

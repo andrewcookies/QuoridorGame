@@ -16,7 +16,7 @@
 /*
  Board View
  */
-"board_infobox_player_turn" = "Prendi un muro o fai una mossa";
+"board_infobox_player_turn" = "Muovi o inserisci un muro";
 "board_infobox_opponent_waiting" = "In attesa della tua mossa";
 "board_infobox_player_waiting" = "In attesa dell'avversario";
 "board_infobox_opponent_turn" = "Sta per muovere";
