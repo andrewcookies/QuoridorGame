@@ -78,7 +78,7 @@ class QPopupViewController: UIViewController {
             titlePopupLabel.text = Localized.popup_title_matchWon
             contentPopupLabel.text = Localized.popup_content_matchWon
             rightContainerView.isHidden = true
-            leftButtonLabel.text = Localized.popup_confirm_confirmWon
+            leftButtonLabel.text = Localized.popup_confirm_matchWon
             
             
         case .lostMatch:
@@ -119,10 +119,10 @@ class QPopupViewController: UIViewController {
             leftButtonLabel.text = Localized.popup_confirm_invalidWall
             
         case .noOpponentFound:
-            titlePopupLabel.text = "Oh No"
-            contentPopupLabel.text = "Non player found"
+            titlePopupLabel.text = Localized.popup_title_noOpponentFound
+            contentPopupLabel.text = Localized.popup_content_noOpponentFound
             rightContainerView.isHidden = true
-            leftButtonLabel.text = "Quit"
+            leftButtonLabel.text = Localized.popup_confirm_noOpponentFound
         }
     }
  

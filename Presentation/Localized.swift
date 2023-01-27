@@ -25,7 +25,7 @@ class Localized {
     
     static let popup_title_matchWon = String(localized: "popup_title_matchWon")
     static let popup_content_matchWon = String(localized: "popup_content_matchWon")
-    static let popup_confirm_confirmWon = String(localized: "popup_confirm_confirmWon")
+    static let popup_confirm_matchWon = String(localized: "popup_confirm_matchWon")
     
     static let popup_title_matchLost = String(localized: "popup_title_matchLost")
     static let popup_content_matchLost = String(localized: "popup_content_matchLost")
@@ -51,5 +51,10 @@ class Localized {
     static let popup_title_invalidWall = String(localized: "popup_title_invalidWall")
     static let popup_content_invalidWall = String(localized: "popup_content_invalidWall")
     static let popup_confirm_invalidWall = String(localized: "popup_confirm_invalidWall")
+    
+    static let popup_title_noOpponentFound = String(localized: "popup_title_noOpponentFound")
+    static let popup_content_noOpponentFound = String(localized: "popup_content_noOpponentFound")
+    static let popup_confirm_noOpponentFound = String(localized: "popup_confirm_noOpponentFound")
+
 
 }

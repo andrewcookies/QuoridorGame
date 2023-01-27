@@ -30,7 +30,7 @@
  */
 "popup_title_matchWon" = "Congratulations";
 "popup_content_matchWon" = "You won the match!";
-"popup_content_confirmWon" = "Close";
+"popup_confirm_matchWon" = "Close";
 
 "popup_title_matchLost" = "Oh No!";
 "popup_content_matchLost" = "You lost the match!";
@@ -56,3 +56,7 @@
 "popup_title_invalidWall" = "Warning";
 "popup_content_invalidWall" = "You cannot block your opponent";
 "popup_confirm_invalidWall" = "Close";
+
+"popup_title_noOpponentFound" = "Sorry";
+"popup_content_noOpponentFound" = "We didn't find any opponent. Retry later";
+"popup_confirm_noOpponentFound" = "Quit";

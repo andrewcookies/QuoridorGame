@@ -31,7 +31,7 @@
  */
 "popup_title_matchWon" = "Congratulationi";
 "popup_content_matchWon" = "Hai vinto la partita!";
-"popup_content_confirmWon" = "Chiudi";
+"popup_confirm_matchWon" = "Chiudi";
 
 "popup_title_matchLost" = "Oh No!";
 "popup_content_matchLost" = "Hai perso la partita";
@@ -57,3 +57,7 @@
 "popup_title_invalidWall" = "Attenzione";
 "popup_content_invalidWall" = "Non puoi bloccare la strada al tuo avversario";
 "popup_confirm_invalidWall" = "Chiudi";
+
+"popup_title_noOpponentFound" = "Ci dispiace";
+"popup_content_noOpponentFound" = "Non abbiamo trovato alcun avversario. Riprova più tardi";
+"popup_confirm_noOpponentFound" = "Esci";
