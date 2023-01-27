@@ -13,7 +13,7 @@ enum PlayerType : String {
 }
 
 protocol GameFactoryProtocol {
-    func updatePawn(pawn : Pawn) -> Result<Game,GameEvent>
+    func updatePawn(pawn : Pawn) -> Game
     func updateWall(wall : Wall) -> Result<Game,GameEvent>
     func updateGame(game : Game)
     func getGame() -> Game
@@ -257,12 +257,13 @@ final class GameFactory {
     }
 }
 
-extension GameFactory : GameFactoryProtocol {
-    func updatePawn(pawn: Pawn) -> Result<Game, GameEvent> {
+extension GameFactory : GameFactoryProtocol {    
+    func updatePawn(pawn: Pawn) -> Game {
         
 
         let currentUser = userInfo.getUserInfo()
         var playerType = PlayerType.player1
+        var state = currentGame.state
         var player : Player = Player(name: currentGame.player1.name,
                                      playerId: currentGame.player1.playerId,
                                      pawnPosition: pawn,
@@ -277,8 +278,8 @@ extension GameFactory : GameFactoryProtocol {
         }
         
         let validation = validatePawnMove(pawn: pawn, mode: playerType)
-        if validation != .noEvent {
-            return .failure(validation)
+        if validation == .matchWon {
+            state = .win
         }
         
         
@@ -287,13 +288,13 @@ extension GameFactory : GameFactoryProtocol {
         currentMoves.append(move)
         
         let game = Game(created: currentGame.created,
-                        state: currentGame.state,
+                        state: state,
                         player1: playerType == .player1 ? player : currentGame.player1,
                         player2: playerType == .player2 ? player : currentGame.player2,
                         lastMove: move,
                         gameMoves: currentMoves)
         
-        return .success(game)
+        return game
     }
     
     func updateWall(wall: Wall) -> Result<Game, GameEvent> {

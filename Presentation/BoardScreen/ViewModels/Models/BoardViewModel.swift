@@ -89,7 +89,7 @@ extension BoardViewModel : BoardViewModelProtocol {
             let res = await useCases.movePawn(newPawn: pawn)
             DispatchQueue.main.async {
                 self.viewControllerInterface?.handelEvent(gameEvent: res)
-                if res == .waitingOpponentMove {
+                if res == .waitingOpponentMove || res == .matchWon {
                     let wrapper = self.boardFactory.getBoardCellsFromPawn(newMove: pawn, contentType: .playerPawn)
                     self.currentBoard = wrapper.updatedBoard
                     self.viewControllerInterface?.updatePawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)

@@ -36,19 +36,15 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
     }
     
     func movePawn(newPawn: Pawn) async -> GameEvent {
-        let result = gameFactory.updatePawn(pawn: newPawn)
+        let game = gameFactory.updatePawn(pawn: newPawn)
         do {
-            switch result {
-            case .success(let game):
-                GameLog.shared.debug(message: "update Pawn", className: "GameOutputUseCase")
-                try await gameInterface.updateGame(game: game)
-                gameFactory.updateGame(game: game)
+            GameLog.shared.debug(message: "update Pawn \(newPawn.position)", className: "GameOutputUseCase")
+            try await gameInterface.updateGame(game: game)
+            gameFactory.updateGame(game: game)
+            if game.state == .win {
+                return .matchWon
+            } else {
                 return .waitingOpponentMove
-            case .failure(let event):
-                if event == .matchWon {
-                    try await gameInterface.updateState(state: .win)
-                }
-                return event
             }
         } catch {
             GameLog.shared.debug(message: "Exception during call", className: "GameOutputUseCase")
