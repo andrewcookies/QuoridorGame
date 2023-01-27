@@ -64,8 +64,18 @@ class DemoGameInputRepository : DemoGameOutputRepository, GameRepositoryInputInt
     }
     
     @objc func update(){
-        if let g = self.demoGame {
-            self.inputUseCase.updateGameFromOpponent(game: g)
+        if let g = demoGame {
+            let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: demoPlayerStartPawn, wallMove:  defaultWall, moveType: .movePawn)
+            var moves = g.gameMoves
+            moves.append(demoMove)
+            let newGame = Game(created: g.created,
+                               state: .inProgress,
+                               player1: g.player1,
+                               player2: g.player2,
+                               lastMove: demoMove,
+                               gameMoves: moves)
+            demoGame = newGame
+            self.inputUseCase.updateGameFromOpponent(game: newGame)
         }
     }
     

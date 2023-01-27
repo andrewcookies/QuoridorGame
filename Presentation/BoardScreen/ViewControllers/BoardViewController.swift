@@ -217,7 +217,7 @@ class BoardViewController: UIViewController {
     //MARK: Actions
     
     @IBAction func infoTapped(_ sender: UIButton) {
-        if matchType == .demo {
+        if matchType == .demo && gameAction == .waitingForOpponant {
             NotificationCenter.default.post(name: Notification.Name("update"), object: nil)
         } else {
             let vc = getPopup(type : .rules)
@@ -276,6 +276,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             
         case .waitingOpponentMove:
             gameAction = .waitingForOpponant
+            playerInfoView.stopTimer()
 
         case .matchWon:
             playerInfoView.stopTimer()

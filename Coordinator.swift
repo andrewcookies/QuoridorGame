@@ -13,7 +13,7 @@ enum MatchType {
     case online
 }
 
-var matchType : MatchType = .online
+var matchType : MatchType = .demo
 
 final class Coordinator {
     
