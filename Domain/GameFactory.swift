@@ -13,6 +13,7 @@ enum PlayerType : String {
 }
 
 protocol GameFactoryProtocol {
+    func updateState(state : GameState) -> Game
     func updatePawn(pawn : Pawn) -> Game
     func updateWall(wall : Wall) -> Result<Game,GameEvent>
     func updateGame(game : Game)
@@ -257,7 +258,32 @@ final class GameFactory {
     }
 }
 
-extension GameFactory : GameFactoryProtocol {    
+extension GameFactory : GameFactoryProtocol {
+    func updateState(state: GameState) -> Game {
+        let currentUser = userInfo.getUserInfo()
+        var playerType = PlayerType.player1
+        var player : Player = currentGame.player1
+        
+        if currentGame.player1.playerId != currentUser.userId {
+            playerType = .player2
+            player = currentGame.player2
+        }
+        
+        let move = Move(playerId: player.playerId, pawnMove: player.pawnPosition, wallMove: gameValidator.startWall, moveType: .movePawn)
+        var currentMoves = currentGame.gameMoves
+        currentMoves.append(move)
+        
+        let game = Game(created: currentGame.created,
+                        state: state,
+                        player1: playerType == .player1 ? player : currentGame.player1,
+                        player2: playerType == .player2 ? player : currentGame.player2,
+                        lastMove: move,
+                        gameMoves: currentMoves)
+        
+        return game
+        
+    }
+    
     func updatePawn(pawn: Pawn) -> Game {
         
 

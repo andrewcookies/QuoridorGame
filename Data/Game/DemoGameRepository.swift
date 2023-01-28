@@ -22,19 +22,7 @@ class DemoGameOutputRepository : GameRepositoryOutputInterface {
         let game = Game(created: 0, state: .waiting, player1: defaultPlayer1, player2: defaultPlayer2, lastMove: defaultMove, gameMoves: [defaultMove])
         self.demoGame = game
     }
-    
-    func updateState(state: GameState) async throws {
-        if let g = demoGame {
-            let game = Game(created: g.created,
-                            state: state,
-                            player1: g.player1,
-                            player2: g.player2,
-                            lastMove: g.lastMove,
-                            gameMoves: g.gameMoves)
-            demoGame = game
-        }
-    }
-    
+   
     func updateGame(game: Game) async throws {
         if let g = demoGame {
             let demoMove = Move(playerId: "DEMO_PLAYER", pawnMove: demoPlayerStartPawn, wallMove:  defaultWall, moveType: .movePawn)

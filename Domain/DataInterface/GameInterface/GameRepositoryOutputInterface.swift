@@ -8,7 +8,6 @@
 import Foundation
 
 protocol GameRepositoryOutputInterface {
-    func updateState(state : GameState) async throws
     func updateGame(game : Game) async throws
 }
 

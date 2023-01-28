@@ -27,8 +27,11 @@ extension GameOutputUseCase : GameOutputUseCaseProtocol {
     }
     
     func quitMatch() async -> GameEvent {
+        let game = gameFactory.updateState(state: .quit)
         do{
-            try await gameInterface.updateState(state: .quit)
+            GameLog.shared.debug(message: "update quit state", className: "GameOutputUseCase")
+            try await gameInterface.updateGame(game: game)
+            gameFactory.updateGame(game: game)
             return .endGame
         } catch {
             return .error

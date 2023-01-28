@@ -101,7 +101,7 @@ extension BoardFactory : BoardFactoryInterface {
         
         if side == .topSide {
             let topLeftIndex = drawMode == .normal ? cellIndex - bufferTopDownCell : cellIndex - bufferLeftRightCell
-            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell - bufferLeftRightCell : cellIndex
+            let topRigthIndex = drawMode == .normal ? cellIndex - bufferTopDownCell + bufferLeftRightCell : cellIndex
             let bottomRigthIndex = drawMode == .normal ? cellIndex + bufferLeftRightCell : cellIndex + bufferTopDownCell
             let bottomLeftIndex =  drawMode == .normal ? cellIndex : cellIndex + bufferTopDownCell - bufferLeftRightCell
             wall = Wall(orientation: .horizontal, topLeftCell: topLeftIndex, topRightCell: topRigthIndex, bottomLeftCell: bottomLeftIndex, bottomRightCell: bottomRigthIndex)

@@ -47,14 +47,6 @@ extension MultiplayerOutputGameRepository : GameRepositoryOutputInterface {
             throw APIError.currentInfoNIL
         }
     }
-    
-    func updateState(state: GameState) async throws {
-        guard let gameId = dbReader?.getCurrentGameId() else { throw APIError.currentInfoNIL }
-        let collection = db?.collection("games")
-        try await collection?.document(gameId).updateData([
-            "state" : state.rawValue
-        ])
-    }
 
 }
 
