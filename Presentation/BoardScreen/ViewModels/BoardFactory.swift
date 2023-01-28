@@ -67,7 +67,7 @@ final class BoardFactory {
 
 extension BoardFactory : BoardFactoryInterface {
     var opponentRemainingWalls: Int {
-        numberWallPerPlayer - currentBoard.opponent.walls.count
+        (numberWallPerPlayer - currentBoard.opponent.walls.count)
     }
     
     var playerPosition : Int {

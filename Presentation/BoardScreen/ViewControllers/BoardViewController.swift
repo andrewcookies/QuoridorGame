@@ -298,6 +298,7 @@ extension BoardViewController : BoardViewControllerProtocol {
             viewModel?.close()
             
         case .opponentQuitMatch:
+            playerInfoView.stopTimer()
             self.present(getPopup(type: .opponentQuitMatch), animated: true)
             
         case .ringFound:
