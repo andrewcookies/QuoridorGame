@@ -90,7 +90,7 @@ extension BoardViewModel : BoardViewModelProtocol {
             DispatchQueue.main.async {
                 self.viewControllerInterface?.handelEvent(gameEvent: res)
                 if res == .waitingOpponentMove || res == .matchWon {
-                    let wrapper = self.boardFactory.getBoardCellsFromPawn(newMove: pawn, contentType: .playerPawn)
+                    let wrapper = self.boardFactory.getBoardCellsFromPawn(newMove: pawn, contentType: .player)
                     self.currentBoard = wrapper.updatedBoard
                     self.viewControllerInterface?.updatePawnOnBoard(start: wrapper.startPosition, destination: wrapper.endPosition)
                 }
@@ -110,7 +110,7 @@ extension BoardViewModel : BoardViewModelProtocol {
             DispatchQueue.main.async {
                 self.viewControllerInterface?.handelEvent(gameEvent: res)
                 if res == .waitingOpponentMove {
-                    let wrapper = self.boardFactory.getBoardCellsFromWall(newWall: wall)
+                    let wrapper = self.boardFactory.getBoardCellsFromWall(newWall: wall, contentType: .player)
                     self.currentBoard = wrapper.updatedBoard
                     self.viewControllerInterface?.updateWallOnBoard(topRight: wrapper.topRight, topLeft: wrapper.topLeft, bottomRight: wrapper.bottomRight, bottomLeft: wrapper.bottomLeft)
                 }
@@ -145,7 +145,7 @@ extension BoardViewModel : BoardViewModelProtocol {
                 if error == .matchNotFound {
                     let createResult = await matchmakingUseCase.createMatch()
                     switch createResult {
-                    case .success(let game):
+                    case .success(_):
                         DispatchQueue.main.async {
                             self.viewControllerInterface?.handelEvent(gameEvent: .searchingOpponents)
                         }

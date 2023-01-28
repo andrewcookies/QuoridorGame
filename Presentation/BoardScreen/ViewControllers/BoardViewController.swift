@@ -309,13 +309,13 @@ extension BoardViewController : BoardViewControllerProtocol {
     
     func createBoard(board: Board) {
         drawBoard(board: board)
-        updateOpponentName(name: board.opponent.name)
+        updateOpponentName(name: board.opponentName)
         startLoading(isLoading: false)
     }
     
     func joinBoard(board: Board) {
         drawBoard(board: board)
-        updateOpponentName(name: board.opponent.name)
+        updateOpponentName(name: board.opponentName)
         startLoading(isLoading: false)
     }
     

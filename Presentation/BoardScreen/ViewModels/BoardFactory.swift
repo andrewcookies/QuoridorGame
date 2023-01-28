@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum BoardPlayerType {
+    case player
+    case opponent
+}
+
 enum GameStage {
     case gameAlreadyStarted
     case opponentMovePawn
@@ -37,8 +42,8 @@ protocol BoardFactoryInterface {
     func getBoardFromGame(game : Game) -> Board
     func resolveWall(cellIndex: Int, side: BoardCellSide) -> Wall
     func resolvePawn(cellIndex: Int) -> Pawn
-    func getBoardCellsFromPawn(newMove : Pawn, contentType : BoardContentType) -> PawnWrapper
-    func getBoardCellsFromWall(newWall : Wall) -> WallWrapper
+    func getBoardCellsFromPawn(newMove : Pawn, contentType : BoardPlayerType) -> PawnWrapper
+    func getBoardCellsFromWall(newWall : Wall, contentType : BoardPlayerType) -> WallWrapper
     func gameState(game : Game) -> GameStage
 }
 
@@ -47,9 +52,16 @@ final class BoardFactory {
     
     private var userInfo : UserInfoInterface?
     private var currentBoard = Board(cells: [],
-                                     player: Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: pawnNilMove), walls: []),
-                                     opponent: Player(name: defaultPlayerName, playerId: defaultPlayerId, pawnPosition: Pawn(position: pawnNilMove), walls: []),
+                                     playerName: defaultPlayerName,
+                                     playerId: defaultPlayerId,
+                                     playerWalls: 0,
+                                     playerPosition: startPlayer1PawnPosition,
+                                     opponentName: defaultPlayerName,
+                                     opponentId: defaultPlayerId,
+                                     opponentWalls: 0,
+                                     opponentPosition: startPlayer2PawnPosition,
                                      drawMode: .normal)
+
     
     init(userInfo : UserInfoInterface?) {
         self.userInfo = userInfo
@@ -67,11 +79,11 @@ final class BoardFactory {
 
 extension BoardFactory : BoardFactoryInterface {
     var opponentRemainingWalls: Int {
-        (numberWallPerPlayer - currentBoard.opponent.walls.count)
+        (numberWallPerPlayer - currentBoard.opponentWalls)
     }
     
     var playerPosition : Int {
-        userInfo?.getUserInfo().userId == currentBoard.player.playerId ? currentBoard.player.pawnPosition.position : currentBoard.opponent.pawnPosition.position
+        userInfo?.getUserInfo().userId == currentBoard.playerId ? currentBoard.playerPosition: currentBoard.playerPosition
     }
     
     var playerName : String {
@@ -221,18 +233,29 @@ extension BoardFactory : BoardFactoryInterface {
             }
             cells.append(boardRow)
         }
-        currentBoard = Board(cells: cells, player: currentPlayer, opponent: opponentPlayer, drawMode: drawMode)
+        currentBoard =  Board(cells: cells,
+                              playerName: currentPlayer.name,
+                              playerId: currentPlayer.playerId,
+                              playerWalls: currentPlayer.walls.count,
+                              playerPosition: currentPlayer.pawnPosition.position,
+                              opponentName: opponentPlayer.name,
+                              opponentId: opponentPlayer.playerId,
+                              opponentWalls: opponentPlayer.walls.count,
+                              opponentPosition: opponentPlayer.pawnPosition.position,
+                              drawMode: drawMode)
+        
+        
         return currentBoard
     }
     
-    func getBoardCellsFromPawn(newMove: Pawn, contentType : BoardContentType) -> PawnWrapper {
+    func getBoardCellsFromPawn(newMove: Pawn, contentType : BoardPlayerType) -> PawnWrapper {
     
         let defaultCell = BoardCell()
        
         let newPosition = newMove.position
         var newBoardCell : BoardCell?
         
-        let currentPosition = contentType == .playerPawn ? currentBoard.player.pawnPosition.position : currentBoard.opponent.pawnPosition.position
+        let currentPosition = contentType == .player ? currentBoard.playerPosition: currentBoard.opponentPosition
         var currentBoardCell : BoardCell?
         
         var cb = currentBoard
@@ -242,7 +265,7 @@ extension BoardFactory : BoardFactoryInterface {
                 let cell = cb.cells[rowId][columnId]
                 
                 if cell.index == newPosition {
-                    cb.cells[rowId][columnId].contentType = contentType
+                    cb.cells[rowId][columnId].contentType = contentType == .player ? .playerPawn : .opponentPawn
                     newBoardCell = cb.cells[rowId][columnId]
                 }
                 
@@ -252,10 +275,10 @@ extension BoardFactory : BoardFactoryInterface {
                 }
                 
                 if let nbc = newBoardCell, let cbc = currentBoardCell {
-                    if contentType == .playerPawn {
-                        cb.player.pawnPosition.position = newPosition
+                    if contentType == .player {
+                        cb.playerPosition = newPosition
                     } else {
-                        cb.opponent.pawnPosition.position = newPosition
+                        cb.opponentPosition = newPosition
                     }
                     currentBoard = cb
                     return PawnWrapper(updatedBoard: cb, startPosition: cbc, endPosition: nbc)
@@ -266,7 +289,7 @@ extension BoardFactory : BoardFactoryInterface {
         return PawnWrapper(updatedBoard: currentBoard, startPosition: defaultCell, endPosition: defaultCell)
     }
     
-    func getBoardCellsFromWall(newWall : Wall) -> WallWrapper {
+    func getBoardCellsFromWall(newWall : Wall, contentType : BoardPlayerType) -> WallWrapper {
         let wall = newWall
         var cb = currentBoard
         let mode = currentBoard.drawMode
@@ -359,6 +382,11 @@ extension BoardFactory : BoardFactoryInterface {
         }
         let bottomLeftCell = cb.cells[bottomLeftNewRow][bottomLeftNewColumn]
         
+        if contentType == .player {
+            cb.playerWalls += 1
+        } else {
+            cb.opponentWalls += 1
+        }
         currentBoard = cb
         return WallWrapper(updatedBoard: cb, topLeft: topLeftCell, topRight: topRightCell, bottomLeft: bottomLeftCell, bottomRight: bottomRightCell)
     }

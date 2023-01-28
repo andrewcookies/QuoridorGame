@@ -343,7 +343,7 @@ extension GameFactory : GameFactoryProtocol {
     }
     
     func fetchAllowedCurrentPawn(pawn : Pawn) -> [Pawn] {
-        var mode = currentGame.player1.playerId == userInfo.getUserInfo().userId ? PlayerType.player1 : PlayerType.player2
+        let mode = currentGame.player1.playerId == userInfo.getUserInfo().userId ? PlayerType.player1 : PlayerType.player2
         
         let pawns = fetchAllowedPawn(pawn: pawn, walls: currentGame.getTotalWalls(), mode: mode)
         return pawns

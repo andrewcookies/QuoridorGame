@@ -20,7 +20,7 @@ class LoginViewController: UIViewController {
         playerNameTextField.backgroundColor = mainColor
         playerNameTextField.textColor = textColor
         playerNameTextField.font = regularFont
-        playerNameTextField.text = Localized.login_namefield
+        playerNameTextField.placeholder = Localized.login_namefield
         
         titleLabel.text = Localized.app_title
         titleLabel.textColor = colorEmptyWall
